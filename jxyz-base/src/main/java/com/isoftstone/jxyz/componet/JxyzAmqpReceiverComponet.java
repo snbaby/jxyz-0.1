@@ -68,7 +68,7 @@ public class JxyzAmqpReceiverComponet {
 				process(bucket, object, id);
 			}
 		}
-		System.out.println("收到fanout的消息：" + amqp_message);
+		log.info("收到fanout的消息：{}",amqp_message);
 	}
 
 	private void process(String bucket, String object, String id) throws SQLException {
