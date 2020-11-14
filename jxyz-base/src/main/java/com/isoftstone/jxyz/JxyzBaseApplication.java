@@ -11,12 +11,12 @@ import com.github.drinkjava2.jsqlbox.DbContext;
 import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
 
 @SpringBootApplication
-public class JxyzApplication {
+public class JxyzBaseApplication {
     @Autowired
     DataSource ds;
 
     public static void main(String[] args) {
-        SpringApplication.run(JxyzApplication.class, args);
+        SpringApplication.run(JxyzBaseApplication.class, args);
     }
 
     @Bean
