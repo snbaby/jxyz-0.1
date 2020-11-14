@@ -10,13 +10,12 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-public class JxyzApplication {
-
+public class JxyzTraceApplication {
     @Autowired
     DataSource ds;
 
     public static void main(String[] args) {
-        SpringApplication.run(JxyzApplication.class, args);
+        SpringApplication.run(JxyzTraceApplication.class, args);
     }
 
     @Bean

@@ -10,33 +10,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
 @Slf4j
 public class JxyzController {
 
-//    @Value("${jxyz.default_year}")
-//    private String defaultYear;
+    private static int a = 0;
 
     private String GET_YEAR_MONTH= Utils.getYearMonth();
 
-
-    @PostMapping(value = "/test")
+    @PostMapping(value = "/http_request")
     @ResponseBody
-    public ResponseEntity<JSONObject> test(@RequestBody String id) {
-        DbContext dbContext = DbContext.getGlobalDbContext();
-        List<Map<String, Object>> resultList = dbContext.qryMapList(
-                "select * from sdi_jxyz_pkp_trace_message_" + GET_YEAR_MONTH + " where trace_no = ? ", DB.param(id));
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 0);
-        jsonObject.put("msg", "success");
-        jsonObject.put("data", resultList);
-        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+    public int eg01(@RequestBody JSONObject jsonObject){
+        System.out.println(jsonObject.toJSONString().length());
+        a+=1;
+        return a;
     }
-
 
     @PostMapping(value = "receive/trajectory")
     @ResponseBody

@@ -3,11 +3,12 @@ package com.isoftstone.jxyz.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class Utils {
 //	public static final String separator = File.separator;
-//
+
 	public static DateFormat df() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
@@ -18,7 +19,8 @@ public class Utils {
 //		return String.valueOf(now.get(Calendar.YEAR ))+(now.get(Calendar.MONTH) + 1);
 		// 获取当前时间
 		LocalDateTime nowTime = LocalDateTime.now();
-		return String.valueOf(nowTime.getYear()) + nowTime.getMonth().getValue();
+		DateTimeFormatter dateTimeFormatter =   DateTimeFormatter.ofPattern("yyyyMM");
+		return nowTime.format(dateTimeFormatter);
 	}
 
 	public static String translateDateStr(Object obj) {

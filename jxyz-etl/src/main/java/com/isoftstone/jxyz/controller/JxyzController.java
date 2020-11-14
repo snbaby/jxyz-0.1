@@ -3,39 +3,79 @@ package com.isoftstone.jxyz.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DB;
 import com.github.drinkjava2.jsqlbox.DbContext;
+import com.isoftstone.jxyz.service.PageTransferService;
+import com.isoftstone.jxyz.util.DataBaseUtil;
 import com.isoftstone.jxyz.util.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
 @Slf4j
 public class JxyzController {
 
-//    @Value("${jxyz.default_year}")
-//    private String defaultYear;
+    private String GET_YEAR_MONTH = Utils.getYearMonth();
 
-    private String GET_YEAR_MONTH= Utils.getYearMonth();
+    @Autowired
+    private PageTransferService pageTransferService;
 
+    private static JSONObject resultJson() {
+        JSONObject resJsb = new JSONObject();
+        resJsb.put("code", 0);
+        resJsb.put("msg", "success");
+        resJsb.put("data", "");
+        return resJsb;
+    }
 
-    @PostMapping(value = "/test")
-    @ResponseBody
-    public ResponseEntity<JSONObject> test(@RequestBody String id) {
+    @GetMapping(value = "/receive/getDate")
+    public ResponseEntity<JSONObject> getData(String tableName, String periodId, String endTime) {
+        System.out.println("tabl:" + tableName + " perid:" + periodId + " endTime:" + endTime);
+        //获取表名
+//        if (null == jsonObject.get("tableName"))
+        if (null == tableName) {
+            throw new RuntimeException();
+        }
+//        String tableName = jsonObject.get("tableName").toString();
+//        log.info("接受数据库表名字", jsonObject.get("tableName"));
+        log.info("接受数据库表名字", tableName);
+        //获取表字段
+        String fieId = DataBaseUtil.tableNameUtil(tableName);
+        //创建dbcontext
         DbContext dbContext = DbContext.getGlobalDbContext();
-        List<Map<String, Object>> resultList = dbContext.qryMapList(
-                "select * from sdi_jxyz_pkp_trace_message_" + GET_YEAR_MONTH + " where trace_no = ? ", DB.param(id));
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 0);
-        jsonObject.put("msg", "success");
-        jsonObject.put("data", resultList);
-        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        Long count;
+        String sql;
+//        String periodId = null;
+        //总条数
+//        if (null != jsonObject.get("periodId")) {
+        if (null != periodId) {
+//            log.info("接受过滤时间", jsonObject.get("periodId"));
+            log.info("接受过滤时间", periodId);
+//            periodId = jsonObject.get("periodId").toString();
+            sql = "select count(0) from " + tableName + " where period_id >= " + periodId;
+            if (null != endTime) {
+                sql = sql + " and period_id <= " + endTime;
+            }
+        } else {
+            sql = "select count(1) from " + tableName;
+        }
+        count = dbContext.qryLongValue(sql);
+        if (null != periodId) {
+//            log.info("接受过滤时间", jsonObject.get("periodId"));
+            log.info("接受过滤时间", periodId);
+            sql = "select " + fieId + " from " + tableName + " where period_id >= " + periodId;
+            if (null != endTime) {
+                sql = sql + " and period_id <= " + endTime;
+            }
+        } else {
+            sql = "select " + fieId + " from " + tableName;
+        }
+        pageTransferService.pageTransfer(count, dbContext, sql);
+        return new ResponseEntity<>(resultJson(), HttpStatus.OK);
     }
 
 
@@ -62,14 +102,8 @@ public class JxyzController {
                 DB.valuesQuestions());
 
         log.info("轨迹数据：结束导入数据");
-
-        JSONObject resJsb = new JSONObject();
-        resJsb.put("code", 0);
-        resJsb.put("msg", "success");
-        resJsb.put("data", "");
-        return new ResponseEntity<>(resJsb, HttpStatus.OK);
+        return new ResponseEntity<>(resultJson(), HttpStatus.OK);
     }
-
 
 
 }
