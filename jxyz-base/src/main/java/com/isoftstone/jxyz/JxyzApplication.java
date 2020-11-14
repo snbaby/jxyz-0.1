@@ -1,13 +1,14 @@
 package com.isoftstone.jxyz;
 
-import com.github.drinkjava2.jsqlbox.DbContext;
-import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.sql.DataSource;
+import com.github.drinkjava2.jsqlbox.DbContext;
+import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
 
 @SpringBootApplication
 public class JxyzApplication {

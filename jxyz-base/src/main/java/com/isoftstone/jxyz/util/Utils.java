@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,14 +24,6 @@ public class Utils {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 
-	//获取当前时间年月yyyyMM 202001
-	public static String getYearMonth(){
-//		Calendar now = Calendar.getInstance();
-//		return String.valueOf(now.get(Calendar.YEAR ))+(now.get(Calendar.MONTH) + 1);
-		// 获取当前时间
-		LocalDateTime nowTime = LocalDateTime.now();
-		return String.valueOf(nowTime.getYear()) + nowTime.getMonth().getValue();
-	}
 	public static String translateDateStr(Object obj) {
 		if (obj == null) {
 			return null;
@@ -132,7 +125,7 @@ public class Utils {
 	public static void traverFile(File file, List<File> fileList) {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
-			if(files !=null) {
+			if (files != null) {
 				for (File tempFile : files) {
 					traverFile(tempFile, fileList);
 				}
