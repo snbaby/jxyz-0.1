@@ -129,11 +129,18 @@ public class JxyzAmqpReceiverComponet {
 
 	private void parse(String unzipObjectPath, String id, String year) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		
 		log.info(">>开始执行扫描文件夹--{}--", unzipObjectPath);
 		List<File> fileList = new ArrayList<File>();
 		File esbDirectory = new File(unzipObjectPath);
 		Utils.traverFile(esbDirectory, fileList);
 		log.info(">>文件夹数量--{}--", fileList.size());
+		
+		Date parse_start_time = new Date();
+		ctx.execute("update esb_log set parse_total = ? , parse_start_time = ? where id = ? ",fileList.size(), Utils.df().format(parse_start_time), id);
+		
+		
+		
 		List<Map<String, Object>> logMapList = ctx.qryMapList(
 				"select files_path,files_name from sdi_jxyz_log where folder_name=?", DB.param(unzipObjectPath));
 		log.info(">>获取往期--{}--日志", unzipObjectPath);
@@ -230,6 +237,9 @@ public class JxyzAmqpReceiverComponet {
 				// TODO: handle finally clause
 				ctx.execute("INSERT INTO sdi_jxyz_log(files_path,files_name,folder_name,created_name)VALUES(?,?,?,?)",
 						file.getAbsolutePath(), file.getName(), unzipObjectPath, "王小贱");
+				
+				Date parse_end_time = new Date();
+				ctx.execute("update esb_log set parse_end_time = ? where id = ? ",Utils.df().format(parse_end_time), id);
 				try {
 					ctx.nBatchEnd();
 				} catch (Exception e) {
