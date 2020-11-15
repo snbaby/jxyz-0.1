@@ -19,8 +19,6 @@ import java.util.Date;
 @Slf4j
 public class JxyzController {
 
-    private String GET_YEAR_MONTH = Utils.getYearMonth();
-
     @Autowired
     private PageTransferService pageTransferService;
 
@@ -85,7 +83,7 @@ public class JxyzController {
         DbContext dbContext = DbContext.getGlobalDbContext();
         log.debug("轨迹数据：导入数据：{}", jsb.toString());
         log.info("轨迹数据：开始导入数据");
-
+        String GET_YEAR_MONTH = Utils.getYearMonth();
         dbContext.exe("INSERT INTO sdi_jxyz_pkp_trace_message_" + GET_YEAR_MONTH + "(",
                 DB.notNull("trace_no,", jsb.getString("traceNo")),
                 DB.notNull("op_time,", Utils.translateDateStr(jsb.get("opTime"))),
