@@ -1,33 +1,27 @@
 package com.isoftstone.jxyz.controller;
 
+import java.util.Date;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DB;
 import com.github.drinkjava2.jsqlbox.DbContext;
 import com.isoftstone.jxyz.util.Utils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = "/api")
 @Slf4j
 public class JxyzController {
-
-    private static int a = 0;
-
-    private String GET_YEAR_MONTH= Utils.getYearMonth();
-
-    @PostMapping(value = "/http_request")
-    @ResponseBody
-    public int eg01(@RequestBody JSONObject jsonObject){
-        System.out.println(jsonObject.toJSONString().length());
-        a+=1;
-        return a;
-    }
-
+    
     @PostMapping(value = "receive/trajectory")
     @ResponseBody
     public ResponseEntity<JSONObject> trajectory(@RequestBody JSONObject jsb) {
@@ -35,7 +29,8 @@ public class JxyzController {
         log.debug("轨迹数据：导入数据：{}", jsb.toString());
         log.info("轨迹数据：开始导入数据");
 
-        dbContext.exe("INSERT INTO sdi_jxyz_pkp_trace_message_" + GET_YEAR_MONTH + "(",
+        String getYearMonth= Utils.getYearMonth();
+        dbContext.exe("INSERT INTO sdi_jxyz_pkp_trace_message_" + getYearMonth + "(",
                 DB.notNull("trace_no,", jsb.getString("traceNo")),
                 DB.notNull("op_time,", Utils.translateDateStr(jsb.get("opTime"))),
                 DB.notNull("op_code,", jsb.getString("opCode")),

@@ -4,7 +4,7 @@ logging:
   file:
     path: log
 server:
-  port: 9003
+  port: 18143
 spring:
   jackson:
     generator:
@@ -13,9 +13,9 @@ spring:
     name: jxyz-trace
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.112.102.229:3306/jxyz_test?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: root
-    password: root@1234
+    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: jxyz
+    password: jxyz@1234
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -25,8 +25,3 @@ spring:
       connection-test-query: SELECT 1
       idle-timeout: 30000
       maximum-pool-size: 15
-#jxyz:
-#  created_user: 王小贱
-#  minio_data_base_path: /home/minio/data
-#  upzip_base_path: /home/unzip
-#  default_year: 2020
