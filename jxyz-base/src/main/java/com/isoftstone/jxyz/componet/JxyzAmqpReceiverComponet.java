@@ -58,7 +58,7 @@ public class JxyzAmqpReceiverComponet {
 				JSONObject bucketJsb = s3Jsb.getJSONObject("bucket");
 				String bucket = bucketJsb.getString("name");
 				JSONObject objectJsb = s3Jsb.getJSONObject("object");
-				String object = objectJsb.getString("key");
+				String object = objectJsb.getString("key").replace("+", " ");
 
 				Date created_time = new Date();
 				ctx.execute(
