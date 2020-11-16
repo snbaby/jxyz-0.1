@@ -38,7 +38,12 @@ jxyz:
   #每页最大条数
   data_total: 1000
   #定义需要调用的http数据转移接口地址
-  url: localhost:9003/api/
+  url: localhost:18143/api/
+
+  get_token:
+    token_url: https://www.gneec.com/iam/keystone/auth/getToken
+    user_name: svc.frm/uc_frm
+    password: Huawei@123
 #feignclient超时，一般都是初始化请求超时，默认是1秒，这样服务创建请求时间加上请求时间，非常容易超时
 feign:
   httpclient:

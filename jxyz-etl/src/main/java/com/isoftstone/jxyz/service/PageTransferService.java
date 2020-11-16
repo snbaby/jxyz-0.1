@@ -3,69 +3,84 @@ package com.isoftstone.jxyz.service;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DbContext;
 import com.isoftstone.jxyz.util.DataBaseUtil;
+import com.isoftstone.jxyz.util.PostHttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.yaml.snakeyaml.nodes.CollectionNode;
 
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Component
 @Slf4j
-@EnableScheduling
 public class PageTransferService {
     @Value("${jxyz.data_total}")
     private Integer data_total;
-    @Autowired
-    TransactionService transactionService;
+    @Value("${jxyz.get_token.user_name}")
+    private String userName;
+    @Value("${jxyz.get_token.password}")
+    private String password;
+    @Value("${jxyz.get_token.token_url}")
+    private String token_url;
 
-    public void pageTransfer(Long count, DbContext dbContext, String sql) {
-        JSONObject js = new JSONObject();
+    private TransactionService transactionService;
+
+    @Autowired
+    public PageTransferService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+
+    private Integer pageTransfer(Long count, DbContext dbContext, String sql, String tableName, String periodId) {
+        int j = 0;
+        JSONObject getToken = new JSONObject();
+        getToken.put("userName", userName);
+        getToken.put("password", password);
+        //获取token 传完一张表获取一次token避免token失效
+        String token = PostHttpsUtil.post(token_url, getToken.toJSONString());
+        log.info(token);
         //分页传输
+        List<Map<String, Object>> result;
         long totalPage = (count + data_total - 1) / data_total;
         for (int i = 1; i <= totalPage; i++) {
-            List<Map<String, Object>> result;
             String a = dbContext.pagin(i, data_total, sql);
             result = dbContext.qryMapList(a);
             //传输
-            js.put("result", result);
+            Map<String, Object> map = new HashMap<>();
+            map.put("tableName", tableName);
+            map.put("periodId", periodId);
+            map.put("datas", result);
+            map.put("del", 1);
             //转移数据
-            int code = transactionService.httpRequest(js);
+            Integer code = transactionService.httpRequest(map);
             log.info(code + "");
+            j += 1;
         }
+        return j;
     }
 
+    //指定时间间隔，例：0 0 12 * * ?   每天中午12点触发
+    @Scheduled(cron = "1 2 3 * * ?") //每天凌晨3点2分1秒触发
+    public void getData() {
+        configureTasks(null, null, null);
+    }
+
+
     //3.添加定时任务
-    //指定时间间隔，例如：5秒
-    @Scheduled(cron = "0/5 * * * * ?")
     //@Scheduled(fixedRate=5000)
-    public void configureTasks() {
-        //获取当前时间
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String nowFormatter = now.format(dateTimeFormatter);
-        //获取日
-        int day = now.getDayOfMonth();
-        //获取月
-        int month = now.getMonth().getValue();
-        //获取年
-        int year = now.getYear();
-
-        //当前日期的前一天日期
-        String yesterday = LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        //取值
+    public void configureTasks(String tableName, String startTime, String endTime) {
+        //获取表名
         ArrayList<String> tableNames = DataBaseUtil.tableNameList();
-
+        if (null != tableName && !tableName.equals("")) {
+            tableNames.clear();
+            tableNames.add(tableName);
+        }
         //天表列表
         ArrayList<String> dayList = new ArrayList<>();
         dayList.add("dwr_customer_daily_revenue_t");
@@ -83,35 +98,55 @@ public class PageTransferService {
 
         //创建dbcontext
         DbContext dbContext = DbContext.getGlobalDbContext();
-
-        String sql;
-        Long count;
+        //sql语句
+        String countSql;
+        String selectSql;
+        //一张表的总条数
+        long count;
+        //字段列名
         String fieId;
-        for (String tableName : tableNames) {
+        //获取前一天的日期
+        String yesterday = LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String endDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        //获取上一个月的月份
+        String lastMonth = LocalDateTime.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).
+                format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String endMonth = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth()).
+                format(DateTimeFormatter.ofPattern("yyyyMM"));
+        if (null != startTime && !startTime.equals("")) {
+            yesterday = startTime;
+            lastMonth = startTime;
+        }
+        if (null != endTime && !endTime.equals("")) {
+            endDay = endTime;
+            endMonth = endTime;
+        }
 
-            if (dayList.contains(tableName)) {
-
+        for (String tName : tableNames) {
+            //获取表字段
+            fieId = DataBaseUtil.tableNameUtil(tName);
+            countSql = " select count(0) from " + tName;
+            selectSql = " select " + fieId + " from " + tName;
+            String periodId = null;
+            if (dayList.contains(tName)) {
                 //当前日期的前一天的数据
-                sql = "select count(0) from " + tableName + " where period_id = " + yesterday;
-                count = dbContext.qryLongValue(sql);
-                //获取表字段
-                fieId = DataBaseUtil.tableNameUtil(tableName);
-                sql = "select " + fieId + " from " + tableName + " where period_id = " + yesterday;
-
-            } else if (monthList.contains(tableName)) {
+                periodId = yesterday;
+                countSql = countSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
+                count = dbContext.qryLongValue(countSql);
+                selectSql = selectSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
+            } else if (monthList.contains(tName)) {
                 //当前日期的前一个月数据（判断条件为当前时间是1日 运行）
-
+                countSql = countSql + " where period_id >= '" + lastMonth + "' and" + " period_id <= '" + endMonth + "'";
+                count = dbContext.qryLongValue(countSql);
+                selectSql = selectSql + " where period_id >= '" + lastMonth + "' and" + " period_id <= '" + endMonth + "'";
+                periodId = lastMonth;
             } else {
-                //再传全量
+                count = dbContext.qryLongValue(countSql);
             }
 
-
+            Integer a = pageTransfer(count, dbContext, selectSql, tName, periodId);
+            log.info(a + "");
         }
     }
-
-    public static void main(String[] args) {
-
-    }
-
 
 }

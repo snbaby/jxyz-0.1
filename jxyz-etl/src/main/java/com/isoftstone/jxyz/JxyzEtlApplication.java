@@ -19,8 +19,8 @@ import javax.sql.DataSource;
  */
 @EnableAsync
 @EnableFeignClients
-
 @SpringBootApplication
+@EnableScheduling
 public class JxyzEtlApplication {
 
     @Autowired
