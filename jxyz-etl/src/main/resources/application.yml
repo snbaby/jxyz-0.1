@@ -38,8 +38,8 @@ jxyz:
   #每页最大条数
   data_total: 1000
   #定义需要调用的http数据转移接口地址
-#  url: 192.168.124.6:8085/jxyzwg/dataSynch/dataSynchronization
-  url: http://localhost:9001/dataSynch/dataSynchronization
+  url: http://192.168.124.3:8085/jxyzwg/dataSynch/dataSynchronization
+#  url: http://localhost:9001/dataSynch/dataSynchronization
 
   get_token:
     token_url: https://www.gneec.com/iam/keystone/auth/getToken
