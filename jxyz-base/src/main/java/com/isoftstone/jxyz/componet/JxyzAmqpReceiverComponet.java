@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -50,7 +51,8 @@ public class JxyzAmqpReceiverComponet {
 			for (int i = 0; i < recordsJsa.size(); i++) {
 				JSONObject recordJsb = recordsJsa.getJSONObject(i);
 				JSONObject responseElementsJsb = recordJsb.getJSONObject("responseElements");
-				String id = responseElementsJsb.getString("x-amz-request-id");
+//				String id = responseElementsJsb.getString("x-amz-request-id");
+				String id = UUID.randomUUID().toString();
 				JSONObject sourceJsb = recordJsb.getJSONObject("source");
 				String host = sourceJsb.getString("host");
 				Date event_time = recordJsb.getDate("eventTime");
