@@ -1405,7 +1405,7 @@ Caused by: java.net.NoRouteToHostException: No route to host: connect
 
 2020-11-13 18:03:06.997  WARN 16964 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'createDefaultDbContext' defined in com.isoftstone.jxyz.JxyzTraceApplication: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.github.drinkjava2.jsqlbox.DbContext]: Factory method 'createDefaultDbContext' threw exception; nested exception is com.github.drinkjava2.jdialects.DialectException: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
 2020-11-13 18:03:07.006  INFO 16964 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2020-11-13 18:03:07.030  INFO 16964 --- [main] ConditionEvaluationReportLoggingListener : 
+2020-11-13 18:03:07.030  INFO 16964 --- [main] ConditionEvaluationReportLoggingListener :
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
 2020-11-13 18:03:07.043 ERROR 16964 --- [main] o.s.boot.SpringApplication               : Application run failed
@@ -1590,7 +1590,7 @@ Caused by: java.net.NoRouteToHostException: No route to host: connect
 
 2020-11-13 18:03:09.125  WARN 17140 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'createDefaultDbContext' defined in com.isoftstone.jxyz.JxyzEtlApplication: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.github.drinkjava2.jsqlbox.DbContext]: Factory method 'createDefaultDbContext' threw exception; nested exception is com.github.drinkjava2.jdialects.DialectException: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
 2020-11-13 18:03:09.134  INFO 17140 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2020-11-13 18:03:09.147  INFO 17140 --- [main] ConditionEvaluationReportLoggingListener : 
+2020-11-13 18:03:09.147  INFO 17140 --- [main] ConditionEvaluationReportLoggingListener :
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
 2020-11-13 18:03:09.162 ERROR 17140 --- [main] o.s.boot.SpringApplication               : Application run failed
@@ -2880,7 +2880,7 @@ java.lang.RuntimeException: null
 2020-11-14 18:15:56.000  INFO 11828 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1255 ms
 2020-11-14 18:15:56.311  WARN 11828 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jxyzController': Unsatisfied dependency expressed through field 'pageTransferService'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'pageTransferService' defined in file [E:\jxyz\jxyz-etl\target\classes\com\isoftstone\jxyz\service\PageTransferService.class]: Initialization of bean failed; nested exception is java.lang.IllegalStateException: Need to invoke method 'configureTasks' found on proxy for target class 'PageTransferService' but cannot be delegated to target bean. Switch its visibility to package or protected.
 2020-11-14 18:15:56.315  INFO 11828 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2020-11-14 18:15:56.332  INFO 11828 --- [main] ConditionEvaluationReportLoggingListener : 
+2020-11-14 18:15:56.332  INFO 11828 --- [main] ConditionEvaluationReportLoggingListener :
 
 Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
 2020-11-14 18:15:56.349 ERROR 11828 --- [main] o.s.boot.SpringApplication               : Application run failed
