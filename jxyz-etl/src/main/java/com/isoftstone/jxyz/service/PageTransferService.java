@@ -1,9 +1,7 @@
 package com.isoftstone.jxyz.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DbContext;
 import com.isoftstone.jxyz.util.DataBaseUtil;
-import com.isoftstone.jxyz.util.PostHttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -28,52 +27,17 @@ public class PageTransferService {
     private String password;
     @Value("${jxyz.get_token.token_url}")
     private String token_url;
-
-    private TransactionService transactionService;
+    @Value("${jxyz.url}")
+    private String jxyz_url;
 
     @Autowired
-    public PageTransferService(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
+    private HttpsAsync httpsAsync;
 
-
-    private Integer pageTransfer(Long count, DbContext dbContext, String sql, String tableName, String periodId) {
-        int j = 0;
-        JSONObject getToken = new JSONObject();
-        getToken.put("userName", userName);
-        getToken.put("password", password);
-        //获取token 传完一张表获取一次token避免token失效
-        String token = PostHttpsUtil.post(token_url, getToken.toJSONString());
-        log.info(token);
-        //分页传输
-        List<Map<String, Object>> result;
-        long totalPage = (count + data_total - 1) / data_total;
-        for (int i = 1; i <= totalPage; i++) {
-            String a = dbContext.pagin(i, data_total, sql);
-            result = dbContext.qryMapList(a);
-            //传输
-            Map<String, Object> map = new HashMap<>();
-            map.put("tableName", tableName);
-            map.put("periodId", periodId);
-            map.put("datas", result);
-            map.put("del", 1);
-            //转移数据
-            Integer code = transactionService.httpRequest(map);
-            log.info(code + "");
-            j += 1;
-        }
-        return j;
-    }
-
-    //指定时间间隔，例：0 0 12 * * ?   每天中午12点触发
     @Scheduled(cron = "1 2 3 * * ?") //每天凌晨3点2分1秒触发
     public void getData() {
         configureTasks(null, null, null);
     }
 
-
-    //3.添加定时任务
-    //@Scheduled(fixedRate=5000)
     public void configureTasks(String tableName, String startTime, String endTime) {
         //获取表名
         ArrayList<String> tableNames = DataBaseUtil.tableNameList();
@@ -88,6 +52,7 @@ public class PageTransferService {
         dayList.add("dwr_emp_daily_collection_t");
         dayList.add("dwr_regional_daily_collection_t");
         dayList.add("dwr_sales_department_collection_t");
+
         //月表列表
         ArrayList<String> monthList = new ArrayList<>();
         monthList.add("dm_customer_month_revenue_t");
@@ -123,6 +88,7 @@ public class PageTransferService {
         }
 
         for (String tName : tableNames) {
+            System.out.println("///////////////////");
             //获取表字段
             fieId = DataBaseUtil.tableNameUtil(tName);
             countSql = " select count(0) from " + tName;
@@ -141,11 +107,19 @@ public class PageTransferService {
                 selectSql = selectSql + " where period_id >= '" + lastMonth + "' and" + " period_id <= '" + endMonth + "'";
                 periodId = lastMonth;
             } else {
-                count = dbContext.qryLongValue(countSql);
+                if (tName.equals("sdi_jxyz_pkp_waybill_base_")) {
+                    //获取前一天的日期
+                    yesterday = LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                    countSql = countSql + yesterday;
+                    count = dbContext.qryLongValue(countSql);
+                    selectSql = selectSql + yesterday;
+                    tName = tName + yesterday.substring(0, 4);
+                } else {
+                    count = dbContext.qryLongValue(countSql);
+                }
             }
 
-            Integer a = pageTransfer(count, dbContext, selectSql, tName, periodId);
-            log.info(a + "");
+            httpsAsync.pageTransfer(count, selectSql, tName, periodId);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.isoftstone.jxyz.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
@@ -14,7 +15,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
@@ -25,16 +25,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 public class PostHttpsUtil {
-    //private static PoolingHttpClientConnectionManager connMgr;
     private static RequestConfig requestConfig;
-    private static final int MAX_TIMEOUT = 4000;
+    private static final int MAX_TIMEOUT = 10000;
     private static CloseableHttpClient httpClient;
     private static CookieStore cookieStore = new BasicCookieStore();
     static {
-//        connMgr = new PoolingHttpClientConnectionManager();
-//        connMgr.setMaxTotal(200);
-//        connMgr.setDefaultMaxPerRoute(100);
-
         RequestConfig.Builder configBuilder = RequestConfig.custom();
         configBuilder.setConnectTimeout(MAX_TIMEOUT);
         configBuilder.setSocketTimeout(MAX_TIMEOUT);
@@ -43,9 +38,6 @@ public class PostHttpsUtil {
         configBuilder.setCookieSpec(CookieSpecs.STANDARD);
         requestConfig = configBuilder.build();
         refreshHttpClient();
-        // initCookieStore(Conf.get("priceInfoCookie"));
-        // initCookieStore(Conf.get("accountBalanceCookie"));
-        // initCookieStore(Conf.get("refreshCookie"));
     }
 
     private static void refreshHttpClient() {
@@ -84,35 +76,24 @@ public class PostHttpsUtil {
         return sslsf;
     }
 
-    public static void setCookieStore(HttpResponse httpResponse) {
-        Header[] headers = httpResponse.getHeaders("Set-Cookie");
-        for (Header header : headers) {
-            String cookieValueStr=header.getValue();
-            String [] cookieValues=cookieValueStr.split(";");
-            String cookieName=cookieValues[0].split("=")[0];
-            String cookieValue=cookieValues[0].split("=")[1];
-            BasicClientCookie cookie = new BasicClientCookie(cookieName, cookieValue);
-            cookie.setDomain("api.gate.io");
-            cookie.setPath("/");
-            cookieStore.addCookie(cookie);
-        }
-    }
-
-    public static String post(String url, String outputStr) {
+    public static String post(String url, String outputStr,String token) {
         HttpPost httppost = new HttpPost(url);
         Header[] headers = { new BasicHeader("Content-Type", "application/json"),};
         httppost.setHeaders(headers);
-
+        if (null != token){
+            JSONObject tokenJson = new JSONObject();
+            tokenJson.put("token",token);
+            httppost.setEntity(new StringEntity(tokenJson.toJSONString(),"utf-8"));
+        }
         StringEntity uefEntity = new StringEntity(outputStr,"utf-8");//解决中文乱码问题
         uefEntity.setContentEncoding("UTF-8");
         uefEntity.setContentType("application/json");
         httppost.setEntity(uefEntity);
+
         HttpResponse response;
         try {
             response = httpClient.execute(httppost);
-            setCookieStore(response);
             String result = EntityUtils.toString(response.getEntity());
-//            System.out.println(EntityUtils.toString(response.getEntity()));
             return result;
         } catch (Exception e) {
             refreshHttpClient();
