@@ -1,5 +1,7 @@
 package com.isoftstone.jxyz.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -467,6 +469,13 @@ public class JxyzService {
 		if (sqlItemList.size() > 1) {
 			if (validate(jsb) && sqlItemList.size() > 0) {
 				ctx.exe("INSERT INTO sdi_jxyz_pkp_waybill_base_" + year + "(", sqlItemList.toArray(), ")",
+						DB.valuesQuestions());
+				
+				if(ctx.qryLongValue(Utils.validateTable()) == 0) {
+					ctx.exe(Utils.createTable());
+				}
+				DateFormat df = new SimpleDateFormat("yyyyMMdd");
+				ctx.exe("INSERT INTO sdi_jxyz_pkp_waybill_base_" +  df.format(new Date()) + "(", sqlItemList.toArray(), ")",
 						DB.valuesQuestions());
 			}
 		}
