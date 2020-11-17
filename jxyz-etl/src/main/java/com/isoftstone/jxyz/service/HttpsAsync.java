@@ -54,7 +54,6 @@ public class HttpsAsync {
                 jsonObject.put("del", "0");
             }
             //转移数据
-//            Integer code = transactionService.httpRequest(map);
             String result = PostHttpsUtil.post(jxyz_url, jsonObject.toJSONString(),null);
             log.info(result + "");
             j += 1;

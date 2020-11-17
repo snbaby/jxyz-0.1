@@ -88,7 +88,7 @@ public class PageTransferService {
         }
 
         for (String tName : tableNames) {
-            System.out.println("///////////////////");
+            log.info(tableName + "=====开始======");
             //获取表字段
             fieId = DataBaseUtil.tableNameUtil(tName);
             countSql = " select count(0) from " + tName;
@@ -114,6 +114,7 @@ public class PageTransferService {
                     count = dbContext.qryLongValue(countSql);
                     selectSql = selectSql + yesterday;
                     tName = tName + yesterday.substring(0, 4);
+                    periodId = yesterday;
                 } else {
                     count = dbContext.qryLongValue(countSql);
                 }
