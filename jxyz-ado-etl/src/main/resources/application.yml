@@ -1,0 +1,36 @@
+logging:
+  level:
+    root: INFO
+  file:
+    path: log
+server:
+  port: 45678
+  servlet:
+    context-path: /jxyzadoetl
+spring:
+  jackson:
+    generator:
+      write-numbers-as-strings: true
+  application:
+    name: jxyzadoetl
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/jxyz_zy?useUnicode=true&characterEncoding=utf-8&&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: Liqin1988
+    hikari:
+      connection-timeout: 15000
+      auto-commit: true
+      max-lifetime: 600000
+      pool-name: DatebookHikariCP
+      minimum-idle: 5
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+      maximum-pool-size: 15
+      
+jxyzadoetl:
+  etl:
+    download: F:\dowload
+    unzip: F:\unzip
+    url: https://112.51.254.102:18443/premiseapi/api/file/download/ #下载路径  
+
