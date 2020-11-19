@@ -30,7 +30,14 @@ spring:
       
 jxyzadoetl:
   etl:
-    download: F:\dowload
-    unzip: F:\unzip
-    url: https://112.51.254.102:18443/premiseapi/api/file/download/ #下载路径  
+#    download: /home/dowload
+#    unzip: /home/unzip
+    download: d:/dowload
+    unzip: d:/unzip
+    url: https://112.51.254.102:18443/premiseapi/api/file/download/ #下载路径
+    del_url: https://112.51.254.102:18443/premiseapi/api/file/delete/ #删除地址
+    get_token:
+      user_name: liuyi
+      password: Jxyz123@
+      token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
 

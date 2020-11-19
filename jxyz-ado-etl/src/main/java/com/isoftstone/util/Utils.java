@@ -1,11 +1,6 @@
 package com.isoftstone.util;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
@@ -16,9 +11,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 
+@Slf4j
 public class Utils {
 	public static final String separator = File.separator;
 	public static final String surfix = ".7z";
@@ -36,6 +33,37 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * 删除文件或文件夹
+	 *
+	 * @param directory
+	 */
+	public static void delAllFile(File directory) {
+		if (!directory.isDirectory()) {
+			directory.delete();
+		} else {
+			File[] files = directory.listFiles();
+
+			// 空文件夹
+			if (files == null || files.length == 0) {
+				directory.delete();
+				return;
+			}
+
+			// 删除子文件夹和子文件
+			for (File file : files) {
+				if (file.isDirectory()) {
+					delAllFile(file);
+				} else {
+					file.delete();
+				}
+			}
+			// 删除文件夹本身
+			directory.delete();
+		}
+		log.info("删除" + directory.getAbsolutePath());
+	}
+
 	public static InputStream getInputHttpsStreamByGet(String url) {
 		try {
 			HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
@@ -46,7 +74,6 @@ public class Utils {
 				InputStream inputStream = conn.getInputStream();
 				return inputStream;
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -73,8 +100,8 @@ public class Utils {
 
 	/**
 	 * zip解压
-	 * 
-	 * @param inputFile   待解压文件名
+	 *
+	 * @param srcFile   待解压文件名
 	 * @param destDirPath 解压路径
 	 */
 	public static void Uncompress(File srcFile, String destDirPath) throws Exception {
@@ -85,8 +112,8 @@ public class Utils {
 		// 开始解压
 		@SuppressWarnings("resource")
 		SevenZFile zIn = new SevenZFile(srcFile);
-		SevenZArchiveEntry entry = null;
-		File file = null;
+		SevenZArchiveEntry entry;
+		File file;
 		while ((entry = zIn.getNextEntry()) != null) {
 			if (!entry.isDirectory()) {
 				file = new File(destDirPath, entry.getName());
