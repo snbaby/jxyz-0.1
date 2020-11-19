@@ -36,15 +36,26 @@ jxyz:
   upzip_base_path: /home/unzip
   default_year: 2020
   #每页最大条数
-  data_total: 1000
-  #定义需要调用的http数据转移接口地址
-  url: http://192.168.124.3:8085/jxyzwg/dataSynch/dataSynchronization
-#  url: http://localhost:9001/dataSynch/dataSynchronization
-
+  data_total: 10000
+  #数据库名称
+  table_schema: jxyz_test
+  data_base_path: d:/jxyz_data/
+  #文件上传地址
+  upload_url: https://112.51.254.102:18443/premiseapi/api/file/upload
+  #文件传输地址code
+  file_code_url: http://192.168.124.2:45678/jxyzadoetl/etl/download/6576b4f8-7895-4977-ad5e-e7df9d82fd4b
   get_token:
-    token_url: https://www.gneec.com/iam/keystone/auth/getToken
-    user_name: svc.frm/uc_frm
-    password: Huawei@123
+    user_name: liuyi
+    password: Jxyz123@
+    token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
+
+  #定义需要调用的http数据转移接口地址
+#  url: http://localhost:9001/jxyzwg/dataSynch/dataSynchronization
+
+#  get_token:
+#    token_url: https://www.gneec.com/iam/keystone/auth/getToken
+#    user_name: svc.frm/uc_frm
+#    password: Huawei@123
 #feignclient超时，一般都是初始化请求超时，默认是1秒，这样服务创建请求时间加上请求时间，非常容易超时
 feign:
   httpclient:

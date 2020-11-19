@@ -1,17 +1,23 @@
 package com.isoftstone.jxyz.util;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.Consts;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -19,6 +25,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.*;
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -26,7 +33,7 @@ import java.security.cert.X509Certificate;
 
 public class PostHttpsUtil {
     private static RequestConfig requestConfig;
-    private static final int MAX_TIMEOUT = 10000;
+    private static final int MAX_TIMEOUT = 30000;
     private static CloseableHttpClient httpClient;
     private static CookieStore cookieStore = new BasicCookieStore();
     static {
@@ -76,6 +83,20 @@ public class PostHttpsUtil {
         return sslsf;
     }
 
+    public static String get(String url){
+        HttpGet httpGet = new HttpGet(url);
+        HttpResponse response;
+        try {
+            response = httpClient.execute(httpGet);
+            String result = EntityUtils.toString(response.getEntity());
+            return result;
+        } catch (Exception e) {
+            refreshHttpClient();
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static String post(String url, String outputStr,String token) {
         HttpPost httppost = new HttpPost(url);
         Header[] headers = { new BasicHeader("Content-Type", "application/json"),};
@@ -89,7 +110,35 @@ public class PostHttpsUtil {
         uefEntity.setContentEncoding("UTF-8");
         uefEntity.setContentType("application/json");
         httppost.setEntity(uefEntity);
+        HttpResponse response;
+        try {
+            response = httpClient.execute(httppost);
+            String result = EntityUtils.toString(response.getEntity());
+            return result;
+        } catch (Exception e) {
+            refreshHttpClient();
+            e.printStackTrace();
+        }
+        return "";
+    }
 
+
+    public static String uploadPost(String filePath,String uploadUrl,String token){
+        HttpPost httppost = new HttpPost(uploadUrl);
+        Header[] headers = { new BasicHeader("gc-authentication", token),};
+        httppost.setHeaders(headers);
+        //传入参数可以为file或者filePath，在此处做转换
+        File file = new File(filePath);
+        MultipartEntityBuilder builder  = MultipartEntityBuilder.create();
+        //设置浏览器兼容模式
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        //设置请求的编码格式
+        builder.setCharset(Consts.UTF_8);
+        builder.setContentType(ContentType.MULTIPART_FORM_DATA);
+        //添加文件
+        builder.addBinaryBody("file", file);
+        HttpEntity reqEntity = builder.build();
+        httppost.setEntity(reqEntity);
         HttpResponse response;
         try {
             response = httpClient.execute(httppost);

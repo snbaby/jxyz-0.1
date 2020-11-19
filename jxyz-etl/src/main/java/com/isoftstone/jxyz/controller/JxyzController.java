@@ -3,7 +3,7 @@ package com.isoftstone.jxyz.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DB;
 import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.jxyz.service.PageTransferService;
+import com.isoftstone.jxyz.service.DataFileService;
 import com.isoftstone.jxyz.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,8 @@ import java.util.Date;
 @RequestMapping(value = "/api")
 @Slf4j
 public class JxyzController {
-    private PageTransferService pageTransferService;
-
     @Autowired
-    public JxyzController(PageTransferService pageTransferService) {
-        this.pageTransferService = pageTransferService;
-    }
+    private DataFileService dataFileService;
 
     private static JSONObject resultJson() {
         JSONObject resJsb = new JSONObject();
@@ -41,7 +37,7 @@ public class JxyzController {
      */
     @PostMapping(value = "/receive/get_date")
     public ResponseEntity<JSONObject> getData(String tableName, String startTime, String endTime) {
-        pageTransferService.configureTasks(tableName,startTime,endTime);
+        dataFileService.configureTasks(tableName,startTime,endTime);
         return new ResponseEntity<>(resultJson(), HttpStatus.OK);
     }
 
