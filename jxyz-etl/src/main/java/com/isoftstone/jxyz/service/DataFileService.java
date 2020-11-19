@@ -194,8 +194,10 @@ public class DataFileService {
         jsonObject.clear();
         jsonObject = JSONObject.parseObject(reslut);
         String dataCode = jsonObject.get("data").toString();
+        System.out.println(dataCode);
         //将code传给王师傅
-        String getJosn = PostHttpsUtil.get(file_code_url + "\\" + dataCode);
+
+         String result =  PostHttpsUtil.get(file_code_url + dataCode);
         //将7z文件删除
         delAllFile(new File(data_base_path + "\\" + file + ".7z"));
     }

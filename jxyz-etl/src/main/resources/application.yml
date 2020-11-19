@@ -43,7 +43,8 @@ jxyz:
   #文件上传地址
   upload_url: https://112.51.254.102:18443/premiseapi/api/file/upload
   #文件传输地址code
-  file_code_url: http://192.168.124.2:45678/jxyzadoetl/etl/download/6576b4f8-7895-4977-ad5e-e7df9d82fd4b
+#  file_code_url: http://161.117.39.189:45678/jxyzadoetl/etl/download/
+  file_code_url: http://192.168.124.4:45678/jxyzadoetl/etl/download/
   get_token:
     user_name: liuyi
     password: Jxyz123@

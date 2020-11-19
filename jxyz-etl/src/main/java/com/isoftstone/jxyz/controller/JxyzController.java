@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/etl")
 @Slf4j
 public class JxyzController {
     @Autowired

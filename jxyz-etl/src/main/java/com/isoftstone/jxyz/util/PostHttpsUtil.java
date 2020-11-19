@@ -83,7 +83,7 @@ public class PostHttpsUtil {
         return sslsf;
     }
 
-    public static String get(String url){
+    public static String get(String url) {
         HttpGet httpGet = new HttpGet(url);
         HttpResponse response;
         try {
