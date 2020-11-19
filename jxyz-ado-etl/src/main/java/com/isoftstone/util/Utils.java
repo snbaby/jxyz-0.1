@@ -1,6 +1,11 @@
 package com.isoftstone.util;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
@@ -11,9 +16,10 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Utils {
@@ -101,7 +107,7 @@ public class Utils {
 	/**
 	 * zip解压
 	 *
-	 * @param srcFile   待解压文件名
+	 * @param srcFile     待解压文件名
 	 * @param destDirPath 解压路径
 	 */
 	public static void Uncompress(File srcFile, String destDirPath) throws Exception {
@@ -132,6 +138,8 @@ public class Utils {
 				out.close();
 			}
 		}
+		zIn.close();
+		srcFile.delete();
 	}
 
 }
