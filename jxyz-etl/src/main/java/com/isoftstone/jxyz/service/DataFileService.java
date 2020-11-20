@@ -48,6 +48,12 @@ public class DataFileService {
         configureTasks(null, null, null);
     }
 
+    public static void main(String[] args) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String startTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println(startTime);
+    }
+
     public void configureTasks(String tName, String startTime, String endTime) {
         List<String> tableNameList = DataBaseUtil.tableNameList();
         if (null != tName && !tName.equals("")) {
@@ -72,6 +78,8 @@ public class DataFileService {
         DbContext dbContext = DbContext.getGlobalDbContext();
 
         for (String tableName : tableNameList) {
+            String startDayTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            log.info(tableName + "表开始======》" + startDayTime);
             //查询总数
             String countSql = " select count(0) from " + tableName;
             //获取列名字
@@ -96,8 +104,14 @@ public class DataFileService {
                 endDay = endTime;
                 endMonth = endTime;
             }
+            String condition = null;
+            if (null != yesterday || null != lastMonth) {
+                condition = yesterday == null ? lastMonth : yesterday;
+                log.info("查询时间范围 condition =====" + condition);
+            }
+
             if (dayList.contains(tableName)) {
-//                //当前日期的前一天的数据
+                //当前日期的前一天的数据
                 countSql = countSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
                 count = dbContext.qryLongValue(countSql);
                 selectSql = selectSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
@@ -127,18 +141,23 @@ public class DataFileService {
                     deleteSql = "TRUNCATE " + tableName;
                 }
             }
+            String pageStartTime = null;
+            String pageEndTime = null;
+            Map<String, String> timeMap = new HashMap<>();
             if (tableName.contains("sdi_jxyz_pkp_waybill_base_")) {
-                //每页最大条数为50万
+                //每页最大条数为50万,此值不可修改，数据过大文件上传限制
                 data_total = 500000;
+                log.info("查询每页最大条数 total ======》" + data_total);
                 //分页
                 long totalPage = (count + data_total - 1) / data_total;
                 for (int page = 1; page <= totalPage; page++) {
+                    pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    log.info(tableName + "表，" + "第" + page + "页开始时间=====》" + pageStartTime);
                     String file = tableName + "_" + page;
                     try {
                         String studentResourcePath = new File(data_base_path, file + "\\" + file + ".sql").getAbsolutePath();
                         // 保证目录一定存在
                         ensureDirectory(studentResourcePath);
-                        log.info("studentResourcePath = " + studentResourcePath);
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
                         String pageSql = dbContext.pagin(page, data_total, selectSql);
                         //查询需要的数据
@@ -151,9 +170,13 @@ public class DataFileService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    uploadAndDelFile(file);
+                    timeMap = uploadAndDelFile(file);
+                    pageEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    log.info(tableName + "表，" + "第" + page + "页结束时间=====》" + pageEndTime);
                 }
             } else {
+                pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                log.info(tableName + "表，查询" + "开始时间=====》" + pageStartTime);
                 try {
                     String studentResourcePath = new File(data_base_path, tableName + "\\" + tableName + ".sql").getAbsolutePath();
                     // 保证目录一定存在
@@ -164,7 +187,7 @@ public class DataFileService {
                     long totalPage = (count + data_total - 1) / data_total;
                     for (int page = 1; page <= totalPage; page++) {
                         String pageSql = dbContext.pagin(page, data_total, selectSql);
-                        //查询需要的数据
+                        //查询需要的tableName +"表"+数据
                         List<Map<String, Object>> dataList = dbContext.qryMapList(pageSql);
                         createInsertSql(writer, page, tableName, columnName, dataList, deleteSql);
                     }
@@ -176,12 +199,24 @@ public class DataFileService {
                     e.printStackTrace();
                 }
                 //删除文件夹
-                uploadAndDelFile(tableName);
+                timeMap = uploadAndDelFile(tableName);
+                pageEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                log.info(tableName + "表，查询" + "结束时间=====》" + pageEndTime);
             }
+            String endDayTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            log.info(tableName + "表结束========》" + endDayTime);
+
+            dbContext.exe(" INSERT INTO `t_etl_log`( `table_name`, `table_start_time`, `table_end_time`," +
+                    " `data_total`,`condition`, `page_start_time`,`page_end_time`, `sql_file_start_time`, `sql_file_end_time`, `create_time`) " +
+                    " VALUES ( '" + tableName + "','" + startDayTime + "','" + endDayTime + "','" +
+                    count + "','"+ condition +"' , '"+ pageStartTime + "','" + pageEndTime + "','" + timeMap.get("fileUploadStartTime") + "','" +
+                    timeMap.get("fileUploadStartTime") + "','" + (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    + "')"));
+            log.info(tableName + "表完成");
         }
     }
 
-    private void uploadAndDelFile(String file) {
+    private Map<String, String> uploadAndDelFile(String file) {
         //删除文件夹
         delAllFile(new File(data_base_path + "\\" + file));
         //获取token
@@ -189,17 +224,24 @@ public class DataFileService {
         jsonObject.put("userName", userName);
         jsonObject.put("password", password);
         //获取token 传完一张表获取一次token避免token失效
+        String fileUploadStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
+        log.info("上传文件开始时间======》" + fileUploadStartTime);
         String reslut = PostHttpsUtil.uploadPost(data_base_path + "\\" + file + ".7z", upload_url, token);
+        String fileUploadEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("上传文件结束时间======》" + fileUploadEndTime);
+        log.info("上传文件名 ：" + reslut);
         jsonObject.clear();
         jsonObject = JSONObject.parseObject(reslut);
         String dataCode = jsonObject.get("data").toString();
-        System.out.println(dataCode);
         //将code传给王师傅
-
-         String result =  PostHttpsUtil.get(file_code_url + dataCode);
+        PostHttpsUtil.get(file_code_url + dataCode);
         //将7z文件删除
         delAllFile(new File(data_base_path + "\\" + file + ".7z"));
+        Map<String, String> map = new HashMap<>();
+        map.put("fileUploadStartTime", fileUploadStartTime);
+        map.put("fileUploadEndTime", fileUploadEndTime);
+        return map;
     }
 
     /**
@@ -225,7 +267,6 @@ public class DataFileService {
             }
             // 删除文件夹本身
             directory.delete();
-            log.info("删除" + directory.getAbsolutePath());
         }
     }
 
