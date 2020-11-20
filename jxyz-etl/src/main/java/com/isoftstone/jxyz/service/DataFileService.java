@@ -48,12 +48,6 @@ public class DataFileService {
         configureTasks(null, null, null);
     }
 
-    public static void main(String[] args) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        String startTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        System.out.println(startTime);
-    }
-
     public void configureTasks(String tName, String startTime, String endTime) {
         List<String> tableNameList = DataBaseUtil.tableNameList();
         if (null != tName && !tName.equals("")) {
