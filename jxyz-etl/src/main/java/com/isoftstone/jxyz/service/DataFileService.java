@@ -1,32 +1,19 @@
 package com.isoftstone.jxyz.service;
 
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSONObject;
+import com.github.drinkjava2.jsqlbox.DbContext;
+import com.isoftstone.jxyz.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.jxyz.util.DataBaseUtil;
-import com.isoftstone.jxyz.util.File7zUtil;
-import com.isoftstone.jxyz.util.PostHttpsUtil;
-import com.isoftstone.jxyz.util.Utils;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -161,7 +148,7 @@ public class DataFileService {
                     log.info(tableName + "表，" + "第" + page + "页开始时间=====》" + pageStartTime);
                     String file = tableName + "_" + page;
                     try {
-                        String studentResourcePath = new File(data_base_path, file + Utils.separator + file + ".sql").getAbsolutePath();
+                        String studentResourcePath = new File(data_base_path, file + "\\" + file + ".sql").getAbsolutePath();
                         // 保证目录一定存在
                         ensureDirectory(studentResourcePath);
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
@@ -172,7 +159,7 @@ public class DataFileService {
                         writer.flush();
                         writer.close();
                         //生成压缩文件
-                        File7zUtil.Compress7z(data_base_path + Utils.separator + file, data_base_path + Utils.separator + file + ".7z");
+                        File7zUtil.Compress7z(data_base_path + "\\" + file, data_base_path + "\\" + file + ".7z");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -184,7 +171,7 @@ public class DataFileService {
                 pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 log.info(tableName + "表，查询" + "开始时间=====》" + pageStartTime);
                 try {
-                    String studentResourcePath = new File(data_base_path, tableName + Utils.separator + tableName + ".sql").getAbsolutePath();
+                    String studentResourcePath = new File(data_base_path, tableName + "\\" + tableName + ".sql").getAbsolutePath();
                     // 保证目录一定存在
                     ensureDirectory(studentResourcePath);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
@@ -198,9 +185,8 @@ public class DataFileService {
                     }
                     writer.flush();
                     writer.close();
-                    
                     //生成压缩文件
-                    File7zUtil.Compress7z(data_base_path + Utils.separator + tableName, data_base_path + Utils.separator + tableName + ".7z");
+                    File7zUtil.Compress7z(data_base_path + "\\" + tableName, data_base_path + "\\" + tableName + ".7z");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -224,7 +210,7 @@ public class DataFileService {
 
     private Map<String, String> uploadAndDelFile(String file) {
         //删除文件夹
-        delAllFile(new File(data_base_path + Utils.separator + file));
+        delAllFile(new File(data_base_path + "\\" + file));
         //获取token
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userName", userName);
@@ -233,7 +219,7 @@ public class DataFileService {
         String fileUploadStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
         log.info("上传文件开始时间======》" + fileUploadStartTime);
-        String reslut = PostHttpsUtil.uploadPost(data_base_path + Utils.separator + file + ".7z", upload_url, token);
+        String reslut = PostHttpsUtil.uploadPost(data_base_path + "\\" + file + ".7z", upload_url, token);
         String fileUploadEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("上传文件结束时间======》" + fileUploadEndTime);
         log.info("上传响应信息 ：" + reslut);
@@ -243,7 +229,7 @@ public class DataFileService {
         //将code传给王师傅
         PostHttpsUtil.get(file_code_url + dataCode);
         //将7z文件删除
-        delAllFile(new File(data_base_path + Utils.separator + file + ".7z"));
+        delAllFile(new File(data_base_path + "\\" + file + ".7z"));
         Map<String, String> map = new HashMap<>();
         map.put("fileUploadStartTime", fileUploadStartTime);
         map.put("fileUploadEndTime", fileUploadEndTime);
@@ -317,6 +303,7 @@ public class DataFileService {
         if (null == filePath || filePath == "") {
             return;
         }
+        filePath = replaceSeparator(filePath);
         if (filePath.indexOf("/") != -1) {
             filePath = filePath.substring(0, filePath.lastIndexOf("/"));
             File file = new File(filePath);
@@ -326,6 +313,12 @@ public class DataFileService {
         }
     }
 
+    /**
+     * 将符号“\\”和“\”替换成“/”,有时候便于统一的处理路径的分隔符,避免同一个路径出现两个或三种不同的分隔符
+     */
+    private static String replaceSeparator(String str) {
+        return str.replace("\\", "/").replace("\\\\", "/");
+    }
 
     private String getColumnName(String tableName, DbContext dbContext) {
         //获取列名
