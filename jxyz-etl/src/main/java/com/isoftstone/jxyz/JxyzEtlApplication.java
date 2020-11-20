@@ -1,24 +1,21 @@
 package com.isoftstone.jxyz;
 
-import com.github.drinkjava2.jsqlbox.DbContext;
-import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import javax.sql.DataSource;
+import com.github.drinkjava2.jsqlbox.DbContext;
+import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
 
 
 /**
  * async异步实现方法只能放在service或component类中，
  * 不能放在controller里，会再代理中找不到报404
  */
-@EnableAsync
-@EnableFeignClients
 @SpringBootApplication
 @EnableScheduling
 public class JxyzEtlApplication {
