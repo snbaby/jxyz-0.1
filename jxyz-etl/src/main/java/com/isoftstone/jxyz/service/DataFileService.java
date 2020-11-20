@@ -324,7 +324,9 @@ public class DataFileService {
         //获取列名
         StringBuilder cId = new StringBuilder();
         String getColumnNameSql = "select COLUMN_NAME from information_schema.columns where " +
-                "table_name='" + tableName + "' and table_schema='" + table_schema + "';";
+                "table_name='" +
+                (tableName.equals("sdi_jxyz_pkp_waybill_base_") ? (tableName + LocalDateTime.now().plusDays(-1).format(DateTimeFormatter.ofPattern("yyyyMMdd"))) : tableName) +
+                "' and table_schema='" + table_schema + "';";
         List<String> cIds = dbContext.qryList(getColumnNameSql);
         //字段中主键id不要查出来
         for (int i = 0; i < cIds.size(); i++) {
