@@ -98,19 +98,18 @@ public class DataFileService {
                 endDay = endTime;
                 endMonth = endTime;
             }
-            String condition = null;
-            if (null != yesterday || null != lastMonth) {
-                condition = yesterday == null ? lastMonth : yesterday;
-                log.info("查询时间范围 condition =====" + condition);
-            }
-
+            String condition = "";
             if (dayList.contains(tableName)) {
+                condition = yesterday;
+                log.info("查询时间范围 condition =====" + condition);
                 //当前日期的前一天的数据
                 countSql = countSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
                 count = dbContext.qryLongValue(countSql);
                 selectSql = selectSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
                 deleteSql = deleteSql + " where period_id >= '" + yesterday + "' and" + " period_id <= '" + endDay + "'";
             } else if (monthList.contains(tableName)) {
+                condition = lastMonth;
+                log.info("查询时间范围 condition =====" + condition);
                 //当前日期的前一个月数据（判断条件为当前时间是1日 运行）
                 countSql = countSql + " where period_id >= '" + lastMonth + "' and" + " period_id <= '" + endMonth + "'";
                 count = dbContext.qryLongValue(countSql);
@@ -175,7 +174,6 @@ public class DataFileService {
                     String studentResourcePath = new File(data_base_path, tableName + "\\" + tableName + ".sql").getAbsolutePath();
                     // 保证目录一定存在
                     ensureDirectory(studentResourcePath);
-                    log.info("studentResourcePath = " + studentResourcePath);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
                     //分页
                     long totalPage = (count + data_total - 1) / data_total;
@@ -224,7 +222,7 @@ public class DataFileService {
         String reslut = PostHttpsUtil.uploadPost(data_base_path + "\\" + file + ".7z", upload_url, token);
         String fileUploadEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("上传文件结束时间======》" + fileUploadEndTime);
-        log.info("上传文件名 ：" + reslut);
+        log.info("上传响应信息 ：" + reslut);
         jsonObject.clear();
         jsonObject = JSONObject.parseObject(reslut);
         String dataCode = jsonObject.get("data").toString();
@@ -326,7 +324,7 @@ public class DataFileService {
         //获取列名
         StringBuilder cId = new StringBuilder();
         String getColumnNameSql = "select COLUMN_NAME from information_schema.columns where " +
-                "table_name='" + tableName + "' and table_schema='" + table_schema + "'";
+                "table_name='" + tableName + "' and table_schema='" + table_schema + "';";
         List<String> cIds = dbContext.qryList(getColumnNameSql);
         //字段中主键id不要查出来
         for (int i = 0; i < cIds.size(); i++) {
