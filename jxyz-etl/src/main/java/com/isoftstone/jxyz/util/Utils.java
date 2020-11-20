@@ -1,12 +1,13 @@
 package com.isoftstone.jxyz.util;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Utils {
-
+	public static final String separator = File.separator;
 	public static DateFormat df() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}

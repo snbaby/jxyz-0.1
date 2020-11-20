@@ -13,9 +13,9 @@ spring:
     name: jxyz-etl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.112.102.229:3306/jxyz_test?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: root
-    password: root@1234
+    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: jxyz
+    password: jxyz@1234
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -25,39 +25,22 @@ spring:
       connection-test-query: SELECT 1
       idle-timeout: 30000
       maximum-pool-size: 15
-  mvc:
-    async:
-      #设置接口超时时间
-      request-timeout: 10000
 
 jxyz:
-  created_user: 王小贱
-  minio_data_base_path: /home/minio/data
-  upzip_base_path: /home/unzip
-  default_year: 2020
   #每页最大条数
   data_total: 10000
   #数据库名称
-  table_schema: jxyz_test
-  data_base_path: d:/jxyz_data/
+  table_schema: jxyz
+  data_base_path: /temp/etl
   #文件上传地址
   upload_url: https://112.51.254.102:18443/premiseapi/api/file/upload
   #文件传输地址code
 #  file_code_url: http://161.117.39.189:45678/jxyzadoetl/etl/download/
-  file_code_url: http://192.168.124.4:45678/jxyzadoetl/etl/download/
+  file_code_url: http://127.0.0.1:45678/jxyzadoetl/etl/download/
   get_token:
-    user_name: liuyi
-    password: Jxyz123@
+    user_name: sn_baby
+    password: Baby#1988
     token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
 
   #定义需要调用的http数据转移接口地址
 #  url: http://localhost:9001/jxyzwg/dataSynch/dataSynchronization
-
-#  get_token:
-#    token_url: https://www.gneec.com/iam/keystone/auth/getToken
-#    user_name: svc.frm/uc_frm
-#    password: Huawei@123
-#feignclient超时，一般都是初始化请求超时，默认是1秒，这样服务创建请求时间加上请求时间，非常容易超时
-feign:
-  httpclient:
-    connection-timeout: 10000

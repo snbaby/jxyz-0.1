@@ -15,9 +15,9 @@ spring:
     name: jxyzadoetl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/jxyz_zy?useUnicode=true&characterEncoding=utf-8&&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
-    username: root
-    password: Liqin1988
+    url: jdbc:mysql://127.0.0.1:3306/jxyz_etl?useUnicode=true&characterEncoding=utf-8&&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    username: jxyz
+    password: jxyz@1234
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -30,14 +30,12 @@ spring:
       
 jxyzadoetl:
   etl:
-#    download: /home/dowload
-#    unzip: /home/unzip
-    download: f:/dowload
-    unzip: f:/unzip
+    download: /temp/dowload
+    unzip: /temp/unzip
     url: https://112.51.254.102:18443/premiseapi/api/file/download/ #下载路径
     del_url: https://112.51.254.102:18443/premiseapi/api/file/delete/ #删除地址
     get_token:
-      user_name: liuyi
-      password: Jxyz123@
+      user_name: sn_baby
+      password: Baby#1988
       token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
 

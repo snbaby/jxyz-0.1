@@ -56,7 +56,7 @@ public class EtlComponent {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime startTime = LocalDateTime.now();
 		DbContext ctx = DbContext.getGlobalDbContext();
-		ctx.ins("INSERT INTO t_etl_log(id,file_id,recive_time,create_time)VALUES(?,?,?,?)",
+		ctx.exe("INSERT INTO t_etl_log(id,file_id,recive_time,create_time)VALUES(?,?,?,?)",
 				DB.param(requestId, id, df.format(new Date()), df.format(new Date())));
 
 		File downloadBaseFolder = new File(downloadBasePath);
