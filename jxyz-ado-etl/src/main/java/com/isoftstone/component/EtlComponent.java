@@ -50,14 +50,17 @@ public class EtlComponent {
 	private String tokenUrl;
 
 	@Async
-	public void asyncParse(String id) throws Exception {
+	public void asyncParse(String id,String tableName,String condition) throws Exception {
 		String requestId = UUID.randomUUID().toString();
 		log.info(">>开始解析文件--文件Id:{}--请求Id:{}", id, requestId);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime startTime = LocalDateTime.now();
 		DbContext ctx = DbContext.getGlobalDbContext();
-		ctx.exe("INSERT INTO t_etl_log(id,file_id,recive_time,create_time)VALUES(?,?,?,?)",
-				DB.param(requestId, id, df.format(new Date()), df.format(new Date())));
+		if (null == condition || condition.equals("")){
+			condition = null;
+		}
+		ctx.exe("INSERT INTO t_etl_log(`id`,`file_id`,`table_name`,`condition`,`recive_time`,`create_time`)VALUES(?,?,?,?,?,?)",
+				DB.param(requestId, id, tableName, condition, df.format(new Date()), df.format(new Date())));
 
 		File downloadBaseFolder = new File(downloadBasePath);
 		if (!(downloadBaseFolder.isDirectory() && downloadBaseFolder.exists())) {
@@ -111,6 +114,9 @@ public class EtlComponent {
 				for (int j = 0; j < lineList.size(); j++) {
 					ctx.exe(lineList.get(j));
 				}
+			}
+			if (!tableName.contains("sdi_jxyz_pkp_waybill_base_")){
+				total = total-1;
 			}
 			ctx.exe("UPDATE t_etl_log SET insert_end_time = ?,total= ? WHERE id = ?",
 					DB.param(df.format(new Date()),total, requestId));

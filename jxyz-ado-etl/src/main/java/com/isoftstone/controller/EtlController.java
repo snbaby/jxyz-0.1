@@ -36,9 +36,9 @@ public class EtlController {
 
 	@RequestMapping(value = "download/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject download(@PathVariable(value = "id") String id)
+	public JSONObject download(@PathVariable(value = "id") String id,String tableName,String condition)
 			throws Exception {
-		etlComponent.asyncParse(id);
+		etlComponent.asyncParse(id,tableName,condition);
 		JSONObject jsb = new JSONObject();
 		jsb.put("success", id);
 		return jsb;
