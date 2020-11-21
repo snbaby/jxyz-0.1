@@ -43,7 +43,7 @@ public class DataFileService {
     private String file_code_url;
 
     //每天凌晨3点2分1秒触发
-    @Scheduled(cron = "1 2 3 * * ?")
+    @Scheduled(cron = "1 53 0 * * ?")
     void getData() {
         configureTasks(null, null, null);
     }
@@ -148,7 +148,7 @@ public class DataFileService {
                     log.info(tableName + "表，" + "第" + page + "页开始时间=====》" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     String file = tableName + "_" + page;
                     try {
-                        String studentResourcePath = new File(data_base_path, file + "\\" + file + ".sql").getAbsolutePath();
+                        String studentResourcePath = new File(data_base_path, file +  File.separator + file + ".sql").getAbsolutePath();
                         // 保证目录一定存在
                         ensureDirectory(studentResourcePath);
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
@@ -159,7 +159,7 @@ public class DataFileService {
                         writer.flush();
                         writer.close();
                         //生成压缩文件
-                        File7zUtil.Compress7z(data_base_path + "\\" + file, data_base_path + "\\" + file + ".7z");
+                        File7zUtil.Compress7z(data_base_path +  File.separator + file, data_base_path +  File.separator + file + ".7z");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -171,7 +171,7 @@ public class DataFileService {
                 pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 log.info(tableName + "表，查询" + "开始时间=====》" + pageStartTime);
                 try {
-                    String studentResourcePath = new File(data_base_path, tableName + "\\" + tableName + ".sql").getAbsolutePath();
+                    String studentResourcePath = new File(data_base_path, tableName +  File.separator + tableName + ".sql").getAbsolutePath();
                     // 保证目录一定存在
                     ensureDirectory(studentResourcePath);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(studentResourcePath)));
@@ -186,7 +186,8 @@ public class DataFileService {
                     writer.flush();
                     writer.close();
                     //生成压缩文件
-                    File7zUtil.Compress7z(data_base_path + "\\" + tableName, data_base_path + "\\" + tableName + ".7z");
+                    File7zUtil.Compress7z(data_base_path + File.separator + tableName, data_base_path +  File.separator + tableName + ".7z");
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -210,7 +211,7 @@ public class DataFileService {
 
     private Map<String, String> uploadAndDelFile(String file, String tableName, String condition) {
         //删除文件夹
-        delAllFile(new File(data_base_path + "\\" + file));
+        delAllFile(new File(data_base_path +  File.separator + file));
         //获取token
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userName", userName);
@@ -219,7 +220,7 @@ public class DataFileService {
         String fileUploadStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("上传文件开始时间======》" + fileUploadStartTime);
         String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
-        String reslut = PostHttpsUtil.uploadPost(data_base_path + "\\" + file + ".7z", upload_url, token);
+        String reslut = PostHttpsUtil.uploadPost(data_base_path +  File.separator + file + ".7z", upload_url, token);
         String fileUploadEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("上传文件结束时间======》" + fileUploadEndTime);
         log.info("上传响应信息 ：" + reslut);
@@ -229,7 +230,7 @@ public class DataFileService {
         //将code传给王师傅
         PostHttpsUtil.get(file_code_url + dataCode + "?tableName=" + tableName + "&condition=" + condition);
         //将7z文件删除
-        delAllFile(new File(data_base_path + "\\" + file + ".7z"));
+        delAllFile(new File(data_base_path +  File.separator + file + ".7z"));
         Map<String, String> map = new HashMap<>();
         map.put("fileUploadStartTime", fileUploadStartTime);
         map.put("fileUploadEndTime", fileUploadEndTime);
