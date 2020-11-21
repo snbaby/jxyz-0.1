@@ -290,12 +290,11 @@ public class DataFileService {
                     }
                 }
             }
-            String valString = stringBuilder.toString().replaceAll("\\r|\\n", "");
+            String valString = stringBuilder.toString().replaceAll("\\r|\\n", "").replace("\\","");
             String insertSql = " INSERT INTO `" + tableName + "` (" + columnName + ") VALUES (" + valString + ");";
             writer.write(insertSql + "\n");
         }
     }
-
 
     /**
      * 保证拷贝的文件的目录一定要存在
