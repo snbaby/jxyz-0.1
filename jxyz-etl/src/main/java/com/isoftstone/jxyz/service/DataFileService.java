@@ -143,9 +143,9 @@ public class DataFileService {
                 log.info("查询每页最大条数 total ======》" + data_total);
                 //分页
                 long totalPage = (count + data_total - 1) / data_total;
+                pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 for (int page = 1; page <= totalPage; page++) {
-                    pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    log.info(tableName + "表，" + "第" + page + "页开始时间=====》" + pageStartTime);
+                    log.info(tableName + "表，" + "第" + page + "页开始时间=====》" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     String file = tableName + "_" + page;
                     try {
                         String studentResourcePath = new File(data_base_path, file + "\\" + file + ".sql").getAbsolutePath();
@@ -163,10 +163,10 @@ public class DataFileService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    timeMap = uploadAndDelFile(file);
-                    pageEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    log.info(tableName + "表，" + "第" + page + "页结束时间=====》" + pageEndTime);
+                    timeMap = uploadAndDelFile(file,file,condition);
+                    log.info(tableName + "表，" + "第" + page + "页结束时间=====》" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 }
+                pageEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             } else {
                 pageStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 log.info(tableName + "表，查询" + "开始时间=====》" + pageStartTime);
@@ -191,24 +191,24 @@ public class DataFileService {
                     e.printStackTrace();
                 }
                 //删除文件夹
-                timeMap = uploadAndDelFile(tableName);
+                timeMap = uploadAndDelFile(tableName,tableName,condition);
                 pageEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 log.info(tableName + "表，查询" + "结束时间=====》" + pageEndTime);
             }
             String endDayTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             log.info(tableName + "表结束========》" + endDayTime);
 
-            dbContext.exe(" INSERT INTO `t_etl_log`( `table_name`, `table_start_time`, `table_end_time`," +
+            dbContext.exe(" INSERT INTO `t_etl_log`( `table_name`, `file_id`, `table_start_time`, `table_end_time`," +
                     " `data_total`,`condition`, `page_start_time`,`page_end_time`, `sql_file_start_time`, `sql_file_end_time`, `create_time`) " +
-                    " VALUES ( '" + tableName + "','" + startDayTime + "','" + endDayTime + "','" +
-                    count + "','"+ condition +"' , '"+ pageStartTime + "','" + pageEndTime + "','" + timeMap.get("fileUploadStartTime") + "','" +
+                    " VALUES ( '" + tableName + "','" + timeMap.get("fileName") + "','" + startDayTime + "','" + endDayTime + "','" +
+                    count + "','" + condition + "' , '" + pageStartTime + "','" + pageEndTime + "','" + timeMap.get("fileUploadStartTime") + "','" +
                     timeMap.get("fileUploadStartTime") + "','" + (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                     + "')"));
             log.info(tableName + "表完成");
         }
     }
 
-    private Map<String, String> uploadAndDelFile(String file) {
+    private Map<String, String> uploadAndDelFile(String file, String tableName, String condition) {
         //删除文件夹
         delAllFile(new File(data_base_path + "\\" + file));
         //获取token
@@ -217,8 +217,8 @@ public class DataFileService {
         jsonObject.put("password", password);
         //获取token 传完一张表获取一次token避免token失效
         String fileUploadStartTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
         log.info("上传文件开始时间======》" + fileUploadStartTime);
+        String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
         String reslut = PostHttpsUtil.uploadPost(data_base_path + "\\" + file + ".7z", upload_url, token);
         String fileUploadEndTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("上传文件结束时间======》" + fileUploadEndTime);
@@ -227,12 +227,13 @@ public class DataFileService {
         jsonObject = JSONObject.parseObject(reslut);
         String dataCode = jsonObject.get("data").toString();
         //将code传给王师傅
-        PostHttpsUtil.get(file_code_url + dataCode);
+        PostHttpsUtil.get(file_code_url + dataCode + "?tableName=" + tableName + "&condition=" + condition);
         //将7z文件删除
         delAllFile(new File(data_base_path + "\\" + file + ".7z"));
         Map<String, String> map = new HashMap<>();
         map.put("fileUploadStartTime", fileUploadStartTime);
         map.put("fileUploadEndTime", fileUploadEndTime);
+        map.put("fileName", dataCode);
         return map;
     }
 
