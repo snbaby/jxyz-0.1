@@ -36,6 +36,9 @@ public class EtlComponent {
 
 	@Value("${jxyzadoetl.etl.unzip}")
 	private String unzipBasePath;
+	
+	@Value("${jxyzadoetl.etl.base}")
+	private String basePath;
 
 	@Value("${jxyzadoetl.etl.url}")
 	private String downloadBaseUrl;
@@ -62,6 +65,11 @@ public class EtlComponent {
 		ctx.exe("INSERT INTO t_etl_log(`id`,`file_id`,`table_name`,`condition`,`recive_time`,`create_time`)VALUES(?,?,?,?,?,?)",
 				DB.param(requestId, id, tableName, condition, df.format(new Date()), df.format(new Date())));
 
+		File baseFolder = new File(basePath);
+		if (!(baseFolder.isDirectory() && baseFolder.exists())) {
+			baseFolder.mkdir();
+		}
+		
 		File downloadBaseFolder = new File(downloadBasePath);
 		if (!(downloadBaseFolder.isDirectory() && downloadBaseFolder.exists())) {
 			downloadBaseFolder.mkdir();

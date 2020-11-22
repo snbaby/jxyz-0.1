@@ -30,6 +30,7 @@ spring:
       
 jxyzadoetl:
   etl:
+    base: /temp
     download: /temp/dowload
     unzip: /temp/unzip
     url: https://112.51.254.102:18443/premiseapi/api/file/download/ #下载路径
