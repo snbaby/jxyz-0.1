@@ -1,5 +1,8 @@
 package com.isoftstone.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.drinkjava2.jsqlbox.DbContext;
+import com.github.drinkjava2.jsqlbox.JSQLBOX;
 import com.isoftstone.component.EtlComponent;
 
 /**
@@ -41,6 +46,18 @@ public class EtlController {
 		etlComponent.asyncParse(id,tableName,condition);
 		JSONObject jsb = new JSONObject();
 		jsb.put("success", id);
+		return jsb;
+	}
+	
+	@RequestMapping(value = "syncDwrResources", method = RequestMethod.GET)
+	@ResponseBody
+	public JSONObject syncDwrResources(String tableName,int pageNum, int pageSize)
+			throws Exception {
+		DbContext ctx = DbContext.getGlobalDbContext();
+		List<Map<String, Object>> maps = ctx.qryMapList("select * from " + tableName , JSQLBOX.pagin(pageNum, pageSize));
+		JSONObject jsb = new JSONObject();
+		jsb.put("data", maps);
+		jsb.put("total", maps.size());
 		return jsb;
 	}
 }

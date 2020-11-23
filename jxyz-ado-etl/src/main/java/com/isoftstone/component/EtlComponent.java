@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.net.ssl.HostnameVerifier;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DB;
 import com.github.drinkjava2.jsqlbox.DbContext;
+import com.github.drinkjava2.jsqlbox.JSQLBOX;
 import com.isoftstone.util.HttpsPostUtil;
 import com.isoftstone.util.Utils;
 
@@ -147,6 +149,7 @@ public class EtlComponent {
 		String token = HttpsPostUtil.post(tokenUrl, tokenJson.toJSONString(), null);
 		HttpsPostUtil.deleteFile(delUrl + id, token);
 	}
+
 
 	private class NullHostNameVerifier implements HostnameVerifier {
 		/*

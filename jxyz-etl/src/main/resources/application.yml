@@ -13,9 +13,9 @@ spring:
     name: jxyz-etl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: jxyz
-    password: jxyz@1234
+    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/jxyz_zy?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: Liqin1988
     hikari:
       connection-timeout: 15000
       auto-commit: true
