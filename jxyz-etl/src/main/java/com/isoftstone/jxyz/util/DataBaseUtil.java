@@ -1,8 +1,19 @@
 package com.isoftstone.jxyz.util;
 
+import com.alibaba.fastjson.JSONObject;
+import com.github.drinkjava2.jdbpro.SqlItem;
+import com.github.drinkjava2.jsqlbox.DB;
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DataBaseUtil {
+
+    public static DateFormat df() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    }
     private final static String dm_jxyz_emp_info_t = "dm_jxyz_emp_info_t";
     private final static String dm_jxyz_sectin_info_t = "dm_jxyz_sectin_info_t";
     private final static String dwr_jxyz_customer_d = "dwr_jxyz_customer_d";
@@ -58,6 +69,81 @@ public class DataBaseUtil {
     public static ArrayList<String> tableNameList() {
         return new ArrayList<>(tableNameMap().values());
     }
+
+
+
+    public static void consStr(List<SqlItem> sqlItemList, JSONObject jsb, String name) {
+        if (jsb == null) {
+            return;
+        }
+        Object obj = jsb.get(name);
+        if (obj == null) {
+            return;
+        }
+
+        if (StringUtils.isBlank(obj.toString())) {
+            return;
+        }
+
+        try {
+            sqlItemList.add(DB.notNull(name + ",", obj.toString()));
+        } catch (Exception e) {
+            // TODO: handle exception
+            // 异常直接丢弃，不存入数据库
+        }
+    }
+
+    public static void consInteger(List<SqlItem> sqlItemList, JSONObject jsb, String name) {
+        if (jsb == null) {
+            return;
+        }
+        Object obj = jsb.get(name);
+        if (obj == null) {
+            return;
+        }
+
+        try {
+            if (StringUtils.isNotBlank(obj.toString())) {
+                sqlItemList.add(DB.notNull(name + ",", Long.parseLong(obj.toString())));
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            // 异常直接丢弃，不存入数据库
+        }
+    }
+
+    public static void consDecimal(List<SqlItem> sqlItemList, JSONObject jsb, String name) {
+        if (jsb == null) {
+            return;
+        }
+        Object obj = jsb.get(name);
+        if (obj == null) {
+            return;
+        }
+        try {
+            sqlItemList.add(DB.notNull(name + ",", Double.parseDouble(obj.toString())));
+        } catch (Exception e) {
+            // TODO: handle exception
+            // 异常直接丢弃，不存入数据库
+        }
+    }
+
+    public static void consDate(List<SqlItem> sqlItemList, JSONObject jsb, String name) {
+        if (jsb == null) {
+            return;
+        }
+        Object obj = jsb.get(name);
+        if (obj == null) {
+            return;
+        }
+        try {
+            sqlItemList.add(DB.notNull(name + ",", df().format(df().parse(obj.toString()))));
+        } catch (Exception e) {
+            // TODO: handle exception
+            // 异常直接丢弃，不存入数据库
+        }
+    }
+
 
 
 

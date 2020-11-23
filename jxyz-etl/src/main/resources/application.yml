@@ -37,6 +37,8 @@ jxyz:
   #文件传输地址code
 #  file_code_url: http://161.117.39.189:45678/jxyzadoetl/etl/download/
   file_code_url: http://127.0.0.1:45678/jxyzadoetl/etl/download/
+#  获取ado数据地址
+  get_user_data_url: http://localhost:45678/jxyzadoetl/etl/syncDwrResources
   get_token:
     user_name: sn_baby
     password: Baby#1988
