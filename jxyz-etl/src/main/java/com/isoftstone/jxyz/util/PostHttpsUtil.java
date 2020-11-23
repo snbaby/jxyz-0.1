@@ -35,7 +35,7 @@ import java.security.cert.X509Certificate;
 @Slf4j
 public class PostHttpsUtil {
     private static RequestConfig requestConfig;
-    private static final int MAX_TIMEOUT = 30000;
+    private static final int MAX_TIMEOUT = 300000;
     private static CloseableHttpClient httpClient;
     private static CookieStore cookieStore = new BasicCookieStore();
     static {
