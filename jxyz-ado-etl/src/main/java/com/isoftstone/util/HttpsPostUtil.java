@@ -1,6 +1,7 @@
 package com.isoftstone.util;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
@@ -30,6 +31,7 @@ import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+@Slf4j
 public class HttpsPostUtil {
 
     private static RequestConfig requestConfig;
@@ -95,6 +97,7 @@ public class HttpsPostUtil {
             return EntityUtils.toString(response.getEntity());
         } catch (Exception e) {
             refreshHttpClient();
+            log.info(">删除文件失败:{}", e);
             e.printStackTrace();
         }
         return "";
@@ -120,6 +123,7 @@ public class HttpsPostUtil {
             return result;
         } catch (Exception e) {
             refreshHttpClient();
+            log.info(">>获取token失败:--{}--", e);
             e.printStackTrace();
         }
         return "";

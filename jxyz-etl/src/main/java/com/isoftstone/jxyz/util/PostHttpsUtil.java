@@ -1,6 +1,7 @@
 package com.isoftstone.jxyz.util;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -31,9 +32,10 @@ import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+@Slf4j
 public class PostHttpsUtil {
     private static RequestConfig requestConfig;
-    private static final int MAX_TIMEOUT = 30000;
+    private static final int MAX_TIMEOUT = 300000;
     private static CloseableHttpClient httpClient;
     private static CookieStore cookieStore = new BasicCookieStore();
     static {
@@ -83,8 +85,10 @@ public class PostHttpsUtil {
         return sslsf;
     }
 
-    public static String get(String url) {
+    public static String get(String token,String url) {
         HttpGet httpGet = new HttpGet(url);
+        Header[] headers = { new BasicHeader("gc-authentication", token),};
+        httpGet.setHeaders(headers);
         HttpResponse response;
         try {
             response = httpClient.execute(httpGet);
@@ -92,6 +96,7 @@ public class PostHttpsUtil {
             return result;
         } catch (Exception e) {
             refreshHttpClient();
+            log.info(">>传输错误:{}", e);
             e.printStackTrace();
         }
         return "";
@@ -117,6 +122,7 @@ public class PostHttpsUtil {
             return result;
         } catch (Exception e) {
             refreshHttpClient();
+            log.info(">>获取token失败:{}", e);
             e.printStackTrace();
         }
         return "";
@@ -146,6 +152,7 @@ public class PostHttpsUtil {
             return result;
         } catch (Exception e) {
             refreshHttpClient();
+            log.info(">>上传文件失败:{}", e);
             e.printStackTrace();
         }
         return "";

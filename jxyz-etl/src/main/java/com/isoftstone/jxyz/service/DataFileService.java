@@ -228,7 +228,7 @@ public class DataFileService {
         jsonObject = JSONObject.parseObject(reslut);
         String dataCode = jsonObject.get("data").toString();
         //将code传给王师傅
-        PostHttpsUtil.get(file_code_url + dataCode + "?tableName=" + tableName + "&condition=" + condition);
+        PostHttpsUtil.get(token,file_code_url + dataCode + "?tableName=" + tableName + "&condition=" + condition);
         //将7z文件删除
         delAllFile(new File(data_base_path +  File.separator + file + ".7z"));
         Map<String, String> map = new HashMap<>();

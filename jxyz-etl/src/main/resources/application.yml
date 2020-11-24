@@ -13,9 +13,9 @@ spring:
     name: jxyz-etl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: jxyz
-    password: jxyz@1234
+    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/jxyz_zy?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: Liqin1988
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -37,6 +37,8 @@ jxyz:
   #文件传输地址code
 #  file_code_url: http://161.117.39.189:45678/jxyzadoetl/etl/download/
   file_code_url: http://127.0.0.1:45678/jxyzadoetl/etl/download/
+#  获取ado数据地址
+  get_user_data_url: http://localhost:45678/jxyzadoetl/etl/syncDwrResources
   get_token:
     user_name: sn_baby
     password: Baby#1988
