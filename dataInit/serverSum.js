@@ -1,5 +1,7 @@
 const pool = require('./core/pool')
 const moment = require('moment')
+const Day = parseInt(moment().format('DD'))-2
+const currDay = moment().format('yyyy-MM-DD')
 const arr1 = [
     {
       groubName: '作战图',
@@ -49,89 +51,78 @@ const arr1 = [
       toFix: 0,
       value: 100000
     }
-  ]
-  const arr3 = [
+]
+const arr3 = [
+{
+    groubName: '现费指标',
+    classifyName: '现费指标',
+    name: '当月揽收收入(万元)',
+    code: 'cyP04YKV',
+    toFix: 2,
+    value: 100000
+    },
     {
-        groubName: '现费指标',
-        classifyName: '现费指标',
-        name: '当月揽收收入(万元)',
-        code: 'cyP04YKV',
-        toFix: 2,
-        value: 100000
-      },
-      {
-        groubName: '现费指标',
-        classifyName: '现费指标',
-        name: '昨日揽收收入(万元)',
-        code: 'Jej5IdxX',
-        toFix: 2,
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '当月现费收入(万元)',
-        code: 'o2gzp0bK',
-        toFix: 2,
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '本年累计揽收收入(万元)',
-        code: 'bZLMLt5K',
-        toFix: 2,
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '昨日揽收收入(万元)',
-        code: 'DALngQA0',
-        toFix: 2,
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '当月揽收收入(万元)',      
-        code: 'PQdIJEvH',
-        toFix: 2,
-        value: 100000
-      }
-  ]
-  const arr2 = [
+    groubName: '现费指标',
+    classifyName: '现费指标',
+    name: '昨日揽收收入(万元)',
+    code: 'Jej5IdxX',
+    toFix: 2,
+    value: 100000
+    },
     {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '当月环比增幅',
-        code: 'eFKz3RDb',
-        toFix: 2,
-        text: '%',
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '本年环比增幅',
-        code: 'gaNxlBlV',
-        toFix: 2,
-        text: '%',
-        value: 100000
-      },
-      {
-        groubName: '作战图',
-        classifyName: '特快专递业务收入',
-        name: '昨日环比增幅',
-        code: 'pcNXGE7K',
-        toFix: 2,
-        text: '%',
-        value: 100000
-      }
-  ]
-const currMonth = moment().format('yyyy-MM')
-const currDay = moment().format('yyyy-MM-DD')
-const currYear = moment().format('yyyy')
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '本年累计揽收收入(万元)',
+    code: 'bZLMLt5K',
+    toFix: 2,
+    value: 100000
+    },
+    {
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '昨日揽收收入(万元)',
+    code: 'DALngQA0',
+    toFix: 2,
+    value: 100000
+    },
+    {
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '当月揽收收入(万元)',      
+    code: 'PQdIJEvH',
+    toFix: 2,
+    value: 100000
+    }
+]
+const arr2 = [
+{
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '当月环比增幅',
+    code: 'eFKz3RDb',
+    toFix: 2,
+    text: '%',
+    value: 100000
+    },
+    {
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '本年环比增幅',
+    code: 'gaNxlBlV',
+    toFix: 2,
+    text: '%',
+    value: 100000
+    },
+    {
+    groubName: '作战图',
+    classifyName: '特快专递业务收入',
+    name: '昨日环比增幅',
+    code: 'pcNXGE7K',
+    toFix: 2,
+    text: '%',
+    value: 100000
+    }
+]
 
 let dataList = []
 
@@ -216,9 +207,10 @@ async function main3(code,level){
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.currMonth);
             }, 0);
-            const totalLastNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
+            const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.lastMonth);
             }, 0);
+            const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
             const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             console.log(sql1)
@@ -236,9 +228,10 @@ async function main4(code,level){
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.currMonth);
             }, 0);
-            const totalLastNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
+            const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.lastMonth);
             }, 0);
+            const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
             const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             console.log(sql1)
@@ -271,9 +264,10 @@ async function main6(code,level){
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.currMonth);
             }, 0);
-            const totalLastNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
+            const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.lastMonth);
             }, 0);
+            const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
             const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             console.log(sql1)
@@ -345,7 +339,7 @@ function level1Data(){
 // level2Data()
 
 // 后执行1级任务
-// level1Data()
+level1Data()
 
 setTimeout(() =>{
     pool.end()

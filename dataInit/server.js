@@ -62,12 +62,6 @@ const normConfig =[
       code: 'T0Uk9Gf3'
     },
     {
-      groubName: '作战图',
-      classifyName: '特快专递业务收入',
-      name: '当月现费收入(万元)',
-      code: 'o2gzp0bK'
-    },
-    {
       groubName: '现费指标',
       classifyName: '现费指标',
       name: '昨日揽收量(件)',

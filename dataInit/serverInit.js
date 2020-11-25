@@ -85,14 +85,6 @@ const normConfig = [
       value: 100000
     },
     {
-      groubName: '作战图',
-      classifyName: '特快专递业务收入',
-      name: '当月现费收入(万元)',
-      code: 'o2gzp0bK',
-      toFix: 2,
-      value: 100000
-    },
-    {
       groubName: '现费指标',
       classifyName: '现费指标',
       name: '昨日揽收量(件)',
@@ -127,6 +119,7 @@ const normConfig = [
   ]
 
 const currMonth = moment().format('yyyy-MM')
+const Day = parseInt(moment().format('DD'))-2
 const currDay = moment().format('yyyy-MM-DD')
 const currYear = moment().format('yyyy')
 
@@ -165,9 +158,6 @@ async function main(){
                 case 'gaNxlBlV': // 本年环比增幅
                     getAmplification3(code)
                     break;
-                // case 'rUsHrDlu': // 日人均揽收量
-                //     getNum3(code)
-                //     break;
                 case 'ptJaygoo': // 昨日揽收量 - 现费指标
                     getNum5(code)
                     break;
@@ -179,9 +169,6 @@ async function main(){
                     break;
                 case 'cyP04YKV': // 当月揽收收入 - 现费指标
                     getCurrMonthTotal5(code)
-                    break;
-                case 'o2gzp0bK': // 当月现费收入
-                    getCurrMonthTotal6(code)
                     break;
                 case 'T0Uk9Gf3': // 昨日揽收量
                     getNum6(code)
@@ -312,7 +299,8 @@ function getAmplification1(code){
     currArr.forEach(item =>{
         const currValue = item.last_month_postage_total
         const emp = lastArr.find(dd => dd.dept_code === item.dept_code)
-        const lastValue = emp ? emp.last_month_postage_total : 0
+        const last = emp ? emp.last_month_postage_total : 0
+        const lastValue = last/31*Day
         const value = parseInt(lastValue) != 0 ? (Math.round((parseFloat(currValue) - parseFloat(lastValue)) / parseFloat(lastValue) * 10000) / 100.00)+"%" : '0.00%'
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)

@@ -9,7 +9,7 @@ const currDay = moment().format('yyyy-MM-DD')
 let sql = 'select dept_code,period_id,cur_day_total,last_day_total,last_month_postage_total from income'
   pool.query(sql).then(res =>{
     res.forEach(element => {
-      pool.query(`select code,name,level,parent_code as parentCode from t_grid_m where parent_code = '${element.dept_code}'`).then(deptList =>{
+      pool.query(`select a.code,a.name,a.level,a.parent_code as parentCode from t_grid_m a LEFT join (select grid_code from dwr_jxyz_emp_d GROUP BY grid_code) b on a.code = b.grid_code where parent_code = '${element.dept_code}'`).then(deptList =>{
           if (deptList.length == 1){
             const item = deptList[0]
             const sql = `insert income_list (dept_code,period_id,cur_day_total,last_day_total,last_month_postage_total) values('${item.code}','${element.period_id}','${element.cur_day_total}','${element.last_day_total}','${element.last_month_postage_total}');`
@@ -33,13 +33,13 @@ let sql = 'select dept_code,period_id,cur_day_total,last_day_total,last_month_po
               const randowNum2 = Math.random()*offset2
               const randowNum3 = Math.random()*offset3
               if(index % 2 == 1){
-                item.value1 = parseFloat(randowNum1 + baseNum1).toFixed(2)
-                item.value2 = parseFloat(randowNum2 + baseNum2).toFixed(2)
-                item.value3 = parseFloat(randowNum3 + baseNum3).toFixed(2)
+                item.value1 = (parseFloat(randowNum1) + parseFloat(baseNum1)).toFixed(2)
+                item.value2 = (parseFloat(randowNum2) + parseFloat(baseNum2)).toFixed(2)
+                item.value3 = (parseFloat(randowNum3) + parseFloat(baseNum3)).toFixed(2)
               } else {
-                item.value1 = parseFloat(baseNum1- randowNum1).toFixed(2)
-                item.value2 = parseFloat(-randowNum2 + baseNum2).toFixed(2)
-                item.value3 = parseFloat(-randowNum3 + baseNum3).toFixed(2)
+                item.value1 = (parseFloat(baseNum1) - parseFloat(randowNum1)).toFixed(2)
+                item.value2 = (parseFloat(-randowNum2) + parseFloat(baseNum2)).toFixed(2)
+                item.value3 = (parseFloat(-randowNum3) + parseFloat(baseNum3)).toFixed(2)
               }
               const sql1 = `insert income_list (dept_code,period_id,cur_day_total,last_day_total,last_month_postage_total) values('${item.code}','${element.period_id}','${item.value1}','${item.value2}','${item.value3}');`
               console.log(sql1)
@@ -69,4 +69,4 @@ let sql = 'select dept_code,period_id,cur_day_total,last_day_total,last_month_po
 
   setTimeout(() =>{
     pool.end()
-  },10000)
+  },20000)
