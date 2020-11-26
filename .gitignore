@@ -1,3 +1,4 @@
 /jxyz-trace/log
 /jxyz-ado-etl/log
 /dataInit/node_modules
+/jxyz-util/log
