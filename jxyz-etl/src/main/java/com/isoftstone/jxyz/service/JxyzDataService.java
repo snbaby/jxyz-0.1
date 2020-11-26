@@ -46,13 +46,90 @@ public class JxyzDataService {
         }
     }
 
+    private List<String> tableNameList() {
+        List<String> tableNames = new ArrayList<>();
+        tableNames.add("dwr_jxyz_resources_d");
+        tableNames.add("dwr_jxyz_emp_d");
+        tableNames.add("dwr_jxyz_customer_d");
+        return tableNames;
+    }
+
+    public void getData(String[] tableNames, Integer pageNember, Integer totalPage) {
+        List<String> tableNameList;
+        if (null == tableNames || tableNames.length == 0) {
+            tableNameList = tableNameList();
+        } else {
+            tableNameList = Arrays.asList(tableNames);
+        }
+        //将所有数据获取到
+        Map<String, JSONArray> map = new HashMap<>();
+        for (String tableName : tableNameList) {
+            int pageNum = 1;
+            int pageSize = 100;
+            if (null != pageNember) {
+                pageNum = pageNember;
+            }
+            if (null != totalPage) {
+                pageSize = totalPage;
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userName", userName);
+            jsonObject.put("password", password);
+            String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
+            JSONObject result;
+            JSONArray jsonArray = new JSONArray();
+            while (true) {
+                result = getResultData(token, tableName, pageNum++, pageSize);
+                if (result.getJSONArray("data").size()>0){
+                    jsonArray.addAll(result.getJSONArray("data"));
+                }
+                Long total = result.getLong("total");
+                if (pageSize > total) {
+                    break;
+                }
+            }
+            map.put(tableName, jsonArray);
+        }
+        //处理数据
+        DbContext dbContext = DbContext.getGlobalDbContext();
+        Set<String> keySet = map.keySet();
+        for (String key : keySet) {
+            JSONArray jsonArray = map.get(key);
+            System.out.println(jsonArray);
+            //三个表的不同处理
+            String tSql = "TRUNCATE " + key;
+            log.info("清空表{}==》", key);
+            if (key.equals("dwr_jxyz_emp_d")) {
+                dbContext.exe(tSql);
+                jsonUtil.dwr_jxyz_emp_d(jsonArray, dbContext);
+            }
+            if (key.equals("dwr_jxyz_resources_d")) {
+                //清空表
+                dbContext.exe(tSql);
+                jsonUtil.dwr_jxyz_resources_d(jsonArray, dbContext);
+            }
+            if (key.equals("dwr_jxyz_customer_d")) {
+                dbContext.exe(tSql);
+                jsonUtil.dwr_jxyz_customer_d(jsonArray, dbContext);
+            }
+            log.info(">>表:{}数据同步完成", key);
+        }
+
+    }
+
+    private JSONObject getResultData(String token, String tableName, Integer pageNum, Integer pageSize) {
+        String resultString = PostHttpsUtil.get(token, get_user_data_url + "?tableName=" + tableName + "&pageNum=" + pageNum + "&pageSize=" + pageSize);
+        JSONObject result = JSONObject.parseObject(resultString);
+        return result;
+    }
+
     public void getDataList(String tableName, Integer pageNumber, Integer totalPage) {
         log.info(">>表:{}开始同步数据，当前第{}页,每页{}条", tableName, pageNumber, totalPage);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userName", userName);
         jsonObject.put("password", password);
         String token = PostHttpsUtil.post(token_url, jsonObject.toJSONString(), null);
-        String resultString = PostHttpsUtil.get(token,get_user_data_url + "?tableName=" + tableName + "&pageNum=" + pageNumber + "&pageSize=" + totalPage);
+        String resultString = PostHttpsUtil.get(token, get_user_data_url + "?tableName=" + tableName + "&pageNum=" + pageNumber + "&pageSize=" + totalPage);
         JSONObject result = JSONObject.parseObject(resultString);
         int num = result.getInteger("total");
         log.info("获取的数据条数{}==》", num);
@@ -60,6 +137,7 @@ public class JxyzDataService {
 
         JSONArray dataArray = result.getJSONArray("data");
         String tSql = "TRUNCATE " + tableName;
+        log.info("清空表{}==》", tableName);
         if (tableName.equals("dwr_jxyz_resources_d")) {
             //清空表
             dbContext.exe(tSql);
@@ -81,5 +159,4 @@ public class JxyzDataService {
             log.info(">>表:{}数据同步完成", tableName);
         }
     }
-
 }
