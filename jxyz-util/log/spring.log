@@ -1,0 +1,35 @@
+2020-11-25 02:18:27.972  INFO 7952 --- [main] com.isoftstone.JxyzUtilApplication       : Starting JxyzUtilApplication using Java 1.8.0_241 on ISS461102000121 with PID 7952 (F:\项目\github\jxyz-0.1\jxyz-util\target\classes started by jianwang in F:\项目\github\jxyz-0.1\jxyz-util)
+2020-11-25 02:18:27.988  INFO 7952 --- [main] com.isoftstone.JxyzUtilApplication       : No active profile set, falling back to default profiles: default
+2020-11-25 02:18:30.331  INFO 7952 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9002 (http)
+2020-11-25 02:18:30.349  INFO 7952 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-25 02:18:30.349  INFO 7952 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.39]
+2020-11-25 02:18:30.352  INFO 7952 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.24] using APR version [1.7.0].
+2020-11-25 02:18:30.352  INFO 7952 --- [main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-11-25 02:18:30.352  INFO 7952 --- [main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-11-25 02:18:30.368  INFO 7952 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1g  21 Apr 2020]
+2020-11-25 02:18:30.592  INFO 7952 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-25 02:18:30.598  INFO 7952 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2504 ms
+2020-11-25 02:18:30.869  INFO 7952 --- [main] com.zaxxer.hikari.HikariDataSource       : DatebookHikariCP - Starting...
+2020-11-25 02:18:31.911  INFO 7952 --- [main] com.zaxxer.hikari.HikariDataSource       : DatebookHikariCP - Start completed.
+2020-11-25 02:18:32.188  INFO 7952 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-25 02:18:32.663  INFO 7952 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9002 (http) with context path ''
+2020-11-25 02:18:32.680  INFO 7952 --- [main] com.isoftstone.JxyzUtilApplication       : Started JxyzUtilApplication in 5.49 seconds (JVM running for 6.494)
+2020-11-25 02:21:40.822  INFO 13400 --- [main] com.isoftstone.JxyzUtilApplication       : Starting JxyzUtilApplication using Java 1.8.0_241 on ISS461102000121 with PID 13400 (F:\项目\github\jxyz-0.1\jxyz-util\target\classes started by jianwang in F:\项目\github\jxyz-0.1\jxyz-util)
+2020-11-25 02:21:40.825  INFO 13400 --- [main] com.isoftstone.JxyzUtilApplication       : No active profile set, falling back to default profiles: default
+2020-11-25 02:21:43.421  INFO 13400 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9002 (http)
+2020-11-25 02:21:43.434  INFO 13400 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-25 02:21:43.435  INFO 13400 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.39]
+2020-11-25 02:21:43.437  INFO 13400 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.24] using APR version [1.7.0].
+2020-11-25 02:21:43.437  INFO 13400 --- [main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-11-25 02:21:43.437  INFO 13400 --- [main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-11-25 02:21:43.441  INFO 13400 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1g  21 Apr 2020]
+2020-11-25 02:21:43.723  INFO 13400 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-25 02:21:43.723  INFO 13400 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2808 ms
+2020-11-25 02:21:43.998  INFO 13400 --- [main] com.zaxxer.hikari.HikariDataSource       : DatebookHikariCP - Starting...
+2020-11-25 02:21:45.049  INFO 13400 --- [main] com.zaxxer.hikari.HikariDataSource       : DatebookHikariCP - Start completed.
+2020-11-25 02:21:45.510  INFO 13400 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-25 02:21:46.287  INFO 13400 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9002 (http) with context path ''
+2020-11-25 02:21:46.309  INFO 13400 --- [main] com.isoftstone.JxyzUtilApplication       : Started JxyzUtilApplication in 6.345 seconds (JVM running for 7.257)
+2020-11-25 02:27:35.651  INFO 13400 --- [http-nio-9002-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-25 02:27:35.651  INFO 13400 --- [http-nio-9002-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-11-25 02:27:35.657  INFO 13400 --- [http-nio-9002-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
