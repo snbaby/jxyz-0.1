@@ -1,0 +1,10 @@
+{
+  "db": {
+    "connectionLimit": 10,
+    "host": "rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com",
+    "port": "3306",
+    "user": "root",
+    "password": "Liqin1988",
+    "database": "jxyz_plus"
+  }
+}
