@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.github.drinkjava2.jdbpro.SqlOption;
-import com.github.drinkjava2.jdialects.annotation.jpa.Id;
-import com.github.drinkjava2.jsqlbox.ActiveRecord;
 import com.github.drinkjava2.jsqlbox.DbContext;
 import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
 
