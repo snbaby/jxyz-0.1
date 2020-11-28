@@ -40,7 +40,7 @@ public class SlaveDataSourceConfig {
 	private int maximumPoolSize;
 
 	@Bean(name = "slaveDataSource")
-	public DataSource masterDataSource() {
+	public DataSource slaveDataSource() {
 		HikariDataSource hikariDataSource = new HikariDataSource();
 		hikariDataSource.setDriverClassName(driverClassName);
 		hikariDataSource.setUsername(username);
