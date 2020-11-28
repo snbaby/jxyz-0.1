@@ -32,7 +32,7 @@ jxyz:
         connection-timeout: 15000
         auto-commit: true
         max-lifetime: 600000
-        pool-name: DatebookHikariCP
+        pool-name: MasterDatebookHikariCP
         minimum-idle: 5
         connection-test-query: SELECT 1
         idle-timeout: 30000
@@ -46,7 +46,7 @@ jxyz:
         connection-timeout: 15000
         auto-commit: true
         max-lifetime: 600000
-        pool-name: DatebookHikariCP
+        pool-name: SlaveDatebookHikariCP
         minimum-idle: 5
         connection-test-query: SELECT 1
         idle-timeout: 30000
