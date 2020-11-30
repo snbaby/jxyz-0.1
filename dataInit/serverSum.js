@@ -1,7 +1,8 @@
-const pool = require('./core/pool')
 const moment = require('moment')
 const Day = parseInt(moment().format('DD'))-2
 const currDay = moment().format('yyyy-MM-DD')
+const lastMonth = moment().month(moment().month() - 1).startOf('month').format("YYYY-MM");
+const curMonth = moment().add(0, 'month').format('YYYY-MM')
 const arr1 = [
     {
       groubName: '作战图',
@@ -159,7 +160,7 @@ async function main(code,level){
             const totalNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseInt(total) + parseInt(currentValue.value);
             }, 0);
-            const sql = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', '${level}', 'mainDownLeftCount', '${code}', '${totalNum}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', '${level}', 'mainDownLeftCount', '${code}', '${totalNum}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -177,7 +178,7 @@ async function main1(code,level){
             const totalNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
                 return parseFloat(total) + parseFloat(currentValue.value);
             }, 0);
-            const sql = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', '${level}', 'mainDownLeftCount', '${code}', '${totalNum.toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', '${level}', 'mainDownLeftCount', '${code}', '${totalNum.toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -187,11 +188,11 @@ async function main1(code,level){
 
 // 昨日环比增幅
 async function main2(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join t_grid_m b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join t_grid_m b on a.dept_code = b.code where a.period_id = ${curMonth} GROUP BY b.parent_code`
     global.pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -200,7 +201,7 @@ async function main2(code,level){
 
 // 当月环比增幅
 async function main3(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join t_grid_m b on a.dept_code = b.code and period_id = '2020-11'`
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = ${lastMonth}) c on a.dept_code = c.dept_code LEFT join t_grid_m b on a.dept_code = b.code and period_id = ${curMonth}`
     global.pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -212,7 +213,7 @@ async function main3(code,level){
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -221,7 +222,7 @@ async function main3(code,level){
 
 // 当月环比增幅 -- 市级
 async function main4(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where period_id = '2020-11'`
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = ${lastMonth}) c on a.dept_code = c.dept_code LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where period_id = ${curMonth}`
     global.pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -233,7 +234,7 @@ async function main4(code,level){
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -243,11 +244,11 @@ async function main4(code,level){
 
 // 当日环比增幅 -- 市级
 async function main5(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where a.period_id = ${curMonth} GROUP BY b.parent_code`
     global.pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -257,7 +258,7 @@ async function main5(code,level){
 
 // 当月环比增幅 -- 省级
 async function main6(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where period_id = '2020-11' `
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = ${lastMonth}) c on a.dept_code = c.dept_code LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where period_id = ${curMonth} `
     global.pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -269,7 +270,7 @@ async function main6(code,level){
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -278,11 +279,11 @@ async function main6(code,level){
 
 // 当日环比增幅 -- 省级
 async function main7(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where a.period_id = ${curMonth} GROUP BY b.parent_code`
     global.pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
-            const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+            const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.parent_code}', ${level}, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
             global.pool.query(sql)
         })
     })
@@ -350,13 +351,13 @@ function level1Data(){
             level3Data()
             setTimeout(() =>{
                 level2Data()
-            },50000)
+            },80000)
             setTimeout(() =>{
                 level1Data()
-            },100000)
+            },160000)
             setTimeout(() =>{
               resolve()
-            },150000)
+            },350000)
           })
         }
       };

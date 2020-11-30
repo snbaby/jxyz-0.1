@@ -11,7 +11,7 @@ async function main1(){
     deptList.forEach(element => {
       if (element.userNum) {
         const value = parseFloat(element.value/element.userNum).toFixed(2) 
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '4', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '4', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         global.pool.query(sql1)
       }
     });
@@ -24,7 +24,7 @@ async function main2(){
   deptList.forEach(element => {
     if (element.userNum) {
       const value = parseFloat(element.value/element.userNum).toFixed(2) 
-      const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '5', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+      const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '5', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
       global.pool.query(sql1)
     }
   });
@@ -37,7 +37,7 @@ async function main3(){
   deptList.forEach(element => {
     if (element.userNum) {
       const value = parseFloat(element.value/element.userNum).toFixed(2) 
-      const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '3', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+      const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '3', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
       global.pool.query(sql1)
     }
   });
@@ -50,10 +50,11 @@ async function main4(){
   deptList.forEach(element => {
     if (element.userNum) {
       const value = parseFloat(element.value/element.userNum).toFixed(2) 
-      const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '2', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+      const sql1 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '2', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
       global.pool.query(sql1)
     }
   });
+  return false
 }
 
 
@@ -62,25 +63,30 @@ async function main5(){
   let sql = 'select a.value,a.grid_code from t_grid_statistics a where a.`key` = "T0Uk9Gf3" and a.level = 1'
   const data1 = await global.pool.query(sql)
   let sql1 = 'select count(*) as userNum from dwr_jxyz_emp_d where grid_code is not null'
-  const data2 = await global.pool.query(sql1)
+  const data2 = await global.execSql(sql1)
+  console.log(data2)
   const value = parseFloat(data1[0].value/data2[0].userNum).toFixed(2) 
   const element = data1[0]
-  const sql2 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '1', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-  global.pool.query(sql2)
+  const sql2 = `replace INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${element.grid_code}', '1', 'mainDownLeftCount', '${key}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+  await global.execSql(sql2)
+  return false
 }
 
 
 module.exports = {
   randomData: (sql, values) => {
     return new Promise(function (resolve, reject) {
-      main1()
-      main2()
-      main3()
-      main4()
-      main5()
+      async function test(){
+        await main1()
+        await main2()
+        await main3()
+        await main4()
+        await main5()
+      }
+      test()
       setTimeout(() =>{
         resolve()
-      },150000)
+      },60000)
     })
   }
 };
