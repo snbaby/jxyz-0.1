@@ -28,7 +28,7 @@ function parseExcelData() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 385) {
+          if (rowNumber > 4 & rowNumber < worksheet.rowCount) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['last_month_clledted_qty'] = getCellValue(row.getCell(10))
             item['last_month_postage_total'] = getCellValue(row.getCell(11))
@@ -50,7 +50,7 @@ function parseExcelData11() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 232) {
+          if (rowNumber > 4 & rowNumber < worksheet.rowCount) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['cur_day_qty'] = getCellValue(row.getCell(7))
             item['cur_day_total'] = getCellValue(row.getCell(8))
@@ -74,7 +74,7 @@ function parseExcelData12() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 246) {
+          if (rowNumber > 4 & rowNumber < worksheet.rowCount) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['last_day_qty'] = getCellValue(row.getCell(7))
             item['last_day_total'] = getCellValue(row.getCell(8))
@@ -95,7 +95,7 @@ function parseExcelData13() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 178) {
+          if (rowNumber > 4 & rowNumber < worksheet.rowCount) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['cur_day_qty_s'] = getCellValue(row.getCell(7))
             item['cur_day_total1_s'] = getCellValue(row.getCell(8))
@@ -119,7 +119,7 @@ function parseExcelData14() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 195) {
+          if (rowNumber > 4 & rowNumber < worksheet.rowCount) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['last_day_qty_s'] = getCellValue(row.getCell(7))
             item['last_day_total1_s'] = getCellValue(row.getCell(8))
