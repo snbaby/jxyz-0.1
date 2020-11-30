@@ -1,4 +1,3 @@
-const pool = require('./core/pool')
 const moment = require('moment')
 const normConfig = [
     {
@@ -129,7 +128,7 @@ async function main(){
     // 查询组织信息
     let sql = `select * from income;`
     
-    pool.query(sql).then(res =>{
+    global.pool.query(sql).then(res =>{
         dataList = res
         normConfig.forEach(item =>{
             const code = item.code
@@ -175,19 +174,16 @@ async function main(){
                     break;
             }
         })
-        setTimeout(() =>{
-            pool.end()
-        },20000)
     })
     return false
 }
-main()
+
 // 当月揽收收入
 function getCurrMonthTotal1(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_month_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -196,7 +192,7 @@ function getCurrMonthTotal2(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.year_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 // 昨日揽收收入
@@ -204,7 +200,7 @@ function getCurrMonthTotal3(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 // 昨日揽收收入 - 现费指标
@@ -212,7 +208,7 @@ function getCurrMonthTotal4(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total1_s/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 // 当月揽收收入 - 现费指标
@@ -220,7 +216,7 @@ function getCurrMonthTotal5(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -229,7 +225,7 @@ function getCurrMonthTotal6(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -239,7 +235,7 @@ function getNum1(code){
     const lastArr = dataList.filter(item => item.period_id === '2020-10')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -249,7 +245,7 @@ function getNum2(code){
     const lastArr = dataList.filter(item => item.period_id === '2020-10')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.year_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -259,7 +255,7 @@ function getNum2(code){
 //     const lastArr = dataList.filter(item => item.period_id === '2020-10')
 //     currArr.forEach(item =>{
 //         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-//         console.log(sql1)
+//          global.pool.query(sql1)
 //     })
 // }
 
@@ -269,7 +265,7 @@ function getNum4(code){
     const lastArr = dataList.filter(item => item.period_id === '2020-10')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -278,7 +274,7 @@ function getNum5(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty_s}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -288,7 +284,7 @@ function getNum6(code){
     const lastArr = dataList.filter(item => item.period_id === '2020-10')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -303,7 +299,7 @@ function getAmplification1(code){
         const lastValue = last/31*Day
         const value = parseInt(lastValue) != 0 ? (Math.round((parseFloat(currValue) - parseFloat(lastValue)) / parseFloat(lastValue) * 10000) / 100.00)+"%" : '0.00%'
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -315,7 +311,7 @@ function getAmplification2(code){
         const lastValue = item.last_day_total
         const value = parseInt(lastValue) != 0 ? (Math.round((parseFloat(currValue) - parseFloat(lastValue)) / parseFloat(lastValue) * 10000) / 100.00)+"%" : '0.00%'
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
 
@@ -324,6 +320,20 @@ function getAmplification3(code){
     const currArr = dataList.filter(item => item.period_id === '2020-11')
     currArr.forEach(item =>{
         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', 0, NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
-        console.log(sql1)
+         global.pool.query(sql1)
     })
 }
+
+
+
+module.exports = {
+    init: () => {
+      return new Promise(function (resolve, reject) {
+        main()
+        setTimeout(() =>{
+          resolve()
+        },80000)
+      })
+    }
+  };
+  
