@@ -205,10 +205,10 @@ async function main3(code,level){
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.currMonth);
+                return parseFloat(total) + parseFloat(currentValue.currMonth?currentValue.currMonth:0);
             }, 0);
             const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.lastMonth);
+                return parseFloat(total) + parseFloat(currentValue.lastMonth?currentValue.lastMonth:0);
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
@@ -226,10 +226,10 @@ async function main4(code,level){
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.currMonth);
+                return parseFloat(total) + parseFloat(currentValue.currMonth?currentValue.currMonth:0);
             }, 0);
             const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.lastMonth);
+                return parseFloat(total) + parseFloat(currentValue.lastMonth?currentValue.lastMonth:0);
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'
@@ -262,10 +262,10 @@ async function main6(code,level){
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
             const totalCurNum = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.currMonth);
+                return parseFloat(total) + parseFloat(currentValue.currMonth?currentValue.currMonth:0);
             }, 0);
             const totalLast = item.list.reduce(function (total, currentValue, currentIndex, arr) {
-                return parseFloat(total) + parseFloat(currentValue.lastMonth);
+                return parseFloat(total) + parseFloat(currentValue.lastMonth?currentValue.lastMonth:0);
             }, 0);
             const totalLastNum = totalLast/31*Day
             const value = parseInt(totalLastNum) != 0 ? (Math.round((parseFloat(totalCurNum) - parseFloat(totalLastNum)) / parseFloat(totalLastNum) * 10000) / 100.00)+"%" : '0.00%'

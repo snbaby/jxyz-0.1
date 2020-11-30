@@ -45,12 +45,12 @@ function parseExcelData() {
 
 function parseExcelData11() {
   var workbook = new Excel.Workbook()
-    workbook.xlsx.readFile('./标准20201124.xlsx')
+    workbook.xlsx.readFile('./标准20201129.xlsx')
       .then(function() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 385) {
+          if (rowNumber > 4 & rowNumber < 232) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['cur_day_qty'] = getCellValue(row.getCell(7))
             item['cur_day_total'] = getCellValue(row.getCell(8))
@@ -69,12 +69,12 @@ function parseExcelData11() {
 
 function parseExcelData12() {
   var workbook = new Excel.Workbook()
-    workbook.xlsx.readFile('./标准20201123.xlsx')
+    workbook.xlsx.readFile('./标准20201128.xlsx')
       .then(function() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 385) {
+          if (rowNumber > 4 & rowNumber < 246) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['last_day_qty'] = getCellValue(row.getCell(7))
             item['last_day_total'] = getCellValue(row.getCell(8))
@@ -90,12 +90,12 @@ function parseExcelData12() {
 
 function parseExcelData13() {
   var workbook = new Excel.Workbook()
-    workbook.xlsx.readFile('./散户20201124.xlsx')
+    workbook.xlsx.readFile('./散户20201129.xlsx')
       .then(function() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 346) {
+          if (rowNumber > 4 & rowNumber < 178) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['cur_day_qty_s'] = getCellValue(row.getCell(7))
             item['cur_day_total1_s'] = getCellValue(row.getCell(8))
@@ -114,12 +114,12 @@ function parseExcelData13() {
 
 function parseExcelData14() {
   var workbook = new Excel.Workbook()
-    workbook.xlsx.readFile('./散户20201123.xlsx')
+    workbook.xlsx.readFile('./散户20201128.xlsx')
       .then(function() {
         const worksheet = workbook.getWorksheet('机构量收分析表(个计)')
         worksheet.eachRow(function(row, rowNumber) {
           const item = {}
-          if (rowNumber > 4 & rowNumber < 346) {
+          if (rowNumber > 4 & rowNumber < 195) {
             item['dept_code'] = getCellValue(row.getCell(5))
             item['last_day_qty_s'] = getCellValue(row.getCell(7))
             item['last_day_total1_s'] = getCellValue(row.getCell(8))
