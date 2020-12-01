@@ -117,7 +117,7 @@ const normConfig = [
     }
   ]
 
-const Day = parseInt(moment().format('DD'))-2
+const Day = parseInt(moment().format('DD'))-1 <= 0 ? 1 : parseInt(moment().format('DD'))-1
 const currDay = moment().format('yyyy-MM-DD')
 const lastMonth = moment().month(moment().month() - 1).startOf('month').format("YYYY-MM");
 const curMonth = moment().add(0, 'month').format('YYYY-MM')
