@@ -13,9 +13,9 @@ spring:
     name: jxyz-salary
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://161.117.39.189:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://121.36.32.115:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: root
-    password: Huawei@1234
+    password: 1qaz@WSX
     hikari:
       connection-timeout: 15000
       auto-commit: true

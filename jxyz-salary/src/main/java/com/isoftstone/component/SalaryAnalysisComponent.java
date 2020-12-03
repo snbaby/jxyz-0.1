@@ -19,7 +19,7 @@ public class SalaryAnalysisComponent {
 	@Autowired
 	private SalaryAnalysisService salaryAnalysisService;
 
-	@Scheduled(initialDelay = 2000, fixedDelay = 120000000)
+	@Scheduled(initialDelay = 2000, fixedDelay = 3600000)
 	public void run3() throws InterruptedException {
 		DbContext dbContext = DbContext.getGlobalDbContext();
 		String ruleSql = "select a.*,b.code as ruleCode,b.name as ruleName,b.type,b.fixed_income,b.commission_rate,b.min_discount,b.max_discount,b.is_discount,b.is_loose_items from t_emolument_template a left join t_emolument_rule b on a.code = b.template_code";
