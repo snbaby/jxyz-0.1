@@ -4,7 +4,7 @@ logging:
   file:
     path: log
 server:
-  port: 18413
+  port: 18409
 spring:
   jackson:
     generator:
@@ -13,9 +13,9 @@ spring:
     name: jxyz-salary
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: jxyz
-    password: jxyz@1234
+    url: jdbc:mysql://161.117.39.189:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: Huawei@1234
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -24,4 +24,4 @@ spring:
       minimum-idle: 5
       connection-test-query: SELECT 1
       idle-timeout: 30000
-      maximum-pool-size: 15
+      maximum-pool-size: 30

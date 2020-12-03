@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.github.drinkjava2.jsqlbox.DbContext;
 import com.github.drinkjava2.jtransactions.spring.SpringTxConnectionManager;
 
 @SpringBootApplication
+@EnableAsync
+@EnableScheduling
 public class JxyzSalaryApplication {
 	@Autowired
 	DataSource ds;
@@ -23,7 +27,7 @@ public class JxyzSalaryApplication {
 	public DbContext createDefaultDbContext() {
 		DbContext ctx = new DbContext(ds);
 		ctx.setConnectionManager(SpringTxConnectionManager.instance());
-		ctx.setAllowShowSQL(false);
+		ctx.setAllowShowSQL(true);
 		DbContext.setGlobalDbContext(ctx);// 设定静态全局上下文
 		return ctx;
 	}
