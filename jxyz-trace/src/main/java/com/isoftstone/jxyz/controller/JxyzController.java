@@ -27,7 +27,6 @@ public class JxyzController {
     public ResponseEntity<JSONObject> trajectory(@RequestBody JSONObject jsb) {
         DbContext dbContext = DbContext.getGlobalDbContext();
         log.debug("轨迹数据：导入数据：{}", jsb.toString());
-        log.info("轨迹数据：开始导入数据");
 
         String getYearMonth= Utils.getYearMonth();
         dbContext.exe("INSERT INTO sdi_jxyz_pkp_trace_message_" + getYearMonth + "(",
@@ -44,8 +43,6 @@ public class JxyzController {
                 DB.notNull("op_erator_name,", jsb.getString("operatorname")),
                 DB.notNull("created_date,", Utils.df().format(new Date())), DB.notNull("created_by", "王小贱"), ")",
                 DB.valuesQuestions());
-
-        log.info("轨迹数据：结束导入数据");
 
         JSONObject resJsb = new JSONObject();
         resJsb.put("code", 0);
