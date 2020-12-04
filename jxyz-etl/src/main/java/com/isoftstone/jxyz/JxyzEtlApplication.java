@@ -31,7 +31,7 @@ public class JxyzEtlApplication {
     public DbContext createDefaultDbContext() {
         DbContext ctx = new DbContext(ds);
         ctx.setConnectionManager(SpringTxConnectionManager.instance());
-        ctx.setAllowShowSQL(false);
+        ctx.setAllowShowSQL(true);
         DbContext.setGlobalDbContext(ctx);// 设定静态全局上下文
         return ctx;
     }

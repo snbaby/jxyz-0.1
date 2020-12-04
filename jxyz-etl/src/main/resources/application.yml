@@ -15,7 +15,7 @@ spring:
     name: jxyz-etl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/jxyz_zy?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com/dcp_business?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: root
     password: Liqin1988
     hikari:
@@ -41,10 +41,18 @@ jxyz:
   file_code_url: http://127.0.0.1:45678/jxyzadoetl/etl/download/
 #  获取ado数据地址
   get_user_data_url: http://localhost:45678/jxyzadoetl/etl/syncDwrResources
+  
   get_token:
     user_name: sn_baby
     password: Baby@1988
     token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
+    
+  ado:
+    user_name: sn_baby
+    password: Baby@1988
+    token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
+    qry_url: http://127.0.0.1:45678/jxyzadoetl/etl/qry
+    
 
   #定义需要调用的http数据转移接口地址
 #  url: http://localhost:9001/jxyzwg/dataSynch/dataSynchronization

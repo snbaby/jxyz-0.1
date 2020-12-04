@@ -1,4 +1,4 @@
-package com.isoftstone.service;
+package com.isoftstone.jxyz.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -6,35 +6,34 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.model.DmCustomerMonthRevenueT;
-import com.isoftstone.model.DmDeliveryMonthT;
-import com.isoftstone.model.DmEmpMonthCollectionT;
-import com.isoftstone.model.DmJxyzEmpInfoT;
-import com.isoftstone.model.DmJxyzSandSectionT;
-import com.isoftstone.model.DmJxyzSandTableT;
-import com.isoftstone.model.DmJxyzSectinInfoT;
-import com.isoftstone.model.DmRegionalMonthCollectionT;
-import com.isoftstone.model.DmSalesDepartmentCollectionMonthT;
-import com.isoftstone.model.DwrCustomerDailyRevenueT;
-import com.isoftstone.model.DwrDeliveryDetailT;
-import com.isoftstone.model.DwrEmpDailyCollectionT;
-import com.isoftstone.model.DwrJxyzCustomerD;
-import com.isoftstone.model.DwrJxyzCustomerRelationD;
-import com.isoftstone.model.DwrJxyzDepartmentD;
-import com.isoftstone.model.DwrJxyzEmpD;
-import com.isoftstone.model.DwrJxyzRegionD;
-import com.isoftstone.model.DwrJxyzResourcesD;
-import com.isoftstone.model.DwrRegionalDailyCollectionT;
-import com.isoftstone.model.DwrSalesDepartmentCollectionT;
-import com.isoftstone.model.TEmolumentResult;
-import com.isoftstone.model.TEmolumentRule;
-import com.isoftstone.model.TEmolumentTemplate;
-import com.isoftstone.model.TGridM;
-import com.isoftstone.model.TGridM0928;
+import com.isoftstone.jxyz.model.DmCustomerMonthRevenueT;
+import com.isoftstone.jxyz.model.DmDeliveryMonthT;
+import com.isoftstone.jxyz.model.DmEmpMonthCollectionT;
+import com.isoftstone.jxyz.model.DmJxyzEmpInfoT;
+import com.isoftstone.jxyz.model.DmJxyzSandSectionT;
+import com.isoftstone.jxyz.model.DmJxyzSandTableT;
+import com.isoftstone.jxyz.model.DmJxyzSectinInfoT;
+import com.isoftstone.jxyz.model.DmRegionalMonthCollectionT;
+import com.isoftstone.jxyz.model.DmSalesDepartmentCollectionMonthT;
+import com.isoftstone.jxyz.model.DwrCustomerDailyRevenueT;
+import com.isoftstone.jxyz.model.DwrDeliveryDetailT;
+import com.isoftstone.jxyz.model.DwrEmpDailyCollectionT;
+import com.isoftstone.jxyz.model.DwrJxyzCustomerD;
+import com.isoftstone.jxyz.model.DwrJxyzCustomerRelationD;
+import com.isoftstone.jxyz.model.DwrJxyzDepartmentD;
+import com.isoftstone.jxyz.model.DwrJxyzEmpD;
+import com.isoftstone.jxyz.model.DwrJxyzRegionD;
+import com.isoftstone.jxyz.model.DwrJxyzResourcesD;
+import com.isoftstone.jxyz.model.DwrRegionalDailyCollectionT;
+import com.isoftstone.jxyz.model.DwrSalesDepartmentCollectionT;
+import com.isoftstone.jxyz.model.TEmolumentResult;
+import com.isoftstone.jxyz.model.TEmolumentRule;
+import com.isoftstone.jxyz.model.TEmolumentTemplate;
+import com.isoftstone.jxyz.model.TGridM;
+import com.isoftstone.jxyz.model.TGridM0928;
 
 @Service
-public class EtlService {
-
+public class JxyzDownloadService {
 	public void dm_customer_month_revenue_t(String prefix, JSONArray dataJsa, String suffix) {
 		DbContext ctx = DbContext.getGlobalDbContext();
 		if (StringUtils.isNotBlank(prefix)) {

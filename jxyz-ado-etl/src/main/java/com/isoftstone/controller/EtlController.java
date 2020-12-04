@@ -86,87 +86,87 @@ public class EtlController {
 
 	@RequestMapping(value = "ins", method = RequestMethod.POST)
 	public void exe(@RequestBody JSONObject jsb) throws Exception {
-		String pre = jsb.getString("pre");// 预处理语句
+		String prefix = jsb.getString("prefix");// 预处理语句
 		String table = jsb.getString("table");// 表名
 		JSONArray dataJsa = jsb.getJSONArray("data");
-		String sufix = jsb.getString("sufix");// 预处理语句
+		String suffix = jsb.getString("suffix");// 预处理语句
 
 		switch (table) {
 		case "dm_customer_month_revenue_t":
-			etlService.dm_customer_month_revenue_t(pre, dataJsa, sufix);
+			etlService.dm_customer_month_revenue_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_delivery_month_t":
-			etlService.dm_delivery_month_t(pre, dataJsa, sufix);
+			etlService.dm_delivery_month_t(prefix, dataJsa, suffix);
 			break;
 
 		case "dm_emp_month_collection_t":
-			etlService.dm_emp_month_collection_t(pre, dataJsa, sufix);
+			etlService.dm_emp_month_collection_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_jxyz_emp_info_t":
-			etlService.dm_jxyz_emp_info_t(pre, dataJsa, sufix);
+			etlService.dm_jxyz_emp_info_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_jxyz_sand_section_t":
-			etlService.dm_jxyz_sand_section_t(pre, dataJsa, sufix);
+			etlService.dm_jxyz_sand_section_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_jxyz_sand_table_t":
-			etlService.dm_jxyz_sand_table_t(pre, dataJsa, sufix);
+			etlService.dm_jxyz_sand_table_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_jxyz_sectin_info_t":
-			etlService.dm_jxyz_sectin_info_t(pre, dataJsa, sufix);
+			etlService.dm_jxyz_sectin_info_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_regional_month_collection_t":
-			etlService.dm_regional_month_collection_t(pre, dataJsa, sufix);
+			etlService.dm_regional_month_collection_t(prefix, dataJsa, suffix);
 			break;
 		case "dm_sales_department_collection_month_t":
-			etlService.dm_sales_department_collection_month_t(pre, dataJsa, sufix);
+			etlService.dm_sales_department_collection_month_t(prefix, dataJsa, suffix);
 			break;
 		case "dwr_customer_daily_revenue_t":
-			etlService.dwr_customer_daily_revenue_t(pre, dataJsa, sufix);
+			etlService.dwr_customer_daily_revenue_t(prefix, dataJsa, suffix);
 			break;
 		case "dwr_delivery_detail_t":
-			etlService.dwr_delivery_detail_t(pre, dataJsa, sufix);
+			etlService.dwr_delivery_detail_t(prefix, dataJsa, suffix);
 			break;
 		case "dwr_emp_daily_collection_t":
-			etlService.dwr_emp_daily_collection_t(pre, dataJsa, sufix);
+			etlService.dwr_emp_daily_collection_t(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_customer_d":
-			etlService.dwr_jxyz_customer_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_customer_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_customer_relation_d":
-			etlService.dwr_jxyz_customer_relation_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_customer_relation_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_department_d":
-			etlService.dwr_jxyz_department_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_department_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_emp_d":
-			etlService.dwr_jxyz_emp_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_emp_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_region_d":
-			etlService.dwr_jxyz_region_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_region_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_jxyz_resources_d":
-			etlService.dwr_jxyz_resources_d(pre, dataJsa, sufix);
+			etlService.dwr_jxyz_resources_d(prefix, dataJsa, suffix);
 			break;
 		case "dwr_regional_daily_collection_t":
-			etlService.dwr_regional_daily_collection_t(pre, dataJsa, sufix);
+			etlService.dwr_regional_daily_collection_t(prefix, dataJsa, suffix);
 			break;
 		case "dwr_sales_department_collection_t":
-			etlService.dwr_sales_department_collection_t(pre, dataJsa, sufix);
+			etlService.dwr_sales_department_collection_t(prefix, dataJsa, suffix);
 			break;
 		case "t_emolument_result":
-			etlService.t_emolument_result(pre, dataJsa, sufix);
+			etlService.t_emolument_result(prefix, dataJsa, suffix);
 			break;
 		case "t_emolument_rule":
-			etlService.t_emolument_rule(pre, dataJsa, sufix);
+			etlService.t_emolument_rule(prefix, dataJsa, suffix);
 			break;
 		case "t_emolument_template":
-			etlService.t_emolument_template(pre, dataJsa, sufix);
+			etlService.t_emolument_template(prefix, dataJsa, suffix);
 			break;
 		case "t_grid_m":
-			etlService.t_grid_m(pre, dataJsa, sufix);
+			etlService.t_grid_m(prefix, dataJsa, suffix);
 			break;
 		case "t_grid_m_0928":
-			etlService.t_grid_m(pre, dataJsa, sufix);
+			etlService.t_grid_m_0928(prefix, dataJsa, suffix);
 			break;
 		default:
 			log.error("table：{},不在计算之列", table);

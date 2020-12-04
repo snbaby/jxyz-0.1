@@ -18,12 +18,15 @@ import com.isoftstone.jxyz.config.RestTemplateConfig;
 @Service
 public class AdoService {
 	// 获取token
-	@Value("${jxyz.get_token.user_name}")
+	@Value("${jxyz.ado.user_name}")
 	private String userName;
-	@Value("${jxyz.get_token.password}")
+	@Value("${jxyz.ado.password}")
 	private String password;
-	@Value("${jxyz.get_token.token_url}")
+	@Value("${jxyz.ado.token_url}")
 	private String token_url;
+	
+	@Value("${jxyz.ado.qry_url}")
+	private String qry_url;
 
 	public String getToken() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		RestTemplate restTemplate = new RestTemplate(RestTemplateConfig.generateHttpRequestFactory());
@@ -33,7 +36,22 @@ public class AdoService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(paramJsb.toJSONString(), headers);
-		ResponseEntity<String> responseEntity  = restTemplate.postForEntity(token_url, requestEntity, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(token_url, requestEntity, String.class);
+		return responseEntity.getBody();
+	}
+
+	public JSONObject getDatas(String qry) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		RestTemplate restTemplate = new RestTemplate();
+		JSONObject paramJsb = new JSONObject();
+		paramJsb.put("qry", qry);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add("gc-authentication", getToken());
+		
+		
+		HttpEntity<String> requestEntity = new HttpEntity<String>(paramJsb.toJSONString(), headers);
+		ResponseEntity<JSONObject> responseEntity = restTemplate.postForEntity(qry_url, requestEntity,
+				JSONObject.class);
 		return responseEntity.getBody();
 	}
 }
