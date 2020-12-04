@@ -1,6 +1,8 @@
 const pool = require('./core/pool')
 const moment = require('moment')
-const Day = parseInt(moment().format('DD'))-2
+const currMonth = moment().format('yyyy-MM')
+const lastMonth = moment().month(moment().month() - 1).startOf('month').format("YYYY-MM");
+const Day = parseInt(moment().format('DD'))-1 <= 0 ? 30 : parseInt(moment().format('DD'))-1
 const currDay = moment().format('yyyy-MM-DD')
 const arr1 = [
     {
@@ -187,7 +189,7 @@ async function main1(code,level){
 
 // 昨日环比增幅
 async function main2(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join t_grid_m b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join t_grid_m b on a.dept_code = b.code where a.period_id = '${currMonth}' GROUP BY b.parent_code`
     pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
@@ -200,7 +202,7 @@ async function main2(code,level){
 
 // 当月环比增幅
 async function main3(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join t_grid_m b on a.dept_code = b.code and period_id = '2020-11'`
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '${lastMonth}') c on a.dept_code = c.dept_code LEFT join t_grid_m b on a.dept_code = b.code and period_id = '${currMonth}'`
     pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -221,7 +223,7 @@ async function main3(code,level){
 
 // 当月环比增幅 -- 市级
 async function main4(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where period_id = '2020-11'`
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '${lastMonth}') c on a.dept_code = c.dept_code LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where period_id = '${currMonth}'`
     pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -243,7 +245,7 @@ async function main4(code,level){
 
 // 当日环比增幅 -- 市级
 async function main5(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,b.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '${currMonth}' GROUP BY b.parent_code`
     pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
@@ -257,7 +259,7 @@ async function main5(code,level){
 
 // 当月环比增幅 -- 省级
 async function main6(code,level){
-    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '2020-10') c on a.dept_code = c.dept_code LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where period_id = '2020-11' `
+    let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,b.parent_code,b.code from income a LEFT join (select dept_code,last_month_postage_total from income where period_id = '${lastMonth}') c on a.dept_code = c.dept_code LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where period_id = '${currMonth}' `
     pool.query(sql).then(deptList =>{
         const level3Group = groupArr(deptList.filter(item => item.parent_code != null),'parent_code')
         level3Group.forEach(item =>{
@@ -278,7 +280,7 @@ async function main6(code,level){
 
 // 当日环比增幅 -- 省级
 async function main7(code,level){
-    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '2020-11' GROUP BY b.parent_code`
+    let sql = `select sum(a.cur_day_total) as currDay,sum(a.last_day_total)  as lastDay,b.parent_code from income a LEFT join (select a.code as code,c.parent_code as parent_code from t_grid_m a left join t_grid_m b on a.parent_code = b.code left join t_grid_m c on b.parent_code = c.code where a.level = 4) b on a.dept_code = b.code where a.period_id = '${currMonth}' GROUP BY b.parent_code`
     pool.query(sql).then(deptList =>{
         deptList.forEach(item =>{
             const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'

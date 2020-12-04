@@ -1,7 +1,9 @@
 "use strict";
 const pool = require('./core/pool')
 const moment = require('moment')
-const Day = parseInt(moment().format('DD')) -2
+const currMonth = moment().format('yyyy-MM')
+const lastMonth = moment().month(moment().month() - 1).startOf('month').format("YYYY-MM");
+const Day = parseInt(moment().format('DD'))-1 <= 0 ? 30 : parseInt(moment().format('DD'))-1
 const currDay = moment().format('yyyy-MM-DD')
 
   function getConfig(){
@@ -86,7 +88,7 @@ function insertData(list,total,key,toFix,text){
 }
 
 async function main1(code){
-  let sql = `select dept_code,cur_day_total as currDay,last_day_total as lastDay,last_month_postage_total from income_list where period_id = '2020-11'`
+  let sql = `select dept_code,cur_day_total as currDay,last_day_total as lastDay,last_month_postage_total from income_list where period_id = '${currMonth}'`
   pool.query(sql).then(dataList =>{
       dataList.forEach(item =>{
         const value = parseInt(item.lastDay) != 0 ? (Math.round((parseFloat(item.currDay) - parseFloat(item.lastDay)) / parseFloat(item.lastDay) * 10000) / 100.00)+"%" : '0.00%'
@@ -99,7 +101,7 @@ async function main1(code){
 
 async function main2(code){
   // 查询组织信息
-  let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,a.dept_code from income_list a LEFT join (select dept_code,last_month_postage_total from income_list where period_id = '2020-10') c on a.dept_code = c.dept_code where period_id = '2020-11'`
+  let sql = `select a.last_month_postage_total as currMonth,c.last_month_postage_total as lastMonth,a.dept_code from income_list a LEFT join (select dept_code,last_month_postage_total from income_list where period_id = '${lastMonth}') c on a.dept_code = c.dept_code where period_id = '${currMonth}'`
   pool.query(sql).then(dataList =>{
       dataList.forEach(item =>{
         const lastValue = item.lastMonth/31*Day
@@ -142,6 +144,6 @@ function getData(){
     main2('eFKz3RDb') // 当月环比增幅
     setTimeout(() =>{
       pool.end()
-    },120000)
+    },60000)
   })
 }
