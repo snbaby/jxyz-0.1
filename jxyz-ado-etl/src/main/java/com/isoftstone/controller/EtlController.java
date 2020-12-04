@@ -165,7 +165,9 @@ public class EtlController {
 		case "t_grid_m":
 			etlService.t_grid_m(pre, dataJsa, sufix);
 			break;
-
+		case "t_grid_m_0928":
+			etlService.t_grid_m(pre, dataJsa, sufix);
+			break;
 		default:
 			log.error("table：{},不在计算之列", table);
 			break;

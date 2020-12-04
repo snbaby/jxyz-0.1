@@ -30,6 +30,7 @@ import com.isoftstone.model.TEmolumentResult;
 import com.isoftstone.model.TEmolumentRule;
 import com.isoftstone.model.TEmolumentTemplate;
 import com.isoftstone.model.TGridM;
+import com.isoftstone.model.TGridM0928;
 
 @Service
 public class EtlService {
@@ -523,6 +524,26 @@ public class EtlService {
 			for (int i = 0; i < dataJsa.size(); i++) {
 				TGridM tGridM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TGridM.class);
 				tGridM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(sufix)) {
+			ctx.exe(sufix);
+		}
+	}
+	
+	public void t_grid_m_0928(String pre, JSONArray dataJsa, String sufix) {
+		DbContext ctx = DbContext.getGlobalDbContext();
+		if (StringUtils.isNotBlank(pre)) {
+			ctx.exe(pre);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TGridM0928 tGridM0928 = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TGridM0928.class);
+				tGridM0928.insert();
 			}
 		} finally {
 			// TODO: handle finally clause
