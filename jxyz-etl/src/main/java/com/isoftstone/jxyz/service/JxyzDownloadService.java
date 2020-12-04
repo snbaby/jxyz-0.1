@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
@@ -42,6 +43,7 @@ public class JxyzDownloadService {
 	@Autowired
 	private AdoService adoService;
 	
+	@Async
 	public void dm_customer_month_revenue_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -63,7 +65,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_delivery_month_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -85,7 +87,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_emp_month_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -107,7 +109,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_jxyz_emp_info_t(String prefix, String qry, String suffix)
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
@@ -129,7 +131,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_jxyz_sand_section_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -151,7 +153,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_jxyz_sand_table_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -173,7 +175,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_jxyz_sectin_info_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -195,7 +197,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_regional_month_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -217,7 +219,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dm_sales_department_collection_month_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -239,7 +241,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_customer_daily_revenue_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -261,7 +263,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_delivery_detail_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -283,7 +285,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_emp_daily_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -305,7 +307,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_customer_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -327,7 +329,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_customer_relation_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -349,7 +351,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_department_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -371,7 +373,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_emp_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -392,7 +394,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_region_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -413,7 +415,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_jxyz_resources_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -435,7 +437,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_regional_daily_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -457,7 +459,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void dwr_sales_department_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -479,7 +481,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void t_emolument_result(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -501,7 +503,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void t_emolument_rule(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -522,7 +524,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void t_emolument_template(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -544,7 +546,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-
+	@Async
 	public void t_grid_m(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
@@ -565,7 +567,7 @@ public class JxyzDownloadService {
 			ctx.exe(suffix);
 		}
 	}
-	
+	@Async
 	public void t_grid_m_0928(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 		DbContext ctx = DbContext.getGlobalDbContext();
