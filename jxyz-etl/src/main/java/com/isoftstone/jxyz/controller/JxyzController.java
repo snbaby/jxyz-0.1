@@ -50,53 +50,53 @@ public class JxyzController {
 		String table = reqJsb.getString("table");
 
 		switch (table) {
-		case "dm_customer_month_revenue_t":
+		case "dm_customer_month_revenue_t"://客户销售月统计
 			jxyzDownloadService.dm_customer_month_revenue_t(prefix, qry, suffix);
 			break;
-		case "dm_delivery_month_t":
+		case "dm_delivery_month_t"://投递月统计
 			jxyzDownloadService.dm_delivery_month_t(prefix, qry, suffix);
 			break;
 
-		case "dm_emp_month_collection_t":
+		case "dm_emp_month_collection_t"://员工销售月统计
 			jxyzDownloadService.dm_emp_month_collection_t(prefix, qry, suffix);
 			break;
-		case "dm_jxyz_emp_info_t":
+		case "dm_jxyz_emp_info_t"://员工沙盘展示
 			jxyzDownloadService.dm_jxyz_emp_info_t(prefix, qry, suffix);
 			break;
-		case "dm_jxyz_sand_section_t":
+		case "dm_jxyz_sand_section_t"://段道信息表
 			jxyzDownloadService.dm_jxyz_sand_section_t(prefix, qry, suffix);
 			break;
-		case "dm_jxyz_sand_table_t":
+		case "dm_jxyz_sand_table_t"://沙盘表
 			jxyzDownloadService.dm_jxyz_sand_table_t(prefix, qry, suffix);
 			break;
 		case "dm_jxyz_sectin_info_t":
 			jxyzDownloadService.dm_jxyz_sectin_info_t(prefix, qry, suffix);
 			break;
-		case "dm_regional_month_collection_t":
+		case "dm_regional_month_collection_t"://区域销售月统计
 			jxyzDownloadService.dm_regional_month_collection_t(prefix, qry, suffix);
 			break;
-		case "dm_sales_department_collection_month_t":
+		case "dm_sales_department_collection_month_t"://部门销售月统计
 			jxyzDownloadService.dm_sales_department_collection_month_t(prefix, qry, suffix);
 			break;
-		case "dwr_customer_daily_revenue_t":
+		case "dwr_customer_daily_revenue_t"://客户日销售统计
 			jxyzDownloadService.dwr_customer_daily_revenue_t(prefix, qry, suffix);
 			break;
-		case "dwr_delivery_detail_t":
+		case "dwr_delivery_detail_t"://投递明细表
 			jxyzDownloadService.dwr_delivery_detail_t(prefix, qry, suffix);
 			break;
-		case "dwr_emp_daily_collection_t":
+		case "dwr_emp_daily_collection_t"://员工日销售统计
 			jxyzDownloadService.dwr_emp_daily_collection_t(prefix, qry, suffix);
 			break;
-		case "dwr_jxyz_customer_d":
+		case "dwr_jxyz_customer_d"://客户表
 			jxyzDownloadService.dwr_jxyz_customer_d(prefix, qry, suffix);
 			break;
 		case "dwr_jxyz_customer_relation_d":
 			jxyzDownloadService.dwr_jxyz_customer_relation_d(prefix, qry, suffix);
 			break;
-		case "dwr_jxyz_department_d":
+		case "dwr_jxyz_department_d"://部门表
 			jxyzDownloadService.dwr_jxyz_department_d(prefix, qry, suffix);
 			break;
-		case "dwr_jxyz_emp_d":
+		case "dwr_jxyz_emp_d"://员工表
 			jxyzDownloadService.dwr_jxyz_emp_d(prefix, qry, suffix);
 			break;
 		case "dwr_jxyz_region_d":
@@ -105,22 +105,22 @@ public class JxyzController {
 		case "dwr_jxyz_resources_d":
 			jxyzDownloadService.dwr_jxyz_resources_d(prefix, qry, suffix);
 			break;
-		case "dwr_regional_daily_collection_t":
+		case "dwr_regional_daily_collection_t"://区域销售日统计
 			jxyzDownloadService.dwr_regional_daily_collection_t(prefix, qry, suffix);
 			break;
-		case "dwr_sales_department_collection_t":
+		case "dwr_sales_department_collection_t"://部门销售日统计
 			jxyzDownloadService.dwr_sales_department_collection_t(prefix, qry, suffix);
 			break;
-		case "t_emolument_result":
+		case "t_emolument_result"://薪酬结果
 			jxyzDownloadService.t_emolument_result(prefix, qry, suffix);
 			break;
-		case "t_emolument_rule":
+		case "t_emolument_rule"://薪酬规则
 			jxyzDownloadService.t_emolument_rule(prefix, qry, suffix);
 			break;
-		case "t_emolument_template":
+		case "t_emolument_template"://薪酬模板
 			jxyzDownloadService.t_emolument_template(prefix, qry, suffix);
 			break;
-		case "t_grid_m":
+		case "t_grid_m"://网格段道表
 			jxyzDownloadService.t_grid_m(prefix, qry, suffix);
 			break;
 		case "t_grid_m_0928":

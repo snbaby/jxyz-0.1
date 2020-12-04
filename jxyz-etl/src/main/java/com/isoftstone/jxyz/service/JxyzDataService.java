@@ -34,17 +34,17 @@ public class JxyzDataService {
     @Autowired
     private JSONUtil jsonUtil;
 
-    @Scheduled(cron = "1 2 22 * * ?")
-    private void configureTasks() {
-        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
-        List<String> list = new LinkedList<>();
-        list.add("dwr_jxyz_resources_d");
-        list.add("dwr_jxyz_emp_d");
-        list.add("dwr_jxyz_customer_d");
-        for (String s : list) {
-            getDataList(s, 1, 500000);
-        }
-    }
+//    @Scheduled(cron = "1 2 22 * * ?")
+//    private void configureTasks() {
+//        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
+//        List<String> list = new LinkedList<>();
+//        list.add("dwr_jxyz_resources_d");
+//        list.add("dwr_jxyz_emp_d");
+//        list.add("dwr_jxyz_customer_d");
+//        for (String s : list) {
+//            getDataList(s, 1, 500000);
+//        }
+//    }
 
     private List<String> tableNameList() {
         List<String> tableNames = new ArrayList<>();
