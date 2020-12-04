@@ -1,13 +1,19 @@
 package com.isoftstone.jxyz.controller;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.isoftstone.jxyz.service.AdoService;
 import com.isoftstone.jxyz.service.DataFileService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class JxyzController {
     @Autowired
     private DataFileService dataFileService;
+    
+    @Autowired
+    private AdoService adoService;
 
     /**
      * 传输数据接口（注意，传输月份格式为:"202001"; 日期格式为："2020-02-28"）
@@ -34,6 +43,16 @@ public class JxyzController {
         resJsb.put("code", 0);
         resJsb.put("msg", "success");
         resJsb.put("data", "");
+        return new ResponseEntity<>(resJsb, HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/token")
+    @ResponseBody
+    public ResponseEntity<JSONObject> token() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+        JSONObject resJsb = new JSONObject();
+        resJsb.put("code", 0);
+        resJsb.put("msg", "success");
+        resJsb.put("data", adoService.getToken());
         return new ResponseEntity<>(resJsb, HttpStatus.OK);
     }
 

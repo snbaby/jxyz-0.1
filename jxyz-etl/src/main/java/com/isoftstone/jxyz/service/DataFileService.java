@@ -1,20 +1,30 @@
 package com.isoftstone.jxyz.service;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.jxyz.util.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSONObject;
+import com.github.drinkjava2.jsqlbox.DbContext;
+import com.isoftstone.jxyz.util.DataBaseUtil;
+import com.isoftstone.jxyz.util.File7zUtil;
+import com.isoftstone.jxyz.util.PostHttpsUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -43,11 +53,11 @@ public class DataFileService {
     @Value("${jxyz.file_code_url}")
     private String file_code_url;
 
-    //每天凌晨3点2分1秒触发
-    @Scheduled(cron = "1 53 0 * * ?")
-    void getData() {
-        configureTasks(null, null, null);
-    }
+//    //每天凌晨3点2分1秒触发
+//    @Scheduled(cron = "1 53 0 * * ?")
+//    void getData() {
+//        configureTasks(null, null, null);
+//    }
 
     public void configureTasks(String tName, String startTime, String endTime) {
         List<String> tableNameList = DataBaseUtil.tableNameList();

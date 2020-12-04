@@ -5,6 +5,8 @@ logging:
     path: log
 server:
   port: 9002
+  servlet:
+    context-path: /jxyz-etl
 spring:
   jackson:
     generator:
@@ -41,7 +43,7 @@ jxyz:
   get_user_data_url: http://localhost:45678/jxyzadoetl/etl/syncDwrResources
   get_token:
     user_name: sn_baby
-    password: Baby#1988
+    password: Baby@1988
     token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
 
   #定义需要调用的http数据转移接口地址
