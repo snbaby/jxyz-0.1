@@ -11,125 +11,124 @@ import com.github.drinkjava2.jdialects.annotation.jpa.Temporal;
 import com.github.drinkjava2.jdialects.annotation.jpa.TemporalType;
 import com.github.drinkjava2.jsqlbox.ActiveRecord;
 
-
 /**
  * The persistent class for the t_grid_m database table.
  * 
  */
 @Entity
-@Table(name="t_grid_m_0928")
-public class TGridM0928 extends ActiveRecord<TGridM0928>  {
+@Table(name = "t_grid_m_0928")
+public class TGridM0928 extends ActiveRecord<TGridM0928> {
 
 	@Id
 	private String id;
 
-	@Column(name="all_parent_code")
+	@Column(name = "all_parent_code")
 	private String allParentCode;
 
-	@Column(name="area")
+	@Column(name = "area")
 	private BigDecimal area;
 
-	@Column(name="bundary")
+	@Column(name = "bundary")
 	private String bundary;
 
-	@Column(name="bundary_coordinate")
+	@Column(name = "bundary_coordinate")
 	private Object bundaryCoordinate;
 
-	@Column(name="business_type")
+	@Column(name = "business_type")
 	private String businessType;
 
-	@Column(name="center_latitude")
+	@Column(name = "center_latitude")
 	private BigDecimal centerLatitude;
 
-	@Column(name="center_longitude")
+	@Column(name = "center_longitude")
 	private BigDecimal centerLongitude;
 
 	private String code;
 
 	private String color;
 
-	@Column(name="cover_rate")
+	@Column(name = "cover_rate")
 	private BigDecimal coverRate;
 
-	@Column(name="cover_size")
+	@Column(name = "cover_size")
 	private BigDecimal coverSize;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="create_date")
+	@Column(name = "create_date")
 	private Date createDate;
 
-	@Column(name="create_user")
+	@Column(name = "create_user")
 	private String createUser;
 
 	private String email;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="end_date")
+	@Column(name = "end_date")
 	private Date endDate;
 
-	@Column(name="extend_column")
+	@Column(name = "extend_column")
 	private Object extendColumn;
 
-	@Column(name="full_name")
+	@Column(name = "full_name")
 	private String fullName;
 
-	@Column(name="grid_status")
+	@Column(name = "grid_status")
 	private String gridStatus;
 
 	private String headperson;
 
-	@Column(name="headperson_code")
+	@Column(name = "headperson_code")
 	private String headpersonCode;
 
-	@Column(name="headperson_portal")
+	@Column(name = "headperson_portal")
 	private String headpersonPortal;
 
-	@Column(name="headperson_tel")
+	@Column(name = "headperson_tel")
 	private String headpersonTel;
 
-	@Column(name="is_modify")
+	@Column(name = "is_modify")
 	private byte isModify;
 
-	@Column(name="is_town")
+	@Column(name = "is_town")
 	private byte isTown;
 
 	private int level;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modify_date")
+	@Column(name = "modify_date")
 	private Date modifyDate;
 
-	@Column(name="modify_user")
+	@Column(name = "modify_user")
 	private String modifyUser;
 
 	private String name;
 
-	@Column(name="nap_takeup_rate")
+	@Column(name = "nap_takeup_rate")
 	private BigDecimal napTakeupRate;
 
-	@Column(name="old_grid_code")
+	@Column(name = "old_grid_code")
 	private String oldGridCode;
 
-	@Column(name="parent_code")
+	@Column(name = "parent_code")
 	private String parentCode;
 
 	private int priority;
 
-	@Column(name="relate_org")
+	@Column(name = "relate_org")
 	private String relateOrg;
 
-	@Column(name="relate_org_code")
+	@Column(name = "relate_org_code")
 	private String relateOrgCode;
 
 	private String remark;
 
 	private int seq;
 
-	@Column(name="short_name")
+	@Column(name = "short_name")
 	private String shortName;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="start_date")
+	@Column(name = "start_date")
 	private Date startDate;
 
 	private String type;
@@ -171,13 +170,13 @@ public class TGridM0928 extends ActiveRecord<TGridM0928>  {
 		this.bundary = bundary;
 	}
 
-	public Object getBundaryCoordinate() {
-		return this.bundaryCoordinate;
-	}
-
-	public void setBundaryCoordinate(Object bundaryCoordinate) {
-		this.bundaryCoordinate = bundaryCoordinate;
-	}
+//	public Object getBundaryCoordinate() {
+//		return this.bundaryCoordinate;
+//	}
+//
+//	public void setBundaryCoordinate(Object bundaryCoordinate) {
+//		this.bundaryCoordinate = bundaryCoordinate;
+//	}
 
 	public String getBusinessType() {
 		return this.businessType;
@@ -327,16 +326,28 @@ public class TGridM0928 extends ActiveRecord<TGridM0928>  {
 		return this.isModify;
 	}
 
-	public void setIsModify(byte isModify) {
-		this.isModify = isModify;
+	public void setIsModify(Object isModify) {
+		if (isModify == null) {
+			this.isModify = (byte) 0;
+		} else if (isModify.getClass().getSimpleName().equals("Boolean")) {
+			this.isModify = (boolean) isModify ? (byte) 1 : (byte) 0;
+		} else {
+			this.isModify = (byte) isModify;
+		}
 	}
 
 	public byte getIsTown() {
 		return this.isTown;
 	}
 
-	public void setIsTown(byte isTown) {
-		this.isTown = isTown;
+	public void setIsTown(Object isTown) {
+		if (isTown == null) {
+			this.isTown = (byte) 0;
+		} else if (isTown.getClass().getSimpleName().equals("Boolean")) {
+			this.isTown = (boolean) isTown ? (byte) 1 : (byte) 0;
+		} else {
+			this.isTown = (byte) isTown;
+		}
 	}
 
 	public int getLevel() {

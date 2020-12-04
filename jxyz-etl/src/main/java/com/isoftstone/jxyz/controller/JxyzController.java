@@ -43,14 +43,14 @@ public class JxyzController {
 	}
 
 	@PostMapping(value = "/download")
-	public void t_grid_m(@RequestBody JSONObject reqJsb)
+	public void download(@RequestBody JSONObject reqJsb)
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		String qry = reqJsb.getString("qry");
 		String prefix = reqJsb.getString("prefix");
 		String suffix = reqJsb.getString("suffix");
 		String table = reqJsb.getString("table");
 
-		JSONArray dataJsa = adoService.getDatas(qry).getJSONArray("data");
+		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
 
 		switch (table) {
 		case "dm_customer_month_revenue_t":
@@ -133,6 +133,17 @@ public class JxyzController {
 			log.error("table：{},不在计算之列", table);
 			break;
 		}
+	}
+	
+	@PostMapping(value = "/upload")
+	public void upload(@RequestBody JSONObject reqJsb)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		String ins = reqJsb.getString("ins");
+		String prefix = reqJsb.getString("prefix");
+		String suffix = reqJsb.getString("suffix");
+		String table = reqJsb.getString("table");
+
+		adoService.insDatas(ins,prefix,suffix,table);
 	}
 
 }

@@ -52,6 +52,7 @@ jxyz:
     password: Baby@1988
     token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
     qry_url: http://127.0.0.1:45678/jxyzadoetl/etl/qry
+    ins_url: http://127.0.0.1:45678/jxyzadoetl/etl/ins
     
 
   #定义需要调用的http数据转移接口地址
