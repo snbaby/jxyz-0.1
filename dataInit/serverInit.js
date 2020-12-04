@@ -119,9 +119,9 @@ const normConfig = [
   ]
 
 const currMonth = moment().format('yyyy-MM')
-const Day = parseInt(moment().format('DD'))-2
+const lastMonth = moment().month(moment().month() - 1).startOf('month').format("YYYY-MM");
+const Day = parseInt(moment().format('DD'))-1 <= 0 ? 30 : parseInt(moment().format('DD'))-1
 const currDay = moment().format('yyyy-MM-DD')
-const currYear = moment().format('yyyy')
 
 let dataList = []
 
@@ -184,146 +184,146 @@ async function main(){
 main()
 // 当月揽收收入
 function getCurrMonthTotal1(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_month_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_month_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 本年累计揽收收入
 function getCurrMonthTotal2(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.year_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.year_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 // 昨日揽收收入
 function getCurrMonthTotal3(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 // 昨日揽收收入 - 现费指标
 function getCurrMonthTotal4(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total1_s/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.cur_day_total1_s/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 // 当月揽收收入 - 现费指标
 function getCurrMonthTotal5(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 当月现费收入
 function getCurrMonthTotal6(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${parseFloat(item.last_postage_total/10000).toFixed(2)}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 当月揽收量
 function getNum1(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
-    const lastArr = dataList.filter(item => item.period_id === '2020-10')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
+    const lastArr = dataList.filter(item => item.period_id === lastMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 本年累计揽收量
 function getNum2(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
-    const lastArr = dataList.filter(item => item.period_id === '2020-10')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
+    const lastArr = dataList.filter(item => item.period_id === lastMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.year_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.year_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 日人均揽收量
 // function getNum3(code){
-//     const currArr = dataList.filter(item => item.period_id === '2020-11')
-//     const lastArr = dataList.filter(item => item.period_id === '2020-10')
+//     const currArr = dataList.filter(item => item.period_id === currMonth)
+//     const lastArr = dataList.filter(item => item.period_id === lastMonth)
 //     currArr.forEach(item =>{
-//         const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+//         const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_month_clledted_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
 //         console.log(sql1)
 //     })
 // }
 
  // 当月揽收量 - 现费指标
 function getNum4(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
-    const lastArr = dataList.filter(item => item.period_id === '2020-10')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
+    const lastArr = dataList.filter(item => item.period_id === lastMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.last_collected_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 昨日揽收量 - 现费指标
 function getNum5(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty_s}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty_s}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
  // 昨日揽收量
 function getNum6(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
-    const lastArr = dataList.filter(item => item.period_id === '2020-10')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
+    const lastArr = dataList.filter(item => item.period_id === lastMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${item.cur_day_qty}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 当月环比增幅
 function getAmplification1(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
-    const lastArr = dataList.filter(item => item.period_id === '2020-10')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
+    const lastArr = dataList.filter(item => item.period_id === lastMonth)
     currArr.forEach(item =>{
         const currValue = item.last_month_postage_total
         const emp = lastArr.find(dd => dd.dept_code === item.dept_code)
         const last = emp ? emp.last_month_postage_total : 0
         const lastValue = last/31*Day
         const value = parseInt(lastValue) != 0 ? (Math.round((parseFloat(currValue) - parseFloat(lastValue)) / parseFloat(lastValue) * 10000) / 100.00)+"%" : '0.00%'
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 昨日环比增幅
 function getAmplification2(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
         const currValue = item.cur_day_total
         const lastValue = item.last_day_total
         const value = parseInt(lastValue) != 0 ? (Math.round((parseFloat(currValue) - parseFloat(lastValue)) / parseFloat(lastValue) * 10000) / 100.00)+"%" : '0.00%'
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', '${value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }
 
 // 当月环比增幅
 function getAmplification3(code){
-    const currArr = dataList.filter(item => item.period_id === '2020-11')
+    const currArr = dataList.filter(item => item.period_id === currMonth)
     currArr.forEach(item =>{
-        const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', 0, NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
+        const sql1 = `REPLACE INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${item.dept_code}', 4, 'mainDownLeftCount', '${code}', 0, NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
         console.log(sql1)
     })
 }

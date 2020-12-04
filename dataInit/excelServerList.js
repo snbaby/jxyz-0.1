@@ -13,6 +13,7 @@ let sql = 'select dept_code,period_id,cur_day_total,last_day_total,last_month_po
           if (deptList.length == 1){
             const item = deptList[0]
             const sql = `insert income_list (dept_code,period_id,cur_day_total,last_day_total,last_month_postage_total) values('${item.code}','${element.period_id}','${element.cur_day_total}','${element.last_day_total}','${element.last_month_postage_total}');`
+            console.log(sql)
           } else {
             const total1 = element.cur_day_total
             const baseNum1 = total1/deptList.length // 获取基数
