@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SalaryAnalysisService {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private SimpleDateFormat bizOccurDateDf = new SimpleDateFormat("yyyy-10-01 00:00:00");
+	private SimpleDateFormat bizOccurDateDf = new SimpleDateFormat("yyyy-MM-01 00:00:00");
 	private SimpleDateFormat yearDf = new SimpleDateFormat("yyyy");
 	private SimpleDateFormat periodDf = new SimpleDateFormat("yyyyMM");
 
@@ -83,16 +83,17 @@ public class SalaryAnalysisService {
 			Map<String, Object> ruleMap = ruleMapList.get(i);
 			if (ruleMap.getOrDefault("city_code", "").equals(city_code)) {
 				thisRuleMapList.add(ruleMap);
-			};
+			}
+			;
 		}
-		
+
 		if (thisRuleMapList.size() > 0) {
 			basic_salary = Utils.getMapDouble(thisRuleMapList.get(0), "basic_salary");
 		}
-		
-		String msgSql = "select trace_no,op_org_code,op_erator_no from sdi_jxyz_pkp_trace_message_"+ periodDf.format(new Date()) + " where op_erator_no = ? and op_code = '704' ";
-		List<Map<String, Object>> msgMapList = dbContext.qryMapList(msgSql,
-				DB.param(empMap.get("emp_code")));
+
+		String msgSql = "select trace_no,op_org_code,op_erator_no from sdi_jxyz_pkp_trace_message_"
+				+ periodDf.format(new Date()) + " where op_erator_no = ? and op_code = '704' ";
+		List<Map<String, Object>> msgMapList = dbContext.qryMapList(msgSql, DB.param(empMap.get("emp_code")));
 		Set<String> trace_noSet = new HashSet<String>();
 		for (Map<String, Object> msgMap : msgMapList) {
 			String trace_no = Utils.getMapStr(msgMap, "trace_no");
@@ -111,19 +112,20 @@ public class SalaryAnalysisService {
 			boolean is_matching = false;
 			for (int i = 0; i < thisRuleMapList.size(); i++) {
 				Map<String, Object> thisRuleMap = thisRuleMapList.get(i);
-				if (thisRuleMap.getOrDefault("type", "").equals(type) && thisRuleMap.getOrDefault("is_loose_items", "").equals(isCourt)) {
+				if (thisRuleMap.getOrDefault("type", "").equals(type)
+						&& thisRuleMap.getOrDefault("is_loose_items", "").equals(isCourt)) {
 					double fee = Utils.getMapDouble(thisRuleMap, "fixed_income");
 					deliver_num++;
 					deliver_total += fee;
 					is_matching = true;
 				}
 			}
-			if(!is_matching) {
+			if (!is_matching) {
 				log.error("投递未匹配上规则：trace_no:{}", trace_no);
 			}
 		}
 		String baseSql = "select waybill_no,product_reach_area,contents_attribute,sender_type,postage_total,postage_standard,postage_paid,postage_other,discount_rate from sdi_jxyz_pkp_waybill_base_"
-				+ yearDf.format(new Date()) + "1130"
+				+ yearDf.format(new Date())
 				+ " where biz_occur_date >= ? and post_person_no = ? and postage_paid != 0 and is_deleted = 0";
 		List<Map<String, Object>> baseMapList = dbContext.qryMapList(baseSql,
 				DB.param(bizOccurDateDf.format(new Date()), empMap.get("emp_code")));
@@ -181,7 +183,7 @@ public class SalaryAnalysisService {
 					}
 				}
 			}
-			if(!is_matching) {
+			if (!is_matching) {
 				log.error("揽收未匹配上规则：waybill_no:{}", waybill_no);
 			}
 		}
