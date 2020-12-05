@@ -1,5 +1,10 @@
 package com.isoftstone.service;
 
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,10 +40,16 @@ import com.isoftstone.model.TGridM0928;
 
 @Service
 public class EtlService {
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Async
-	public void dm_customer_month_revenue_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_customer_month_revenue_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -56,11 +67,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_delivery_month_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_delivery_month_t(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -78,11 +94,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_emp_month_collection_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_emp_month_collection_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -100,11 +122,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_jxyz_emp_info_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_jxyz_emp_info_t(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -121,11 +148,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_jxyz_sand_section_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_jxyz_sand_section_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -143,11 +176,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_jxyz_sand_table_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_jxyz_sand_table_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -165,11 +204,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_jxyz_sectin_info_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_jxyz_sectin_info_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -187,11 +232,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_regional_month_collection_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_regional_month_collection_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -209,11 +260,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dm_sales_department_collection_month_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dm_sales_department_collection_month_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -231,11 +288,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_customer_daily_revenue_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_customer_daily_revenue_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -253,11 +316,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_delivery_detail_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_delivery_detail_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -275,11 +344,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_emp_daily_collection_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_emp_daily_collection_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -297,11 +372,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_customer_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_customer_d(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -319,11 +399,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_customer_relation_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_customer_relation_d(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -341,11 +427,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_department_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_department_d(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -363,11 +455,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_emp_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_emp_d(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -384,11 +481,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_region_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_region_d(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -405,11 +507,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_jxyz_resources_d(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_jxyz_resources_d(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -427,11 +535,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_regional_daily_collection_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_regional_daily_collection_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -449,11 +563,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void dwr_sales_department_collection_t(String prefix, JSONArray dataJsa, String suffix) {
+	public void dwr_sales_department_collection_t(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -471,11 +591,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void t_emolument_result(String prefix, JSONArray dataJsa, String suffix) {
+	public void t_emolument_result(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -493,11 +618,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void t_emolument_rule(String prefix, JSONArray dataJsa, String suffix) {
+	public void t_emolument_rule(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -514,11 +644,17 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void t_emolument_template(String prefix, JSONArray dataJsa, String suffix) {
+	public void t_emolument_template(String prefix, JSONArray dataJsa, String suffix, String table)
+			throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -536,11 +672,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void t_grid_m(String prefix, JSONArray dataJsa, String suffix) {
+	public void t_grid_m(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -557,11 +698,16 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 
 	@Async
-	public void t_grid_m_0928(String prefix, JSONArray dataJsa, String suffix) {
+	public void t_grid_m_0928(String prefix, JSONArray dataJsa, String suffix, String table) throws SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		String id = UUID.randomUUID().toString();
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -578,5 +724,7 @@ public class EtlService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
 	}
 }
