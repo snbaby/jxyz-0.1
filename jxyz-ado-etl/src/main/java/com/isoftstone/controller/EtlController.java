@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +80,7 @@ public class EtlController {
 	public JSONObject qry(@RequestBody JSONObject jsb) throws Exception {
 		DbContext ctx = DbContext.getGlobalDbContext();
 		String qry = jsb.getString("qry");// 查询语句
-
-		String id = UUID.randomUUID().toString();
+		String id = jsb.getString("id");// 查询语句
 		// 日志
 		ctx.execute("INSERT INTO t_ado_etl_qry_log(id,qry,start_time,create_time)VALUES(?,?,?,?)", id, qry,
 				sdf.format(new Date()), sdf.format(new Date()));
@@ -115,82 +113,87 @@ public class EtlController {
 			suffix = jsb.getString("suffix");// 预处理语句
 		}
 
+		String id = "";// 预处理语句
+		if (StringUtils.isNotBlank(jsb.getString("id"))) {
+			id = jsb.getString("id");// 预处理语句
+		}
+
 		switch (table) {
 		case "dm_customer_month_revenue_t":
-			etlService.dm_customer_month_revenue_t(prefix, dataJsa, suffix, table);
+			etlService.dm_customer_month_revenue_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_delivery_month_t":
-			etlService.dm_delivery_month_t(prefix, dataJsa, suffix, table);
+			etlService.dm_delivery_month_t(prefix, dataJsa, suffix, table, id);
 			break;
 
 		case "dm_emp_month_collection_t":
-			etlService.dm_emp_month_collection_t(prefix, dataJsa, suffix, table);
+			etlService.dm_emp_month_collection_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_jxyz_emp_info_t":
-			etlService.dm_jxyz_emp_info_t(prefix, dataJsa, suffix, table);
+			etlService.dm_jxyz_emp_info_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_jxyz_sand_section_t":
-			etlService.dm_jxyz_sand_section_t(prefix, dataJsa, suffix, table);
+			etlService.dm_jxyz_sand_section_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_jxyz_sand_table_t":
-			etlService.dm_jxyz_sand_table_t(prefix, dataJsa, suffix, table);
+			etlService.dm_jxyz_sand_table_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_jxyz_sectin_info_t":
-			etlService.dm_jxyz_sectin_info_t(prefix, dataJsa, suffix, table);
+			etlService.dm_jxyz_sectin_info_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_regional_month_collection_t":
-			etlService.dm_regional_month_collection_t(prefix, dataJsa, suffix, table);
+			etlService.dm_regional_month_collection_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dm_sales_department_collection_month_t":
-			etlService.dm_sales_department_collection_month_t(prefix, dataJsa, suffix, table);
+			etlService.dm_sales_department_collection_month_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_customer_daily_revenue_t":
-			etlService.dwr_customer_daily_revenue_t(prefix, dataJsa, suffix, table);
+			etlService.dwr_customer_daily_revenue_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_delivery_detail_t":
-			etlService.dwr_delivery_detail_t(prefix, dataJsa, suffix, table);
+			etlService.dwr_delivery_detail_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_emp_daily_collection_t":
-			etlService.dwr_emp_daily_collection_t(prefix, dataJsa, suffix, table);
+			etlService.dwr_emp_daily_collection_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_customer_d":
-			etlService.dwr_jxyz_customer_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_customer_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_customer_relation_d":
-			etlService.dwr_jxyz_customer_relation_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_customer_relation_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_department_d":
-			etlService.dwr_jxyz_department_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_department_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_emp_d":
-			etlService.dwr_jxyz_emp_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_emp_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_region_d":
-			etlService.dwr_jxyz_region_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_region_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_jxyz_resources_d":
-			etlService.dwr_jxyz_resources_d(prefix, dataJsa, suffix, table);
+			etlService.dwr_jxyz_resources_d(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_regional_daily_collection_t":
-			etlService.dwr_regional_daily_collection_t(prefix, dataJsa, suffix, table);
+			etlService.dwr_regional_daily_collection_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "dwr_sales_department_collection_t":
-			etlService.dwr_sales_department_collection_t(prefix, dataJsa, suffix, table);
+			etlService.dwr_sales_department_collection_t(prefix, dataJsa, suffix, table, id);
 			break;
 		case "t_emolument_result":
-			etlService.t_emolument_result(prefix, dataJsa, suffix, table);
+			etlService.t_emolument_result(prefix, dataJsa, suffix, table, id);
 			break;
 		case "t_emolument_rule":
-			etlService.t_emolument_rule(prefix, dataJsa, suffix, table);
+			etlService.t_emolument_rule(prefix, dataJsa, suffix, table, id);
 			break;
 		case "t_emolument_template":
-			etlService.t_emolument_template(prefix, dataJsa, suffix, table);
+			etlService.t_emolument_template(prefix, dataJsa, suffix, table, id);
 			break;
 		case "t_grid_m":
-			etlService.t_grid_m(prefix, dataJsa, suffix, table);
+			etlService.t_grid_m(prefix, dataJsa, suffix, table, id);
 			break;
 		case "t_grid_m_0928":
-			etlService.t_grid_m_0928(prefix, dataJsa, suffix, table);
+			etlService.t_grid_m_0928(prefix, dataJsa, suffix, table, id);
 			break;
 		default:
 			log.error("table：{},不在计算之列", table);
