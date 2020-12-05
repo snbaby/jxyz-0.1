@@ -91,7 +91,7 @@ public class SalaryAnalysisService {
 			basic_salary = Utils.getMapDouble(thisRuleMapList.get(0), "basic_salary");
 		}
 
-		String msgSql = "select trace_no,op_org_code,op_erator_no from sdi_jxyz_pkp_trace_message_"
+		String msgSql = "select trace_no,op_org_code,op_erator_no from sdi_jxyz_pkp_trace_message_704_"
 				+ periodDf.format(new Date()) + " where op_erator_no = ? and op_code = '704' ";
 		List<Map<String, Object>> msgMapList = dbContext.qryMapList(msgSql, DB.param(empMap.get("emp_code")));
 		Set<String> trace_noSet = new HashSet<String>();
