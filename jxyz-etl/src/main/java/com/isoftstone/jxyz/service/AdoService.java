@@ -80,7 +80,7 @@ public class AdoService {
 		DbContext ctx = DbContext.getGlobalDbContext();
 		String id = UUID.randomUUID().toString();
 		ctx.execute(
-				"INSERT INTO t_etl_upload_log(id,ins,prefix,suffix,table,qry_start_time,create_time)VALUES(?,?,?,?,?,?,?)",
+				"INSERT INTO t_etl_upload_log(id,ins,prefix,suffix,`table`,qry_start_time,create_time)VALUES(?,?,?,?,?,?,?)",
 				id, ins, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
 
 		List<Map<String, Object>> data = ctx.qryMapList(ins);
