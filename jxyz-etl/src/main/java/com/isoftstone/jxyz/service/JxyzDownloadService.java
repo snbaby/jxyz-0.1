@@ -3,6 +3,9 @@ package com.isoftstone.jxyz.service;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +42,19 @@ import com.isoftstone.jxyz.model.TGridM0928;
 
 @Service
 public class JxyzDownloadService {
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
 	private AdoService adoService;
-	
-	
-	public void dm_customer_month_revenue_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_customer_month_revenue_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -63,11 +72,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_delivery_month_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_delivery_month_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -85,11 +102,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_emp_month_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_emp_month_collection_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -107,12 +132,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_jxyz_emp_info_t(String prefix, String qry, String suffix)
-			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_jxyz_emp_info_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -129,11 +161,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_jxyz_sand_section_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_jxyz_sand_section_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -151,11 +191,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_jxyz_sand_table_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_jxyz_sand_table_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -173,11 +221,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_jxyz_sectin_info_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_jxyz_sectin_info_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -195,11 +251,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_regional_month_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_regional_month_collection_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -217,11 +281,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dm_sales_department_collection_month_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dm_sales_department_collection_month_t(String prefix, String qry, String suffix, String table,
+			String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -239,11 +311,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_customer_daily_revenue_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_customer_daily_revenue_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -261,11 +341,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_delivery_detail_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_delivery_detail_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -283,11 +371,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_emp_daily_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_emp_daily_collection_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -305,11 +401,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_customer_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_customer_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -327,11 +431,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_customer_relation_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_customer_relation_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -349,11 +461,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_department_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_department_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -371,11 +491,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_emp_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_emp_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -392,11 +520,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_region_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_region_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -413,11 +549,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_jxyz_resources_d(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_jxyz_resources_d(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -435,11 +579,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_regional_daily_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_regional_daily_collection_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -457,11 +609,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void dwr_sales_department_collection_t(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void dwr_sales_department_collection_t(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -479,11 +639,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void t_emolument_result(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void t_emolument_result(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -501,11 +669,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void t_emolument_rule(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void t_emolument_rule(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -522,11 +698,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void t_emolument_template(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void t_emolument_template(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -544,11 +728,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void t_grid_m(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void t_grid_m(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -565,11 +757,19 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
-	
-	public void t_grid_m_0928(String prefix, String qry, String suffix) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		JSONArray dataJsa = adoService.qryDatas(qry).getJSONArray("data");
+
+	public void t_grid_m_0928(String prefix, String qry, String suffix, String table, String id)
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
 		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
 		if (StringUtils.isNotBlank(prefix)) {
 			ctx.exe(prefix);
 		}
@@ -586,5 +786,7 @@ public class JxyzDownloadService {
 		if (StringUtils.isNotBlank(suffix)) {
 			ctx.exe(suffix);
 		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
 	}
 }
