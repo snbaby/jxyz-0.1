@@ -55,7 +55,7 @@ public class AdoService {
 
 	public JSONObject qryDatas(String qry, String id)
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate(RestTemplateConfig.generateHttpRequestFactory());
 		JSONObject paramJsb = new JSONObject();
 		paramJsb.put("qry", qry);
 		paramJsb.put("id", id);
@@ -72,7 +72,7 @@ public class AdoService {
 	@Async
 	public void insDatas(String ins, String prefix, String suffix, String table)
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
-		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate(RestTemplateConfig.generateHttpRequestFactory());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add("gc-authentication", getToken());

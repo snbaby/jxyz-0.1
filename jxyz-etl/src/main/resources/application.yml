@@ -15,9 +15,9 @@ spring:
     name: jxyz-etl
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com:3306/dcp_business?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: root
-    password: Liqin1988
+    url: jdbc:mysql://127.0.0.1:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: jxyz
+    password: jxyz@1234
     hikari:
       connection-timeout: 15000
       auto-commit: true
@@ -51,8 +51,8 @@ jxyz:
     user_name: sn_baby
     password: Baby@1988
     token_url: https://112.51.254.102:18443/iam/keystone/auth/getToken
-    qry_url: http://127.0.0.1:45678/jxyzadoetl/etl/qry
-    ins_url: http://127.0.0.1:45678/jxyzadoetl/etl/ins
+    qry_url: https://112.51.254.102:18443/jxyzadoetl/etl/qry
+    ins_url: https://112.51.254.102:18443/jxyzadoetl/etl/ins
     
 
   #定义需要调用的http数据转移接口地址

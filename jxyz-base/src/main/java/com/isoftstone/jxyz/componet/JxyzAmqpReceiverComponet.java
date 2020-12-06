@@ -70,7 +70,7 @@ public class JxyzAmqpReceiverComponet {
 				process(bucket, object, id);
 			}
 		}
-		log.info("收到fanout的消息：{}",amqp_message);
+		log.debug("收到fanout的消息：{}",amqp_message);
 	}
 
 	private void process(String bucket, String object, String id) throws SQLException {
