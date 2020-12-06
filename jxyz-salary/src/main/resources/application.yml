@@ -21,10 +21,18 @@ spring:
       auto-commit: true
       max-lifetime: 600000
       pool-name: DatebookHikariCP
-      minimum-idle: 5
+      minimum-idle: 300
       connection-test-query: SELECT 1
       idle-timeout: 30000
-      maximum-pool-size: 30
+      maximum-pool-size: 300
+  task:
+    execution:
+      pool:
+        core-size: 100
+        max-size: 1000
+        keep-alive: 3s
+        queue-capacity: 20000
+      thread-name-prefix: salary-thread-
   
 jxyz:
   etl:

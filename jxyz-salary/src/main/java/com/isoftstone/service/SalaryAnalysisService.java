@@ -188,8 +188,8 @@ public class SalaryAnalysisService {
 			}
 		}
 
-		String resultInsert = "REPLACE INTO t_emolument_result(period_id,emp_code,emp_name,province_code,province_name,city_code,city_name,county_code,county_name,dept_code,dept_name,grid_code,grid_name,all_parent_code,basic_salary,deliver_num,deliver_total,deliver_court_num,deliver_court_total,standard_delivery_num,standard_delivery_total,express_package_num,express_package_total,international_delivery_num,international_delivery_total,modify_time,ado_id)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
+		dbContext.execute("delete from t_emolument_result where period_id = ? and emp_code = ?",period_id, emp_code);
+		String resultInsert = "insert INTO t_emolument_result(period_id,emp_code,emp_name,province_code,province_name,city_code,city_name,county_code,county_name,dept_code,dept_name,grid_code,grid_name,all_parent_code,basic_salary,deliver_num,deliver_total,deliver_court_num,deliver_court_total,standard_delivery_num,standard_delivery_total,express_package_num,express_package_total,international_delivery_num,international_delivery_total,modify_time,ado_id)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		dbContext.execute(resultInsert, period_id, emp_code, emp_name, province_code, province_name, city_code,
 				city_name, county_code, county_name, dept_code, dept_name, grid_code, grid_name, all_parent_code,
 				basic_salary, deliver_num, deliver_total, deliver_court_num, deliver_court_total, standard_delivery_num,

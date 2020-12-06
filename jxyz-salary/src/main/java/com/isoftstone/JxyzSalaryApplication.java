@@ -27,7 +27,7 @@ public class JxyzSalaryApplication {
 	public DbContext createDefaultDbContext() {
 		DbContext ctx = new DbContext(ds);
 		ctx.setConnectionManager(SpringTxConnectionManager.instance());
-		ctx.setAllowShowSQL(true);
+		ctx.setAllowShowSQL(false);
 		DbContext.setGlobalDbContext(ctx);// 设定静态全局上下文
 		return ctx;
 	}
