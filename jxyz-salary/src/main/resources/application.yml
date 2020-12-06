@@ -25,3 +25,8 @@ spring:
       connection-test-query: SELECT 1
       idle-timeout: 30000
       maximum-pool-size: 30
+  
+jxyz:
+  etl:
+    download_url: http://127.0.0.1:18411/jxyz-etl/etl/download
+    upload_url: http://127.0.0.1:18411/jxyz-etl/etl/upload

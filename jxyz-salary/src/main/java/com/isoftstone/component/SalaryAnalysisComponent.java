@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.github.drinkjava2.jsqlbox.DbContext;
+import com.isoftstone.service.EtlService;
 import com.isoftstone.service.SalaryAnalysisService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 public class SalaryAnalysisComponent {
 	@Autowired
 	private SalaryAnalysisService salaryAnalysisService;
+	
+	@Autowired
+	private EtlService etlService;
 
 	@Scheduled(initialDelay = 2000, fixedDelay = 2*60*60*1000)
 	public void run3() throws InterruptedException {
+		log.info("start：------------------------------");
+		etlService.uploadTEmolumentResult();
+		etlService.downloadDwrJxyzEmpD();
+		etlService.downloadTGridM();
+		etlService.downloadTEmolumentRule();
+		etlService.downloadTEmolumentTemplate();
+		
 		DbContext dbContext = DbContext.getGlobalDbContext();
 		String ruleSql = "select a.*,b.code as ruleCode,b.name as ruleName,b.type,b.fixed_income,b.commission_rate,b.min_discount,b.max_discount,b.is_discount,b.is_loose_items from t_emolument_template a left join t_emolument_rule b on a.code = b.template_code";
 		List<Map<String, Object>> ruleMapList = dbContext.qryMapList(ruleSql);
@@ -41,6 +52,6 @@ public class SalaryAnalysisComponent {
 			}
 		});
 		
-		log.error("over：------------------------------");
+		log.info("over：------------------------------");
 	}
 }
