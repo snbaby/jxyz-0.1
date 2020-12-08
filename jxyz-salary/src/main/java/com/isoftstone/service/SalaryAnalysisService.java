@@ -100,7 +100,7 @@ public class SalaryAnalysisService {
 			if (!trace_noSet.contains(trace_no)) {
 				trace_noSet.add(trace_no);// 去重trace_no
 			} else {
-				break;
+				continue;
 			}
 			String isCourt = ""; // 是否为法院专线
 			String type = "1"; // 投递
