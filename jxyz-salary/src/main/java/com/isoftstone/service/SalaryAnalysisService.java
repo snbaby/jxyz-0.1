@@ -137,7 +137,7 @@ public class SalaryAnalysisService {
 			if (!waybill_noSet.contains(waybill_no)) {
 				waybill_noSet.add(waybill_no);// 去重waybill_no
 			} else {
-				break;
+				continue;
 			}
 			String loose_items = baseMap.getOrDefault("sender_type", "0").equals("0") ? "1" : "0";// 是否为散件,'1'散户，'0'，协议客户
 			String type = "";
