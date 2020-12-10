@@ -195,6 +195,9 @@ public class EtlController {
 		case "t_grid_m_0928":
 			etlService.t_grid_m_0928(prefix, dataJsa, suffix, table, id);
 			break;
+		case "jpx_resource_collect_d":
+			etlService.jpx_resource_collect_d(prefix, dataJsa, suffix, table, id);
+			break;
 		default:
 			log.error("table：{},不在计算之列", table);
 			break;

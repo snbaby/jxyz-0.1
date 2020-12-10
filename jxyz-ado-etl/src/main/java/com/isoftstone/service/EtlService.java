@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.isoftstone.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -11,31 +12,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.model.DmCustomerMonthRevenueT;
-import com.isoftstone.model.DmDeliveryMonthT;
-import com.isoftstone.model.DmEmpMonthCollectionT;
-import com.isoftstone.model.DmJxyzEmpInfoT;
-import com.isoftstone.model.DmJxyzSandSectionT;
-import com.isoftstone.model.DmJxyzSandTableT;
-import com.isoftstone.model.DmJxyzSectinInfoT;
-import com.isoftstone.model.DmRegionalMonthCollectionT;
-import com.isoftstone.model.DmSalesDepartmentCollectionMonthT;
-import com.isoftstone.model.DwrCustomerDailyRevenueT;
-import com.isoftstone.model.DwrDeliveryDetailT;
-import com.isoftstone.model.DwrEmpDailyCollectionT;
-import com.isoftstone.model.DwrJxyzCustomerD;
-import com.isoftstone.model.DwrJxyzCustomerRelationD;
-import com.isoftstone.model.DwrJxyzDepartmentD;
-import com.isoftstone.model.DwrJxyzEmpD;
-import com.isoftstone.model.DwrJxyzRegionD;
-import com.isoftstone.model.DwrJxyzResourcesD;
-import com.isoftstone.model.DwrRegionalDailyCollectionT;
-import com.isoftstone.model.DwrSalesDepartmentCollectionT;
-import com.isoftstone.model.TEmolumentResult;
-import com.isoftstone.model.TEmolumentRule;
-import com.isoftstone.model.TEmolumentTemplate;
-import com.isoftstone.model.TGridM;
-import com.isoftstone.model.TGridM0928;
 
 @Service
 public class EtlService {
@@ -734,4 +710,31 @@ public class EtlService {
 		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
 				sdf.format(new Date()), id);
 	}
+
+	@Async
+    public void jpx_resource_collect_d(String prefix, JSONArray dataJsa, String suffix, String table, String id)
+			throws SQLException {
+		DbContext ctx = DbContext.getGlobalDbContext();
+
+		ctx.execute("INSERT INTO t_ado_etl_ins_log(id,`table`,prefix,suffix,start_time,create_time)VALUES(?,?,?,?,?,?)",
+				id, table, prefix, suffix, sdf.format(new Date()), sdf.format(new Date()));
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				JpxResourceCollectD jpxResourceCollectD = JSONObject.toJavaObject(dataJsa.getJSONObject(i), JpxResourceCollectD.class);
+				jpxResourceCollectD.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+		ctx.execute("update t_ado_etl_ins_log set total = ?, end_time = ? where id = ?", dataJsa.size(),
+				sdf.format(new Date()), id);
+    }
 }
