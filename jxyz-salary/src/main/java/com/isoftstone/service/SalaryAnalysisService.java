@@ -126,7 +126,7 @@ public class SalaryAnalysisService {
 		}
 		String baseSql = "select waybill_no,product_reach_area,contents_attribute,sender_type,postage_total,postage_standard,postage_paid,postage_other,discount_rate from sdi_jxyz_pkp_waybill_base_"
 				+ yearDf.format(new Date())
-				+ " where biz_occur_date >= ? and post_person_no = ? and postage_paid != 0 and is_deleted = 0";
+				+ " where biz_occur_date >= ? and post_person_no = ? and postage_paid != 0 ";
 		List<Map<String, Object>> baseMapList = dbContext.qryMapList(baseSql,
 				DB.param(bizOccurDateDf.format(new Date()), empMap.get("emp_code")));
 
