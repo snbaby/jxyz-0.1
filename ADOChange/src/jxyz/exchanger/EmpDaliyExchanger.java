@@ -430,7 +430,7 @@ public class EmpDaliyExchanger implements Exchanger {
 				"period_id) f LEFT OUTER JOIN \r\n" + 
 				"(SELECT e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel FROM \r\n" + 
 				"dwr_jxyz_emp_d e \r\n" + 
-				"WHERE e.emp_status = '01'\r\n" + 
+//				"WHERE e.emp_status = '01'\r\n" + 
 				"GROUP BY e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel) e\r\n" + 
 				"ON f.post_person_no = e.emp_code\r\n" + 
 				"GROUP BY\r\n" + 
@@ -520,7 +520,7 @@ public class EmpDaliyExchanger implements Exchanger {
 		
 		Map<String,String> transferMap = new HashMap<>();
 		transferMap.put("tableName", "dwr_emp_daily_collection_t");
-		String selectSql = "select * from dwr_emp_daily_collection_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
+		String selectSql = "select `post_org_id`,`post_org_no`,`org_drds_code`,`post_org_name`,`sender_country_no`,`sender_country_name`,`sender_province_no`,`sender_province_name`,`sender_city_no`,`sender_city_name`,`sender_county_no`,`sender_county_name`,`sender_district_no`,`post_person_id`,`post_person_no`,`post_person_name`,`post_person_mobile`,`section_code`,`section_name`,`period_id`,`order_weight`,`real_weight`,`fee_weight`,`postage_total`,`yesterday_postage_total`,`postage_standard`,`postage_paid`,`postage_other`,`total_current_charges`,`total_charge_owed`,`total_prepaid_charges`,`unpaid_amount`,`payment_amount`,`collected_qty`,`yesterday_collection_qty`,`delivery_qty`,`yesterday_delivery_qty`,`standard_express_collection`,`international_sales_volume`,`standard_express_salary`,`package_collection_salary`,`international_sales__salary`,`package_collection`,`created_date`,`created_by`,`extend_column`,`create_user`,`create_date`,`modify_user`,`modify_date` from dwr_emp_daily_collection_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
 		selectSql = Tools.parse(selectSql, params);
 		transferMap.put("selectSql", selectSql);
 		transferMap.put("prefix", deleteSQL);

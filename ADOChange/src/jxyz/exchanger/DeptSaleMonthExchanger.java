@@ -525,7 +525,7 @@ public class DeptSaleMonthExchanger implements Exchanger {
 		
 		Map<String,String> transferMap = new HashMap<>();
 		transferMap.put("tableName", "dm_sales_department_collection_month_t");
-		String selectSql = "select * from dm_sales_department_collection_month_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
+		String selectSql = "select `post_org_id`,`post_org_no`,`org_drds_code`,`post_org_name`,`sender_country_no`,`sender_country_name`,`sender_province_no`,`sender_province_name`,`sender_city_no`,`sender_city_name`,`sender_county_no`,`sender_county_name`,`sender_district_no`,`period_id`,`order_weight`,`real_weight`,`fee_weight`,`postage_total`,`last_month_postage_total`,`postage_standard`,`postage_paid`,`postage_other`,`total_current_charges`,`total_charge_owed`,`total_prepaid_charges`,`unpaid_amount`,`payment_amount`,`collected_qty`,`last_month_collection_qty`,`month_delivery_qty`,`last_month_delivery_qty`,`daily_effective_person`,`files_qty`,`last_month_files_qty`,`goods_qty`,`last_month_goods_qty`,`files_revenue`,`goods_revenue`,`files_rate`,`goods_rate`,`files_unit_price`,`goods_unit_price`,`fee_weight_unit_price`,`cur_year_collection_total`,`last_year_collection_qty`,`last_year_total_qty`,`cur_year_postage_total`,`last_year_postage_total`,`last_year_all_postage_total`,`created_date`,`created_by`,`extend_column`,`create_user`,`create_date`,`modify_user`,`modify_date` from dm_sales_department_collection_month_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
 		selectSql = Tools.parse(selectSql, params);
 		transferMap.put("selectSql", selectSql);
 		transferMap.put("prefix", deleteSQL);

@@ -2,8 +2,6 @@ package jxyz;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import jxyz.exchanger.CustomDaliyExchanger;
 import jxyz.exchanger.CustomExchanger;
 import jxyz.exchanger.CustomHttpExchanger;
 import jxyz.exchanger.CustomMonthExchanger;
-import jxyz.exchanger.CustomDaliyExchanger;
 import jxyz.exchanger.DeliveryDaliyExchanger;
 import jxyz.exchanger.DeliveryMonthExchanger;
 import jxyz.exchanger.DepartmentExchanger;
@@ -30,7 +28,6 @@ import jxyz.exchanger.RegionDaliyExchanger;
 import jxyz.exchanger.RegionMonthExchanger;
 import jxyz.exchanger.ResourceExchanger;
 import jxyz.exchanger.SandTableExchanger;
-import jxyz.model.DeptSaleMonth;
 import jxyz.utils.TimeUtil;
 
 /**
@@ -62,7 +59,7 @@ public class Application {
 	public static final String LAST_YEAR_SAME_MONTH_START = "last_year_same_month_start";
 	public static final String LAST_YEAR_START = "last_year_start";
 	public static final String CURR_YEAR_START = "curr_year_start";
-	
+
 	public static final String numer = "1";
 
 	// 环境信息
@@ -92,52 +89,36 @@ public class Application {
 				"jdbc:mysql://%s/%s?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai",
 				DATABASE_IP, DATABASE_DB), DATABASE_USER, DATABASE_PASS);
 		long startTime = System.currentTimeMillis();
+
+		/*****自动算前一天****/
+//		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+//		c.add(Calendar.DATE, -1);
+//		Date targetDate = c.getTime();
+//		calcByDate(c.getTime(), connection, 1);
+		/*****自动算前一天****/
 		
+		/*****手动按天****/
+		String date = "2020-12-01";
+		Date targetDate = TimeUtil.stringToDate(date);
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+		c.setTime(targetDate);
 		
-			
-			String date = "2020-12-01";
-			Date targetDate = TimeUtil.stringToDate(date);
-			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-			c.setTime(targetDate);
-			
-			while (true) {
-				System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
-				Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-				calendar.add(Calendar.DATE, -1);
-			
-				if (TimeUtil.translateDate(c.getTime()).equals(TimeUtil.translateDate(calendar.getTime()))) {
-					System.out.println("进入最後一次循環=======>：" + TimeUtil.translateDate(c.getTime()));
-					calcByDate(c.getTime(), connection,1);
-					break;
-				}else {
-					calcByDate(c.getTime(), connection,0);
-				}
-				System.out.println("================计算结束===========");
-				c.add(Calendar.DATE, 1);
-			}
-			
-	
-			
-//			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-//			c.add(Calendar.DATE, -1);
-////			Date targetDate = c.getTime();
-//			calcByDate(c.getTime(), connection,1);
+		for (int i = 0; i < 10; ++i) {
+			System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
+			calcByDate(c.getTime(), connection,0);
+			System.out.println("================计算结束===========");
+			c.add(Calendar.DATE, 1);
+		}
+		/*****手动按天****/
 		System.out.println("=====总耗时" + (System.currentTimeMillis() - startTime) / 1000 + "===========");
-		
-//		for (int i = 0; i < 30; ++i) {
-//      System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
-//      calcByDate(c.getTime(), connection);
-//      System.out.println("================计算结束===========");
-//      c.add(Calendar.DATE, 1);
 //	}
-		
 
 		// String date = "2020-10-31";
 		// Date targetDate = TimeUtil.stringToDate(date);
 
 	}
 
-	public static void calcByDate(Date targetDate, Connection connection,Integer type) {
+	public static void calcByDate(Date targetDate, Connection connection, Integer type) {
 		// 设置全局变量
 		// 计算当年
 		Calendar cale = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
@@ -210,8 +191,8 @@ public class Application {
 		}
 
 		List<Exchanger> exchangerList = new ArrayList<Exchanger>();
-		exchangerList.add(new CustomHttpExchanger());//王建邮政地址接口
-		exchangerList.add(new DepartmentExchanger());//营业部同步
+		exchangerList.add(new CustomHttpExchanger());// 王建邮政地址接口
+		exchangerList.add(new DepartmentExchanger());// 营业部同步
 		exchangerList.add(new DeliveryDaliyExchanger());// 添加投递记录转换器
 		exchangerList.add(new CustomExchanger()); // 添加客户转换器
 		exchangerList.add(new DeptSaleDaliyExchanger()); // 添加部门销售收入转换器

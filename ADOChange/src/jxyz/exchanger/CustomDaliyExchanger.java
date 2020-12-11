@@ -3,15 +3,11 @@ package jxyz.exchanger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 import jxyz.Application;
 import jxyz.utils.HttpUtil;
-import jxyz.utils.TimeUtil;
 import jxyz.utils.Tools;
 
 /**
@@ -538,7 +534,7 @@ public class CustomDaliyExchanger implements Exchanger{
 		
 		Map<String,String> map = new HashMap<>();
 		map.put("tableName", "dwr_customer_daily_revenue_t");
-		String selectSql = "select * from dwr_customer_daily_revenue_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
+		String selectSql = "select `post_org_no`,`post_org_name`,`sender_country_no`,`sender_country_name`,`sender_province_no`,`sender_province_name`,`sender_city_no`,`sender_city_name`,`sender_county_no`,`sender_county_name`,`sender_district_no`,`sender_id`,`sender_no`,`sender`,`sender_warehouse_id`,`sender_warehouse_name`,`period_id`,`order_weight`,`real_weight`,`fee_weight`,`postage_total`,`yesterday_postage_total`,`postage_standard`,`postage_paid`,`postage_other`,`total_current_charges`,`total_charge_owed`,`total_prepaid_charges`,`unpaid_amount`,`payment_amount`,`collected_qty`,`yesterday_collection_qty`,`delivery_qty`,`yesterday_delivery_qty`,`daily_effective_person`,`files_qty`,`yesterday_files_qty`,`goods_qty`,`yesterday_goods_qty`,`is_new_customer`,`customer_send_time_type`,`customer_send_qty1`,`customer_send_qty2`,`customer_send_qty3`,`created_date`,`created_by`,`extend_column`,`create_user`,`create_date`,`modify_user`,`modify_date` from dwr_customer_daily_revenue_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
 		selectSql = Tools.parse(selectSql, params);
 		map.put("selectSql", selectSql);
 		map.put("prefix", deleteSQL);

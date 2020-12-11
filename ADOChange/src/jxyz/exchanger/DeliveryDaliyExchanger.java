@@ -96,7 +96,7 @@ public class DeliveryDaliyExchanger implements Exchanger {
 		
 		Map<String,String> transferMap = new HashMap<>();
 		transferMap.put("tableName", "dwr_delivery_detail_t");
-		String selectSql = "select * from dwr_delivery_detail_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
+		String selectSql = "select `period_id`,`post_person_id`,`post_person_no`,`post_person_name`,`post_person_mobile`,`receiver_country_no`,`receiver_country_name`,`receiver_province_no`,`receiver_province_name`,`receiver_city_no`,`receiver_city_name`,`receiver_county_no`,`receiver_county_name`,`receiver_district_no`,`deliver_org_no`,`deliver_org_name`,`deliver_section`,`deliver_section_name`,`deliver_section_code`,`deliver_qty`,`yesterday_deliver_qty`,`court_mail_qty`,`created_date`,`created_by`,`extend_column`,`create_user`,`create_date`,`modify_user`,`modify_date` from dwr_delivery_detail_t where period_id >= '${START_DATE}' and period_id <= '${END_DATE}'";
 		selectSql = Tools.parse(selectSql, params);
 		transferMap.put("selectSql", selectSql);
 		transferMap.put("prefix", deleteSQL);

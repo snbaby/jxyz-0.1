@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
-import jxyz.Application;
 import jxyz.utils.HttpUtil;
-import jxyz.utils.Tools;
 
 /**
  * 沙盘看板 输入表：dwr_emp_daily_collection_t 输出表：dm_jxyz_sand_table_t
