@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//src/jxyz/Application.java=UTF-8
+encoding//src/jxyz/exchanger/CustomDaliyExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/CustomExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/DeptSaleDaliyExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/EmpDaliyExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/EmpExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/RegionDaliyExchanger.java=UTF-8
+encoding//src/jxyz/exchanger/ResourceExchanger.java=UTF-8
+encoding//src/jxyz/utils/ProcessFile.java=UTF-8
+encoding//src/jxyz/utils/TimeUtil.java=UTF-8
+encoding//src/jxyz/utils/Tools.java=UTF-8
+encoding/<project>=UTF-8
