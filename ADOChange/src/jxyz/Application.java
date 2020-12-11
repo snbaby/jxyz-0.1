@@ -91,24 +91,23 @@ public class Application {
 		long startTime = System.currentTimeMillis();
 
 		/*****自动算前一天****/
-//		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-//		c.add(Calendar.DATE, -1);
-//		Date targetDate = c.getTime();
-//		calcByDate(c.getTime(), connection, 1);
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+		c.add(Calendar.DATE, -1);
+		calcByDate(c.getTime(), connection, 1);
 		/*****自动算前一天****/
 		
 		/*****手动按天****/
-		String date = "2020-12-01";
-		Date targetDate = TimeUtil.stringToDate(date);
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-		c.setTime(targetDate);
-		
-		for (int i = 0; i < 10; ++i) {
-			System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
-			calcByDate(c.getTime(), connection,0);
-			System.out.println("================计算结束===========");
-			c.add(Calendar.DATE, 1);
-		}
+//		String date = "2020-12-01";
+//		Date targetDate = TimeUtil.stringToDate(date);
+//		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+//		c.setTime(targetDate);
+//		
+//		for (int i = 0; i < 10; ++i) {
+//			System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
+//			calcByDate(c.getTime(), connection,0);
+//			System.out.println("================计算结束===========");
+//			c.add(Calendar.DATE, 1);
+//		}
 		/*****手动按天****/
 		System.out.println("=====总耗时" + (System.currentTimeMillis() - startTime) / 1000 + "===========");
 //	}
