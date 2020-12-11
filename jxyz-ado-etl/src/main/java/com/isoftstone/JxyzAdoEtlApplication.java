@@ -1,5 +1,7 @@
 package com.isoftstone;
 
+import java.util.TimeZone;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ public class JxyzAdoEtlApplication {
     DataSource ds;
 
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 		SpringApplication.run(JxyzAdoEtlApplication.class, args);
 	}
 	
