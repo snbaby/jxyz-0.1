@@ -96,9 +96,9 @@ public class HttpUtil {
             // 设置连接请求方式
             connection.setRequestMethod("POST");
             // 设置连接主机服务器超时时间：60000毫秒
-            connection.setConnectTimeout(60000);
+            connection.setConnectTimeout(240000);
             // 设置读取主机服务器返回数据超时时间：60000毫秒
-            connection.setReadTimeout(60000);
+            connection.setReadTimeout(240000);
 
             // 默认值为：false，当向远程服务器传送数据/写数据时，需要设置为true
             connection.setDoOutput(true);

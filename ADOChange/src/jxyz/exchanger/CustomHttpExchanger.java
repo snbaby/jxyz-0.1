@@ -15,8 +15,9 @@ public class CustomHttpExchanger implements Exchanger {
         jsonObject.put("prefix", "TRUNCATE dwr_jxyz_customer_d;");
         jsonObject.put("suffix", "");
         jsonObject.put("table", "dwr_jxyz_customer_d");
-        String a = HttpUtil.doPost(url,jsonObject.toJSONString());
-        System.out.println("收到结果过返回===========》" + a);
+        HttpUtil.doPost(url,jsonObject.toJSONString());
+        System.out.println("收到结果过返回===========》dwr_jxyz_customer_d");
+
     }
     
 }
