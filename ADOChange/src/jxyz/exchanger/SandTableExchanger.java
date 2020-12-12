@@ -1626,11 +1626,11 @@ public class SandTableExchanger implements Exchanger {
 		System.out.println("开发率: " + num);
 		queryAndInsertPs.close();
 		
-		Map<String,String> transferMap = new HashMap<>();
-        transferMap.put("tableName", "dm_jxyz_sand_table_t");
-		String selectSql = "select * from dm_jxyz_sand_table_t ";
-		transferMap.put("selectSql", selectSql);
-		transferMap.put("prefix", "TRUNCATE dm_jxyz_sand_table_t");
-		HttpUtil.upload(transferMap);
+//		Map<String,String> transferMap = new HashMap<>();
+//        transferMap.put("tableName", "dm_jxyz_sand_table_t");
+//		String selectSql = "select * from dm_jxyz_sand_table_t ";
+//		transferMap.put("selectSql", selectSql);
+//		transferMap.put("prefix", "TRUNCATE dm_jxyz_sand_table_t");
+//		HttpUtil.upload(transferMap);
 	}
 }
