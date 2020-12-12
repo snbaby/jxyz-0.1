@@ -60,8 +60,6 @@ public class Application {
 	public static final String LAST_YEAR_START = "last_year_start";
 	public static final String CURR_YEAR_START = "curr_year_start";
 
-	public static final String numer = "1";
-
 	// 环境信息
 	// public static final String DATABASE_IP = "161.117.39.189:3306";
 	// public static final String DATABASE_USER = "jxyz";
@@ -101,7 +99,7 @@ public class Application {
 //		Date targetDate = TimeUtil.stringToDate(date);
 //		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
 //		c.setTime(targetDate);
-//		
+//
 //		for (int i = 0; i < 10; ++i) {
 //			System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
 //			calcByDate(c.getTime(), connection,0);

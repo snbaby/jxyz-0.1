@@ -1,10 +1,12 @@
 package jxyz.exchanger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import jxyz.Application;
 import jxyz.utils.HttpUtil;
@@ -33,424 +35,424 @@ public class EmpDaliyExchanger implements Exchanger {
 		int num = deletePs.executeUpdate();
 		System.out.println("删除: " + num);
 		deletePs.close();
-		
-		String querySQL = "SELECT post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"e.emp_section_code,\r\n" + 
-				"e.emp_section_name,\r\n" + 
-				"e.emp_tel,\r\n" + 
-				"period_id ,\r\n" + 
-				"sum(order_weight               ) order_weight                               ,\r\n" + 
-				"sum(real_weight                ) real_weight                               ,\r\n" + 
-				"sum(fee_weight                 ) fee_weight                               ,\r\n" + 
-				"sum(postage_total              ) postage_total                               ,\r\n" + 
-				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" + 
-				"sum(postage_standard           ) postage_standard                               ,\r\n" + 
-				"sum(postage_other              ) postage_other                               ,\r\n" + 
-				"sum(total_current_charges      ) total_current_charges                               ,\r\n" + 
-				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" + 
-				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" + 
-				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" + 
-				"sum(payment_amount             ) payment_amount                               ,\r\n" + 
-				"sum(collected_qty              ) collected_qty                               ,\r\n" + 
-				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" + 
-				"sum(delivery_qty               ) delivery_qty                               ,\r\n" + 
-				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" + 
-				"sum(standard_express_collection) standard_express_collection                                ,\r\n" + 
-				"sum(package_collection         ) package_collection                               ,\r\n" + 
-				"sum(international_sales_volume ) international_sales_volume,\r\n" + 
-				"sum(standard_express_salary) AS standard_express_salary ,\r\n" + 
-				"sum(package_collection_salary) AS package_collection_salary ,\r\n" + 
-				"sum(international_sales__salary) AS international_sales__salary\r\n" + 
-				"FROM (\r\n" + 
-				"SELECT post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id ,\r\n" + 
-				"sum(order_weight               ) order_weight                               ,\r\n" + 
-				"sum(real_weight                ) real_weight                               ,\r\n" + 
-				"sum(fee_weight                 ) fee_weight                               ,\r\n" + 
-				"sum(postage_total              ) postage_total                               ,\r\n" + 
-				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" + 
-				"sum(postage_standard           ) postage_standard                               ,\r\n" + 
-				"sum(postage_other              ) postage_other                               ,\r\n" + 
-				"sum(total_current_charges      ) total_current_charges                               ,\r\n" + 
-				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" + 
-				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" + 
-				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" + 
-				"sum(payment_amount             ) payment_amount                               ,\r\n" + 
-				"sum(collected_qty              ) collected_qty                               ,\r\n" + 
-				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" + 
-				"sum(delivery_qty               ) delivery_qty                               ,\r\n" + 
-				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" + 
-				"sum(standard_express_collection) standard_express_collection                                ,\r\n" + 
-				"sum(package_collection         ) package_collection                               ,\r\n" + 
-				"sum(international_sales_volume ) international_sales_volume,\r\n" + 
-				"sum(standard_express_salary) AS standard_express_salary ,\r\n" + 
-				"sum(package_collection_salary) AS package_collection_salary ,\r\n" + 
-				"sum(international_sales__salary) AS international_sales__salary\r\n" + 
-				" FROM \r\n" + 
-				"(SELECT \r\n" + 
-				"@num := IF(@waybill_no = t.waybill_no ,@num  +1 ,1) num\r\n" + 
-				",@waybill_no := t.waybill_no waybill_no\r\n" + 
-				",0 post_org_id\r\n" + 
-				",t.post_org_no\r\n" + 
-				",t.org_drds_code\r\n" + 
-				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" + 
-				",t.sender_country_no\r\n" + 
-				",t.sender_country_name\r\n" + 
-				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" + 
-				",d.province_name as sender_province_name\r\n" + 
-				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" + 
-				",d.city_name as sender_city_name\r\n" + 
-				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" + 
-				",d.county_name as sender_county_name\r\n" + 
-				",t.sender_district_no\r\n" + 
-				",t.post_person_id\r\n" + 
-				",t.post_person_no\r\n" + 
-				",t.post_person_name\r\n" + 
-				",t.post_person_mobile\r\n" + 
-				",date_format(t.biz_occur_date,'%Y-%m-%d') as period_id\r\n" + 
-				",ifnull(t.order_weight,0.0) as order_weight\r\n" + 
-				",ifnull(t.real_weight,0.0) as real_weight\r\n" + 
-				",ifnull(t.fee_weight,0.0) as fee_weight\r\n" + 
-				",ifnull(t.postage_total,0.0) as postage_total\r\n" + 
-				",0.0 as yesterday_postage_total\r\n" + 
-				",ifnull(t.postage_standard,0.0) as postage_standard\r\n" + 
-				",ifnull(t.postage_paid,0.0) as postage_paid\r\n" + 
-				",ifnull(t.postage_other,0.0) as postage_other\r\n" + 
-				",case when t.settlement_mode = '1' then ifnull(t.postage_total,0.0) else 0 end as total_current_charges\r\n" + 
-				",case when t.settlement_mode = '2' then ifnull(t.postage_total,0.0) else 0 end as total_charge_owed\r\n" + 
-				",case when t.settlement_mode = '3' then ifnull(t.postage_total,0.0) else 0 end as total_prepaid_charges\r\n" + 
-				",case when t.payment_state ='0' then ifnull(t.postage_total,0.0)  else 0 end as unpaid_amount\r\n" + 
-				",case when t.payment_state ='1' then ifnull(t.postage_total,0.0)  else 0 end as payment_amount\r\n" + 
-				",IF (t.waybill_no IS NULL,0,1)  collected_qty\r\n" + 
-				",0 as yesterday_collection_qty\r\n" + 
-				",0  delivery_qty\r\n" + 
-				",0 yesterday_delivery_qty\r\n" + 
-				",CASE WHEN  t.base_product_no = '11210' THEN 1 else 0 END AS standard_express_collection \r\n" + 
-				",CASE WHEN t.base_product_no ='11312' THEN 1 ELSE 0 END AS package_collection \r\n" + 
-				",CASE WHEN t.base_product_no IN ('21210','22210','21412') THEN 1 ELSE 0 END AS international_sales_volume \r\n" + 
-				",CASE WHEN  t.base_product_no = '11210' THEN IFNULL(t.postage_total,0) else 0 END AS standard_express_salary \r\n" + 
-				",CASE WHEN t.base_product_no ='11312' THEN IFNULL(t.postage_total,0) ELSE 0 END AS package_collection_salary \r\n" + 
-				",CASE WHEN t.base_product_no IN ('21210','22210','21412') THEN IFNULL(t.postage_total,0) ELSE 0 END AS international_sales__salary\r\n" + 
-				"from sdi_jxyz_pkp_waybill_base_${C_YEAR} t left outer join\r\n" + 
-				"     dwr_jxyz_department_d d \r\n" + 
-				"on d.dept_code = t.post_org_no\r\n" + 
-				"INNER JOIN \r\n" + 
-				"     (SELECT @waybill_no := '',@num := 0) t1\r\n" + 
-				"where t.biz_occur_date >= '${START_DATE}'\r\n" + 
-				"and t.biz_occur_date <= '${END_DATE}'\r\n" + 
-				"and t.sender_province_no = '360000'\r\n" + 
-				"and ifnull(t.postage_total,0) > 0\r\n" + 
-				"and t.waybill_no is not null\r\n" + 
-//				"and t.is_deleted = '0'\r\n" + 
-				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" + 
-				") t\r\n" + 
-				"WHERE t.num = 1\r\n" + 
-				"GROUP BY post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id\r\n" + 
-				"UNION ALL\r\n" + 
-				"SELECT post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id ,\r\n" + 
-				"sum(order_weight               ) order_weight                               ,\r\n" + 
-				"sum(real_weight                ) real_weight                               ,\r\n" + 
-				"sum(fee_weight                 ) fee_weight                               ,\r\n" + 
-				"sum(postage_total              ) postage_total                               ,\r\n" + 
-				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" + 
-				"sum(postage_standard           ) postage_standard                               ,\r\n" + 
-				"sum(postage_other              ) postage_other                               ,\r\n" + 
-				"sum(total_current_charges      ) total_current_charges                               ,\r\n" + 
-				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" + 
-				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" + 
-				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" + 
-				"sum(payment_amount             ) payment_amount                               ,\r\n" + 
-				"sum(collected_qty              ) collected_qty                               ,\r\n" + 
-				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" + 
-				"sum(delivery_qty               ) delivery_qty                               ,\r\n" + 
-				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" + 
-				"sum(standard_express_collection) standard_express_collection                                ,\r\n" + 
-				"sum(package_collection         ) package_collection                               ,\r\n" + 
-				"sum(international_sales_volume ) international_sales_volume,\r\n" + 
-				"sum(standard_express_salary) AS standard_express_salary ,\r\n" + 
-				"sum(package_collection_salary) AS package_collection_salary ,\r\n" + 
-				"sum(international_sales__salary) AS international_sales__salary\r\n" + 
-				" FROM \r\n" + 
-				"(SELECT \r\n" + 
-				"@num1 := IF(@waybill_no1 = t.waybill_no ,@num1  +1 ,1) num\r\n" + 
-				",@waybill_no1 := t.waybill_no waybill_no\r\n" + 
-				",0 post_org_id\r\n" + 
-				",t.post_org_no\r\n" + 
-				",t.org_drds_code\r\n" + 
-				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" + 
-				",t.sender_country_no\r\n" + 
-				",t.sender_country_name\r\n" + 
-				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" + 
-				",d.province_name as sender_province_name\r\n" + 
-				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" + 
-				",d.city_name as sender_city_name\r\n" + 
-				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" + 
-				",d.county_name as sender_county_name\r\n" + 
-				",t.sender_district_no\r\n" + 
-				",t.post_person_id\r\n" + 
-				",t.post_person_no\r\n" + 
-				",t.post_person_name\r\n" + 
-				",t.post_person_mobile\r\n" + 
-				",ADDDATE(date_format(t.biz_occur_date,'%Y-%m-%d'),INTERVAL 1 DAY) as period_id\r\n" + 
-				",0.00 as order_weight\r\n" + 
-				",0.00 as real_weight\r\n" + 
-				",0.00 as fee_weight\r\n" + 
-				",0.00 as postage_total\r\n" + 
-				",ifnull(t.postage_total,0.00) as yesterday_postage_total\r\n" + 
-				",0.00 as postage_standard\r\n" + 
-				",0.00 as postage_paid\r\n" + 
-				",0.00 as postage_other\r\n" + 
-				",0.00 as payment_state\r\n" + 
-				",0.00 as total_current_charges\r\n" + 
-				",0.00 as total_charge_owed\r\n" + 
-				",0.00 as total_prepaid_charges\r\n" + 
-				",0.00 as unpaid_amount\r\n" + 
-				",0.00 as payment_amount\r\n" + 
-				",0  collected_qty\r\n" + 
-				",IF (t.waybill_no IS NULL,0,1) yesterday_collection_qty\r\n" + 
-				",0  delivery_qty\r\n" + 
-				",0 yesterday_delivery_qty\r\n" + 
-				",0 AS standard_express_collection \r\n" + 
-				",0 AS package_collection \r\n" + 
-				",0 AS international_sales_volume\r\n" + 
-				",0.00 AS standard_express_salary \r\n" + 
-				",0.00 AS package_collection_salary \r\n" + 
-				",0.00 AS international_sales__salary \r\n" + 
-				"from sdi_jxyz_pkp_waybill_base_${C_YEAR} t left outer join\r\n" + 
-				"     dwr_jxyz_department_d d \r\n" + 
-				"on d.dept_code = t.post_org_no\r\n" + 
-				"INNER JOIN \r\n" + 
-				"     (SELECT @waybill_no1 := '',@num1 := 0) t1\r\n" + 
-				"where t.biz_occur_date >= ADDDATE('${START_DATE}',INTERVAL -1 DAY)\r\n" + 
-				"and t.biz_occur_date <= ADDDATE('${END_DATE}',INTERVAL -1 DAY)\r\n" + 
-				"and t.sender_province_no = '360000'\r\n" + 
-				"and ifnull(t.postage_total,0) > 0\r\n" + 
-				"and t.waybill_no is not null\r\n" + 
-//				"and t.is_deleted = '0'\r\n" + 
-				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" + 
-				") t\r\n" + 
-				"WHERE t.num = 1\r\n" + 
-				"GROUP BY\r\n" + 
-				"post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id\r\n" + 
-				"UNION ALL\r\n" + 
-				"SELECT post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id ,\r\n" + 
-				"sum(order_weight               ) order_weight                               ,\r\n" + 
-				"sum(real_weight                ) real_weight                               ,\r\n" + 
-				"sum(fee_weight                 ) fee_weight                               ,\r\n" + 
-				"sum(postage_total              ) postage_total                               ,\r\n" + 
-				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" + 
-				"sum(postage_standard           ) postage_standard                               ,\r\n" + 
-				"sum(postage_other              ) postage_other                               ,\r\n" + 
-				"sum(total_current_charges      ) total_current_charges                               ,\r\n" + 
-				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" + 
-				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" + 
-				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" + 
-				"sum(payment_amount             ) payment_amount                               ,\r\n" + 
-				"sum(collected_qty              ) collected_qty                               ,\r\n" + 
-				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" + 
-				"sum(delivery_qty               ) delivery_qty                               ,\r\n" + 
-				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" + 
-				"sum(standard_express_collection) standard_express_collection                                ,\r\n" + 
-				"sum(package_collection         ) package_collection                               ,\r\n" + 
-				"sum(international_sales_volume ) international_sales_volume,\r\n" + 
-				"sum(standard_express_salary) AS standard_express_salary ,\r\n" + 
-				"sum(package_collection_salary) AS package_collection_salary ,\r\n" + 
-				"sum(international_sales__salary) AS international_sales__salary\r\n" + 
-				" FROM \r\n" + 
-				"(SELECT \r\n" + 
-				"@num2 := IF(@waybill_no2 = t.waybill_no ,@num2  +1 ,1) num\r\n" + 
-				",@waybill_no2 := t.waybill_no waybill_no\r\n" + 
-				",0 post_org_id\r\n" + 
-				",t.post_org_no\r\n" + 
-				",t.org_drds_code\r\n" + 
-				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" + 
-				",t.sender_country_no\r\n" + 
-				",t.sender_country_name\r\n" + 
-				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" + 
-				",d.province_name as sender_province_name\r\n" + 
-				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" + 
-				",d.city_name as sender_city_name\r\n" + 
-				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" + 
-				",d.county_name as sender_county_name\r\n" + 
-				",t.sender_district_no\r\n" + 
-				",t.post_person_id\r\n" + 
-				",t.post_person_no\r\n" + 
-				",t.post_person_name\r\n" + 
-				",t.post_person_mobile\r\n" + 
-				",ADDDATE(date_format(t.biz_occur_date,'%Y-%m-%d'),INTERVAL 1 DAY) as period_id\r\n" + 
-				",0.00 as order_weight\r\n" + 
-				",0.00 as real_weight\r\n" + 
-				",0.00 as fee_weight\r\n" + 
-				",0.00 as postage_total\r\n" + 
-				",ifnull(t.postage_total,0.00) as yesterday_postage_total\r\n" + 
-				",0.00 as postage_standard\r\n" + 
-				",0.00 as postage_paid\r\n" + 
-				",0.00 as postage_other\r\n" + 
-				",0.00 as payment_state\r\n" + 
-				",0.00 as total_current_charges\r\n" + 
-				",0.00 as total_charge_owed\r\n" + 
-				",0.00 as total_prepaid_charges\r\n" + 
-				",0.00 as unpaid_amount\r\n" + 
-				",0.00 as payment_amount\r\n" + 
-				",0  collected_qty\r\n" + 
-				",IF (t.waybill_no IS NULL,0,1) yesterday_collection_qty\r\n" + 
-				",0  delivery_qty\r\n" + 
-				",0 yesterday_delivery_qty\r\n" + 
-				",0 AS standard_express_collection \r\n" + 
-				",0 AS package_collection \r\n" + 
-				",0 AS international_sales_volume\r\n" + 
-				",0.00 AS standard_express_salary \r\n" + 
-				",0.00 AS package_collection_salary \r\n" + 
-				",0.00 AS international_sales__salary \r\n" + 
-				"from sdi_jxyz_pkp_waybill_base_${L_YEAR} t left outer join\r\n" + 
-				"     dwr_jxyz_department_d d \r\n" + 
-				"on d.dept_code = t.post_org_no\r\n" + 
-				"INNER JOIN \r\n" + 
-				"     (SELECT @waybill_no2 := '',@num2 := 0) t1\r\n" + 
-				"where t.biz_occur_date >= ADDDATE('${START_DATE}',INTERVAL -1 DAY)\r\n" + 
-				"and t.biz_occur_date <= ADDDATE('${END_DATE}',INTERVAL -1 DAY)\r\n" + 
-				"and t.sender_province_no = '360000'\r\n" + 
-				"and ifnull(t.postage_total,0) > 0\r\n" + 
-				"and t.waybill_no is not null\r\n" + 
-//				"and t.is_deleted = '0'\r\n" + 
-				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" + 
-				") t\r\n" + 
-				"WHERE t.num = 1\r\n" + 
-				"GROUP BY\r\n" + 
-				"post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
-				"period_id) f LEFT OUTER JOIN \r\n" + 
-				"(SELECT e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel FROM \r\n" + 
-				"dwr_jxyz_emp_d e \r\n" + 
-//				"WHERE e.emp_status = '01'\r\n" + 
-				"GROUP BY e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel) e\r\n" + 
-				"ON f.post_person_no = e.emp_code\r\n" + 
-				"GROUP BY\r\n" + 
-				"e.emp_section_code,e.emp_section_name,e.emp_tel, \r\n" + 
-				"post_org_id,\r\n" + 
-				"post_org_no,\r\n" + 
-				"org_drds_code,\r\n" + 
-				"post_org_name,\r\n" + 
-				"sender_country_no,\r\n" + 
-				"sender_country_name,\r\n" + 
-				"sender_province_no,\r\n" + 
-				"sender_province_name,\r\n" + 
-				"sender_city_no,\r\n" + 
-				"sender_city_name,\r\n" + 
-				"sender_county_no,\r\n" + 
-				"sender_county_name,\r\n" + 
-				"sender_district_no,\r\n" + 
-				"post_person_id,\r\n" + 
-				"post_person_no,\r\n" + 
-				"post_person_name,\r\n" + 
+
+		String querySQL = "SELECT post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"e.emp_section_code,\r\n" +
+				"e.emp_section_name,\r\n" +
+				"e.emp_tel,\r\n" +
+				"period_id ,\r\n" +
+				"sum(order_weight               ) order_weight                               ,\r\n" +
+				"sum(real_weight                ) real_weight                               ,\r\n" +
+				"sum(fee_weight                 ) fee_weight                               ,\r\n" +
+				"sum(postage_total              ) postage_total                               ,\r\n" +
+				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" +
+				"sum(postage_standard           ) postage_standard                               ,\r\n" +
+				"sum(postage_other              ) postage_other                               ,\r\n" +
+				"sum(total_current_charges      ) total_current_charges                               ,\r\n" +
+				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" +
+				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" +
+				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" +
+				"sum(payment_amount             ) payment_amount                               ,\r\n" +
+				"sum(collected_qty              ) collected_qty                               ,\r\n" +
+				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" +
+				"sum(delivery_qty               ) delivery_qty                               ,\r\n" +
+				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" +
+				"sum(standard_express_collection) standard_express_collection                                ,\r\n" +
+				"sum(package_collection         ) package_collection                               ,\r\n" +
+				"sum(international_sales_volume ) international_sales_volume,\r\n" +
+				"sum(standard_express_salary) AS standard_express_salary ,\r\n" +
+				"sum(package_collection_salary) AS package_collection_salary ,\r\n" +
+				"sum(international_sales__salary) AS international_sales__salary\r\n" +
+				"FROM (\r\n" +
+				"SELECT post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id ,\r\n" +
+				"sum(order_weight               ) order_weight                               ,\r\n" +
+				"sum(real_weight                ) real_weight                               ,\r\n" +
+				"sum(fee_weight                 ) fee_weight                               ,\r\n" +
+				"sum(postage_total              ) postage_total                               ,\r\n" +
+				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" +
+				"sum(postage_standard           ) postage_standard                               ,\r\n" +
+				"sum(postage_other              ) postage_other                               ,\r\n" +
+				"sum(total_current_charges      ) total_current_charges                               ,\r\n" +
+				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" +
+				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" +
+				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" +
+				"sum(payment_amount             ) payment_amount                               ,\r\n" +
+				"sum(collected_qty              ) collected_qty                               ,\r\n" +
+				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" +
+				"sum(delivery_qty               ) delivery_qty                               ,\r\n" +
+				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" +
+				"sum(standard_express_collection) standard_express_collection                                ,\r\n" +
+				"sum(package_collection         ) package_collection                               ,\r\n" +
+				"sum(international_sales_volume ) international_sales_volume,\r\n" +
+				"sum(standard_express_salary) AS standard_express_salary ,\r\n" +
+				"sum(package_collection_salary) AS package_collection_salary ,\r\n" +
+				"sum(international_sales__salary) AS international_sales__salary\r\n" +
+				" FROM \r\n" +
+				"(SELECT \r\n" +
+				"@num := IF(@waybill_no = t.waybill_no ,@num  +1 ,1) num\r\n" +
+				",@waybill_no := t.waybill_no waybill_no\r\n" +
+				",0 post_org_id\r\n" +
+				",t.post_org_no\r\n" +
+				",t.org_drds_code\r\n" +
+				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" +
+				",t.sender_country_no\r\n" +
+				",t.sender_country_name\r\n" +
+				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" +
+				",d.province_name as sender_province_name\r\n" +
+				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" +
+				",d.city_name as sender_city_name\r\n" +
+				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" +
+				",d.county_name as sender_county_name\r\n" +
+				",t.sender_district_no\r\n" +
+				",t.post_person_id\r\n" +
+				",t.post_person_no\r\n" +
+				",t.post_person_name\r\n" +
+				",t.post_person_mobile\r\n" +
+				",date_format(t.biz_occur_date,'%Y-%m-%d') as period_id\r\n" +
+				",ifnull(t.order_weight,0.0) as order_weight\r\n" +
+				",ifnull(t.real_weight,0.0) as real_weight\r\n" +
+				",ifnull(t.fee_weight,0.0) as fee_weight\r\n" +
+				",ifnull(t.postage_total,0.0) as postage_total\r\n" +
+				",0.0 as yesterday_postage_total\r\n" +
+				",ifnull(t.postage_standard,0.0) as postage_standard\r\n" +
+				",ifnull(t.postage_paid,0.0) as postage_paid\r\n" +
+				",ifnull(t.postage_other,0.0) as postage_other\r\n" +
+				",case when t.settlement_mode = '1' then ifnull(t.postage_total,0.0) else 0 end as total_current_charges\r\n" +
+				",case when t.settlement_mode = '2' then ifnull(t.postage_total,0.0) else 0 end as total_charge_owed\r\n" +
+				",case when t.settlement_mode = '3' then ifnull(t.postage_total,0.0) else 0 end as total_prepaid_charges\r\n" +
+				",case when t.payment_state ='0' then ifnull(t.postage_total,0.0)  else 0 end as unpaid_amount\r\n" +
+				",case when t.payment_state ='1' then ifnull(t.postage_total,0.0)  else 0 end as payment_amount\r\n" +
+				",IF (t.waybill_no IS NULL,0,1)  collected_qty\r\n" +
+				",0 as yesterday_collection_qty\r\n" +
+				",0  delivery_qty\r\n" +
+				",0 yesterday_delivery_qty\r\n" +
+				",CASE WHEN  t.base_product_no = '11210' THEN 1 else 0 END AS standard_express_collection \r\n" +
+				",CASE WHEN t.base_product_no ='11312' THEN 1 ELSE 0 END AS package_collection \r\n" +
+				",CASE WHEN t.base_product_no IN ('21210','22210','21412') THEN 1 ELSE 0 END AS international_sales_volume \r\n" +
+				",CASE WHEN  t.base_product_no = '11210' THEN IFNULL(t.postage_total,0) else 0 END AS standard_express_salary \r\n" +
+				",CASE WHEN t.base_product_no ='11312' THEN IFNULL(t.postage_total,0) ELSE 0 END AS package_collection_salary \r\n" +
+				",CASE WHEN t.base_product_no IN ('21210','22210','21412') THEN IFNULL(t.postage_total,0) ELSE 0 END AS international_sales__salary\r\n" +
+				"from sdi_jxyz_pkp_waybill_base_${C_YEAR} t left outer join\r\n" +
+				"     dwr_jxyz_department_d d \r\n" +
+				"on d.dept_code = t.post_org_no\r\n" +
+				"INNER JOIN \r\n" +
+				"     (SELECT @waybill_no := '',@num := 0) t1\r\n" +
+				"where t.biz_occur_date >= '${START_DATE}'\r\n" +
+				"and t.biz_occur_date <= '${END_DATE}'\r\n" +
+				"and t.sender_province_no = '360000'\r\n" +
+				"and ifnull(t.postage_total,0) > 0\r\n" +
+				"and t.waybill_no is not null\r\n" +
+//				"and t.is_deleted = '0'\r\n" +
+				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" +
+				") t\r\n" +
+				"WHERE t.num = 1\r\n" +
+				"GROUP BY post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id\r\n" +
+				"UNION ALL\r\n" +
+				"SELECT post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id ,\r\n" +
+				"sum(order_weight               ) order_weight                               ,\r\n" +
+				"sum(real_weight                ) real_weight                               ,\r\n" +
+				"sum(fee_weight                 ) fee_weight                               ,\r\n" +
+				"sum(postage_total              ) postage_total                               ,\r\n" +
+				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" +
+				"sum(postage_standard           ) postage_standard                               ,\r\n" +
+				"sum(postage_other              ) postage_other                               ,\r\n" +
+				"sum(total_current_charges      ) total_current_charges                               ,\r\n" +
+				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" +
+				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" +
+				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" +
+				"sum(payment_amount             ) payment_amount                               ,\r\n" +
+				"sum(collected_qty              ) collected_qty                               ,\r\n" +
+				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" +
+				"sum(delivery_qty               ) delivery_qty                               ,\r\n" +
+				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" +
+				"sum(standard_express_collection) standard_express_collection                                ,\r\n" +
+				"sum(package_collection         ) package_collection                               ,\r\n" +
+				"sum(international_sales_volume ) international_sales_volume,\r\n" +
+				"sum(standard_express_salary) AS standard_express_salary ,\r\n" +
+				"sum(package_collection_salary) AS package_collection_salary ,\r\n" +
+				"sum(international_sales__salary) AS international_sales__salary\r\n" +
+				" FROM \r\n" +
+				"(SELECT \r\n" +
+				"@num1 := IF(@waybill_no1 = t.waybill_no ,@num1  +1 ,1) num\r\n" +
+				",@waybill_no1 := t.waybill_no waybill_no\r\n" +
+				",0 post_org_id\r\n" +
+				",t.post_org_no\r\n" +
+				",t.org_drds_code\r\n" +
+				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" +
+				",t.sender_country_no\r\n" +
+				",t.sender_country_name\r\n" +
+				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" +
+				",d.province_name as sender_province_name\r\n" +
+				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" +
+				",d.city_name as sender_city_name\r\n" +
+				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" +
+				",d.county_name as sender_county_name\r\n" +
+				",t.sender_district_no\r\n" +
+				",t.post_person_id\r\n" +
+				",t.post_person_no\r\n" +
+				",t.post_person_name\r\n" +
+				",t.post_person_mobile\r\n" +
+				",ADDDATE(date_format(t.biz_occur_date,'%Y-%m-%d'),INTERVAL 1 DAY) as period_id\r\n" +
+				",0.00 as order_weight\r\n" +
+				",0.00 as real_weight\r\n" +
+				",0.00 as fee_weight\r\n" +
+				",0.00 as postage_total\r\n" +
+				",ifnull(t.postage_total,0.00) as yesterday_postage_total\r\n" +
+				",0.00 as postage_standard\r\n" +
+				",0.00 as postage_paid\r\n" +
+				",0.00 as postage_other\r\n" +
+				",0.00 as payment_state\r\n" +
+				",0.00 as total_current_charges\r\n" +
+				",0.00 as total_charge_owed\r\n" +
+				",0.00 as total_prepaid_charges\r\n" +
+				",0.00 as unpaid_amount\r\n" +
+				",0.00 as payment_amount\r\n" +
+				",0  collected_qty\r\n" +
+				",IF (t.waybill_no IS NULL,0,1) yesterday_collection_qty\r\n" +
+				",0  delivery_qty\r\n" +
+				",0 yesterday_delivery_qty\r\n" +
+				",0 AS standard_express_collection \r\n" +
+				",0 AS package_collection \r\n" +
+				",0 AS international_sales_volume\r\n" +
+				",0.00 AS standard_express_salary \r\n" +
+				",0.00 AS package_collection_salary \r\n" +
+				",0.00 AS international_sales__salary \r\n" +
+				"from sdi_jxyz_pkp_waybill_base_${C_YEAR} t left outer join\r\n" +
+				"     dwr_jxyz_department_d d \r\n" +
+				"on d.dept_code = t.post_org_no\r\n" +
+				"INNER JOIN \r\n" +
+				"     (SELECT @waybill_no1 := '',@num1 := 0) t1\r\n" +
+				"where t.biz_occur_date >= ADDDATE('${START_DATE}',INTERVAL -1 DAY)\r\n" +
+				"and t.biz_occur_date <= ADDDATE('${END_DATE}',INTERVAL -1 DAY)\r\n" +
+				"and t.sender_province_no = '360000'\r\n" +
+				"and ifnull(t.postage_total,0) > 0\r\n" +
+				"and t.waybill_no is not null\r\n" +
+//				"and t.is_deleted = '0'\r\n" +
+				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" +
+				") t\r\n" +
+				"WHERE t.num = 1\r\n" +
+				"GROUP BY\r\n" +
+				"post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id\r\n" +
+				"UNION ALL\r\n" +
+				"SELECT post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id ,\r\n" +
+				"sum(order_weight               ) order_weight                               ,\r\n" +
+				"sum(real_weight                ) real_weight                               ,\r\n" +
+				"sum(fee_weight                 ) fee_weight                               ,\r\n" +
+				"sum(postage_total              ) postage_total                               ,\r\n" +
+				"sum(yesterday_postage_total    ) yesterday_postage_total                               ,\r\n" +
+				"sum(postage_standard           ) postage_standard                               ,\r\n" +
+				"sum(postage_other              ) postage_other                               ,\r\n" +
+				"sum(total_current_charges      ) total_current_charges                               ,\r\n" +
+				"sum(total_charge_owed          ) total_charge_owed                               ,\r\n" +
+				"sum(total_prepaid_charges      ) total_prepaid_charges                               ,\r\n" +
+				"sum(unpaid_amount              ) unpaid_amount                               ,\r\n" +
+				"sum(payment_amount             ) payment_amount                               ,\r\n" +
+				"sum(collected_qty              ) collected_qty                               ,\r\n" +
+				"sum(yesterday_collection_qty   ) yesterday_collection_qty                               ,\r\n" +
+				"sum(delivery_qty               ) delivery_qty                               ,\r\n" +
+				"sum(yesterday_delivery_qty     ) yesterday_delivery_qty                               ,\r\n" +
+				"sum(standard_express_collection) standard_express_collection                                ,\r\n" +
+				"sum(package_collection         ) package_collection                               ,\r\n" +
+				"sum(international_sales_volume ) international_sales_volume,\r\n" +
+				"sum(standard_express_salary) AS standard_express_salary ,\r\n" +
+				"sum(package_collection_salary) AS package_collection_salary ,\r\n" +
+				"sum(international_sales__salary) AS international_sales__salary\r\n" +
+				" FROM \r\n" +
+				"(SELECT \r\n" +
+				"@num2 := IF(@waybill_no2 = t.waybill_no ,@num2  +1 ,1) num\r\n" +
+				",@waybill_no2 := t.waybill_no waybill_no\r\n" +
+				",0 post_org_id\r\n" +
+				",t.post_org_no\r\n" +
+				",t.org_drds_code\r\n" +
+				",IFNULL(d.dept_name,t.post_org_name) post_org_name\r\n" +
+				",t.sender_country_no\r\n" +
+				",t.sender_country_name\r\n" +
+				",IFNULL(d.province_code,t.sender_province_no) as sender_province_no\r\n" +
+				",d.province_name as sender_province_name\r\n" +
+				",IFNULL(d.city_code,t.sender_city_no) as sender_city_no\r\n" +
+				",d.city_name as sender_city_name\r\n" +
+				",IFNULL(d.county_code,t.sender_county_no) as sender_county_no\r\n" +
+				",d.county_name as sender_county_name\r\n" +
+				",t.sender_district_no\r\n" +
+				",t.post_person_id\r\n" +
+				",t.post_person_no\r\n" +
+				",t.post_person_name\r\n" +
+				",t.post_person_mobile\r\n" +
+				",ADDDATE(date_format(t.biz_occur_date,'%Y-%m-%d'),INTERVAL 1 DAY) as period_id\r\n" +
+				",0.00 as order_weight\r\n" +
+				",0.00 as real_weight\r\n" +
+				",0.00 as fee_weight\r\n" +
+				",0.00 as postage_total\r\n" +
+				",ifnull(t.postage_total,0.00) as yesterday_postage_total\r\n" +
+				",0.00 as postage_standard\r\n" +
+				",0.00 as postage_paid\r\n" +
+				",0.00 as postage_other\r\n" +
+				",0.00 as payment_state\r\n" +
+				",0.00 as total_current_charges\r\n" +
+				",0.00 as total_charge_owed\r\n" +
+				",0.00 as total_prepaid_charges\r\n" +
+				",0.00 as unpaid_amount\r\n" +
+				",0.00 as payment_amount\r\n" +
+				",0  collected_qty\r\n" +
+				",IF (t.waybill_no IS NULL,0,1) yesterday_collection_qty\r\n" +
+				",0  delivery_qty\r\n" +
+				",0 yesterday_delivery_qty\r\n" +
+				",0 AS standard_express_collection \r\n" +
+				",0 AS package_collection \r\n" +
+				",0 AS international_sales_volume\r\n" +
+				",0.00 AS standard_express_salary \r\n" +
+				",0.00 AS package_collection_salary \r\n" +
+				",0.00 AS international_sales__salary \r\n" +
+				"from sdi_jxyz_pkp_waybill_base_${L_YEAR} t left outer join\r\n" +
+				"     dwr_jxyz_department_d d \r\n" +
+				"on d.dept_code = t.post_org_no\r\n" +
+				"INNER JOIN \r\n" +
+				"     (SELECT @waybill_no2 := '',@num2 := 0) t1\r\n" +
+				"where t.biz_occur_date >= ADDDATE('${START_DATE}',INTERVAL -1 DAY)\r\n" +
+				"and t.biz_occur_date <= ADDDATE('${END_DATE}',INTERVAL -1 DAY)\r\n" +
+				"and t.sender_province_no = '360000'\r\n" +
+				"and ifnull(t.postage_total,0) > 0\r\n" +
+				"and t.waybill_no is not null\r\n" +
+//				"and t.is_deleted = '0'\r\n" +
+				"ORDER BY t.waybill_no,t.biz_occur_date DESC \r\n" +
+				") t\r\n" +
+				"WHERE t.num = 1\r\n" +
+				"GROUP BY\r\n" +
+				"post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
+				"period_id) f LEFT OUTER JOIN \r\n" +
+				"(SELECT e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel FROM \r\n" +
+				"dwr_jxyz_emp_d e \r\n" +
+//				"WHERE e.emp_status = '01'\r\n" +
+				"GROUP BY e.emp_code,e.emp_section_code,e.emp_section_name,e.emp_tel) e\r\n" +
+				"ON f.post_person_no = e.emp_code\r\n" +
+				"GROUP BY\r\n" +
+				"e.emp_section_code,e.emp_section_name,e.emp_tel, \r\n" +
+				"post_org_id,\r\n" +
+				"post_org_no,\r\n" +
+				"org_drds_code,\r\n" +
+				"post_org_name,\r\n" +
+				"sender_country_no,\r\n" +
+				"sender_country_name,\r\n" +
+				"sender_province_no,\r\n" +
+				"sender_province_name,\r\n" +
+				"sender_city_no,\r\n" +
+				"sender_city_name,\r\n" +
+				"sender_county_no,\r\n" +
+				"sender_county_name,\r\n" +
+				"sender_district_no,\r\n" +
+				"post_person_id,\r\n" +
+				"post_person_no,\r\n" +
+				"post_person_name,\r\n" +
 				"period_id";
 		// 替换变量
 		Map<String, String> params2 = new HashMap<String, String>();
@@ -510,13 +512,82 @@ public class EmpDaliyExchanger implements Exchanger {
 			insertPs.setString(41, rs.getString("emp_section_code"));
 			insertPs.setBigDecimal(42, rs.getBigDecimal("postage_standard"));
 			insertPs.executeUpdate();
-			
+
 			count++;
 		}
 		rs.close();
 		queryPs.close();
 		insertPs.close();
 		System.out.println("写入dwr_emp_daily_collection_t" + " 记录数:" + count);
+
+		//查询所有无段道人员信息
+		String selectSectionPersonSql = "select sender_county_no,post_org_no,post_person_no,section_code,section_name from dwr_emp_daily_collection_t " +
+				"where section_code is null and post_person_no is not null GROUP BY post_person_no";
+		PreparedStatement sectionPs = connection.prepareStatement(selectSectionPersonSql);
+		ResultSet sectionData = sectionPs.executeQuery();
+		//查询旧的段道值
+		String oldSectionSql = "select section_code,section_name from dwr_emp_daily_collection_t where section_code is not null " +
+				" and post_person_no = ? limit 1";
+		PreparedStatement oldSectionPs = connection.prepareStatement(oldSectionSql);
+
+		//更新段道值
+		String updateSql = "update dwr_emp_daily_collection_t set  section_code = ? ,section_name = ? " +
+				"where  section_code is null and post_person_no = ?";
+
+		PreparedStatement updatePs = connection.prepareStatement(updateSql);
+
+		//查询营业部段道
+		PreparedStatement tSectionPs = connection.prepareStatement("SELECT `code`,`name` FROM `t_grid_m` where parent_code = ? ");
+
+		while (sectionData.next()){
+			//查询以往记录中有无段道信息
+			oldSectionPs.setString(1,sectionData.getString("post_person_no"));
+			ResultSet  oldSectionData = oldSectionPs.executeQuery();
+			if (oldSectionData.next()){
+				//有下标，更新section_code为空的数据
+				updatePs.setString(1,oldSectionData.getString("section_code"));
+				updatePs.setString(2,oldSectionData.getString("section_name"));
+				updatePs.setString(3,sectionData.getString("post_person_no"));
+				updatePs.executeUpdate();
+			}else{
+				//无下标，取营业部的段道，随机插入一个并更新所有section_code为空的数据
+				//查询营业部是否有段道
+				tSectionPs.setString(1,sectionData.getString("post_org_no"));
+				ResultSet sCodeSet = tSectionPs.executeQuery();
+				String sectionCode = null;
+				String sectionName = null;
+				if (sCodeSet.next()) {
+					//有下标
+					sCodeSet.last();
+					int a  = sCodeSet.getRow();
+					int number = (new Random().nextInt(a))+1;
+					sCodeSet.first();
+					sCodeSet.previous();
+					//随机取一个存入sectionCode中
+					while (sCodeSet.next()) {
+						if (number == sCodeSet.getRow()) {
+							sectionCode = sCodeSet.getString("code");
+							sectionName = sCodeSet.getString("name");
+						}
+					}
+				}else{
+					//无段道创建 要创建段道并修改
+					sectionCode = sectionData.getString("post_org_no") + "01";
+					sectionName = "L01";
+				}
+				updatePs.setString(1,sectionCode);
+				updatePs.setString(2,sectionName);
+				updatePs.setString(3,sectionData.getString("post_person_no"));
+				updatePs.executeUpdate();
+				sCodeSet.close();
+			}
+			oldSectionData.close();
+		}
+		tSectionPs.close();
+		updatePs.close();
+		oldSectionPs.close();
+		sectionData.close();
+		sectionPs.close();
 		
 		Map<String,String> transferMap = new HashMap<>();
 		transferMap.put("tableName", "dwr_emp_daily_collection_t");
