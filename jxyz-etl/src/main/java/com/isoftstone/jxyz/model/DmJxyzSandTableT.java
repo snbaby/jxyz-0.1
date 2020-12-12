@@ -98,6 +98,9 @@ public class DmJxyzSandTableT extends ActiveRecord<DmJxyzSandTableT> {
 	@Column(name="month_cash_income")
 	private BigDecimal monthCashIncome;
 
+	@Column(name="month_cash_qty")
+	private int monthCashQty;
+
 	@Column(name="month_collection_qty")
 	private int monthCollectionQty;
 
@@ -151,6 +154,12 @@ public class DmJxyzSandTableT extends ActiveRecord<DmJxyzSandTableT> {
 
 	@Column(name="year_salary")
 	private BigDecimal yearSalary;
+
+	@Column(name="yesterday_cash_income")
+	private BigDecimal yesterdayCashIncome;
+
+	@Column(name="yesterday_cash_qty")
+	private int yesterdayCashQty;
 
 	@Column(name="yesterday_collection_qty")
 	private int yesterdayCollectionQty;
@@ -367,6 +376,14 @@ public class DmJxyzSandTableT extends ActiveRecord<DmJxyzSandTableT> {
 		this.monthCashIncome = monthCashIncome;
 	}
 
+	public int getMonthCashQty() {
+		return this.monthCashQty;
+	}
+
+	public void setMonthCashQty(int monthCashQty) {
+		this.monthCashQty = monthCashQty;
+	}
+
 	public int getMonthCollectionQty() {
 		return this.monthCollectionQty;
 	}
@@ -509,6 +526,22 @@ public class DmJxyzSandTableT extends ActiveRecord<DmJxyzSandTableT> {
 
 	public void setYearSalary(BigDecimal yearSalary) {
 		this.yearSalary = yearSalary;
+	}
+
+	public BigDecimal getYesterdayCashIncome() {
+		return this.yesterdayCashIncome;
+	}
+
+	public void setYesterdayCashIncome(BigDecimal yesterdayCashIncome) {
+		this.yesterdayCashIncome = yesterdayCashIncome;
+	}
+
+	public int getYesterdayCashQty() {
+		return this.yesterdayCashQty;
+	}
+
+	public void setYesterdayCashQty(int yesterdayCashQty) {
+		this.yesterdayCashQty = yesterdayCashQty;
 	}
 
 	public int getYesterdayCollectionQty() {
