@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.isoftstone.jxyz.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,31 +15,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.drinkjava2.jsqlbox.DbContext;
-import com.isoftstone.jxyz.model.DmCustomerMonthRevenueT;
-import com.isoftstone.jxyz.model.DmDeliveryMonthT;
-import com.isoftstone.jxyz.model.DmEmpMonthCollectionT;
-import com.isoftstone.jxyz.model.DmJxyzEmpInfoT;
-import com.isoftstone.jxyz.model.DmJxyzSandSectionT;
-import com.isoftstone.jxyz.model.DmJxyzSandTableT;
-import com.isoftstone.jxyz.model.DmJxyzSectinInfoT;
-import com.isoftstone.jxyz.model.DmRegionalMonthCollectionT;
-import com.isoftstone.jxyz.model.DmSalesDepartmentCollectionMonthT;
-import com.isoftstone.jxyz.model.DwrCustomerDailyRevenueT;
-import com.isoftstone.jxyz.model.DwrDeliveryDetailT;
-import com.isoftstone.jxyz.model.DwrEmpDailyCollectionT;
-import com.isoftstone.jxyz.model.DwrJxyzCustomerD;
-import com.isoftstone.jxyz.model.DwrJxyzCustomerRelationD;
-import com.isoftstone.jxyz.model.DwrJxyzDepartmentD;
-import com.isoftstone.jxyz.model.DwrJxyzEmpD;
-import com.isoftstone.jxyz.model.DwrJxyzRegionD;
-import com.isoftstone.jxyz.model.DwrJxyzResourcesD;
-import com.isoftstone.jxyz.model.DwrRegionalDailyCollectionT;
-import com.isoftstone.jxyz.model.DwrSalesDepartmentCollectionT;
-import com.isoftstone.jxyz.model.TEmolumentResult;
-import com.isoftstone.jxyz.model.TEmolumentRule;
-import com.isoftstone.jxyz.model.TEmolumentTemplate;
-import com.isoftstone.jxyz.model.TGridM;
-import com.isoftstone.jxyz.model.TGridM0928;
 
 @Service
 public class JxyzDownloadService {
@@ -778,6 +754,247 @@ public class JxyzDownloadService {
 			for (int i = 0; i < dataJsa.size(); i++) {
 				TGridM0928 tGridM0928 = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TGridM0928.class);
 				tGridM0928.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_building_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizBuildingM tBizBuildingM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizBuildingM.class);
+				tBizBuildingM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_campus_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizCampusM tBizCampusM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizCampusM.class);
+				tBizCampusM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+
+	public void t_biz_enterprise_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizEnterpriseM TBizEnterpriseM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizEnterpriseM.class);
+				TBizEnterpriseM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_uptown_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException{
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TUptownM tUptownM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TUptownM.class);
+				tUptownM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_resource_customer_relation(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizResourceCustomerRelation tBizResourceCustomerRelation = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizResourceCustomerRelation.class);
+				tBizResourceCustomerRelation.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_enterprise_customer_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizEnterpriseCustomerM tBizEnterpriseCustomerM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizEnterpriseCustomerM.class);
+				tBizEnterpriseCustomerM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_enterprise_customer_contract_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizEnterpriseCustomerContractM tBizEnterpriseCustomerContractM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizEnterpriseCustomerContractM.class);
+				tBizEnterpriseCustomerContractM.insert();
+			}
+		} finally {
+			// TODO: handle finally clause
+			ctx.nBatchEnd();
+		}
+		if (StringUtils.isNotBlank(suffix)) {
+			ctx.exe(suffix);
+		}
+
+		ctx.execute("update t_etl_download_log set insert_end_time= ? where id = ?", sdf.format(new Date()), id);
+	}
+
+	public void t_biz_enterprise_customer_instance_m(String prefix, String qry, String suffix, String table, String id) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, SQLException {
+
+		DbContext ctx = DbContext.getGlobalDbContext();
+		ctx.execute(
+				"INSERT INTO t_etl_download_log(id,qry,prefix,suffix,`table`,start_time,create_time)VALUES(?,?,?,?,?,?,?);",
+				id, qry, prefix, suffix, table, sdf.format(new Date()), sdf.format(new Date()));
+		JSONArray dataJsa = adoService.qryDatas(qry, id).getJSONArray("data");
+		ctx.execute("update t_etl_download_log set total = ?,end_time= ?,insert_start_time= ? where id = ?",
+				dataJsa.size(), sdf.format(new Date()), sdf.format(new Date()), id);
+
+		if (StringUtils.isNotBlank(prefix)) {
+			ctx.exe(prefix);
+		}
+		try {
+			ctx.nBatchBegin();
+			for (int i = 0; i < dataJsa.size(); i++) {
+				TBizEnterpriseCustomerInstanceM tBizEnterpriseCustomerInstanceM = JSONObject.toJavaObject(dataJsa.getJSONObject(i), TBizEnterpriseCustomerInstanceM.class);
+				tBizEnterpriseCustomerInstanceM.insert();
 			}
 		} finally {
 			// TODO: handle finally clause

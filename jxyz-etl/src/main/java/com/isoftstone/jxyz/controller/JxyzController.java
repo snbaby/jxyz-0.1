@@ -129,6 +129,30 @@ public class JxyzController {
 		case "t_grid_m_0928":
 			jxyzDownloadService.t_grid_m_0928(prefix, qry, suffix, table, id);
 			break;
+		case "t_biz_building_m":
+			jxyzDownloadService.t_biz_building_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_campus_m":
+			jxyzDownloadService.t_biz_campus_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_enterprise_m":
+			jxyzDownloadService.t_biz_enterprise_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_uptown_m":
+			jxyzDownloadService.t_uptown_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_resource_customer_relation":
+			jxyzDownloadService.t_biz_resource_customer_relation(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_enterprise_customer_m":
+			jxyzDownloadService.t_biz_enterprise_customer_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_enterprise_customer_contract_m":
+			jxyzDownloadService.t_biz_enterprise_customer_contract_m(prefix, qry, suffix, table, id);
+			break;
+		case "t_biz_enterprise_customer_instance_m":
+			jxyzDownloadService.t_biz_enterprise_customer_instance_m(prefix, qry, suffix, table, id);
+			break;
 		default:
 			log.error("table：{},不在计算之列", table);
 			break;
