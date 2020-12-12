@@ -28,6 +28,7 @@ import jxyz.exchanger.RegionDaliyExchanger;
 import jxyz.exchanger.RegionMonthExchanger;
 import jxyz.exchanger.ResourceExchanger;
 import jxyz.exchanger.SandTableExchanger;
+import jxyz.exchanger.SanderExchanger;
 import jxyz.utils.TimeUtil;
 
 /**
@@ -205,6 +206,7 @@ public class Application {
 		if (type == 1) {
 			exchangerList.add(new EmpInfoExchanger()); // 添加员工看板数据转换器
 			exchangerList.add(new SandTableExchanger()); // 网格看板数据转换
+			exchangerList.add(new SanderExchanger()); // 现费数据转换
 			exchangerList.add(new ResourceExchanger()); // 添加资源转换器
 		}
 

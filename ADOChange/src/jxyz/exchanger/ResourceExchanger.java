@@ -438,12 +438,12 @@ public class ResourceExchanger implements Exchanger{
 		p.close();
 		System.out.println("写入jpx_volumn_collect_d" + " 记录数:" + count);
 		
-//		Map<String,String> transferMap = new HashMap<>();
-//        transferMap.put("tableName", "jpx_resource_collect_d");
-//		String selectSql = "select * from jpx_resource_collect_d ";
-//		transferMap.put("selectSql", selectSql);
-//		transferMap.put("prefix", "TRUNCATE jpx_resource_collect_d");
-//		HttpUtil.upload(transferMap);
+		Map<String,String> transferMap = new HashMap<>();
+		transferMap.put("tableName", "jpx_resource_collect_d");
+		String selectSql = "select * from jpx_resource_collect_d ";
+		transferMap.put("selectSql", selectSql);
+		transferMap.put("prefix", "TRUNCATE jpx_resource_collect_d");
+		HttpUtil.upload(transferMap);
     }
 	
 
