@@ -21,6 +21,7 @@ import jxyz.utils.Tools;
  */
 public class ResourceExchanger implements Exchanger{
 	
+	@SuppressWarnings("unused")
 	public void process(Connection connection) throws Exception
     {
     	PreparedStatement p = connection.prepareStatement("select * from t_grid_m t where t.level = 5");
@@ -34,24 +35,12 @@ public class ResourceExchanger implements Exchanger{
 		dp.close();
 
 		while (rs.next()) {
-		
-
-			PreparedStatement p1 = connection.prepareStatement(
-					"select resources_type, key_market_code, users_qty from dwr_jxyz_resources_d  where grid_code = ? ");
-			p1.setString(1, rs.getString("code"));
-
 			String grid_code = rs.getString("code");
-			
-			
-			
-			ResultSet rs1 = p1.executeQuery();
-
 			//总数量
 			int schoolnum = 0;
 			int gyynum = 0;
 			int housenum = 0;
 			int businum = 0;
-			
 			
 			//覆盖数量
 			int school_cover = 0;
@@ -80,140 +69,331 @@ public class ResourceExchanger implements Exchanger{
 
 			String dtype = "";
 			
-			while (rs1.next()) {
-				
-				String type = rs1.getString("resources_type");
-				String market_key = rs1.getString("key_market_code");
-				if(market_key.equals("校园市场"))
-				{
-					System.out.println("");
-				}
-				Integer userNum = rs1.getInt("users_qty");
+			PreparedStatement p2 = connection.prepareStatement(
+					"select code,employee_number from t_biz_campus_m  where grid_code = ? ");
+			p2.setString(1, rs.getString("code"));
+			ResultSet campus = p2.executeQuery(); // 高校
+			while (campus.next()) {
+				dtype = "学校";
+				Integer userNum = campus.getInt("employee_number");
+				String market_key = campus.getString("code");
 				if(userNum == null)
 				{
 					userNum = 0;
 				}
+				schoolnum++;
+				school_user_num += userNum;
+				PreparedStatement customer = connection.prepareStatement(
+						"select count(1) as num from t_biz_campus_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code where a.code = ? ");
+				customer.setString(1, market_key);
+				ResultSet customerRS = customer.executeQuery();
+				while (customerRS.next()) {
+					Integer num = customerRS.getInt("num");
+					school_custom+=num;
+				}
+				customerRS.close();
+				customer.close();
 				
-				if(type.contains("学校"))
-				{
-					schoolnum++;
-					school_user_num += userNum;
-					if(dtype.length() == 0)
-					{
-						dtype = "学校";
+				PreparedStatement contract = connection.prepareStatement(
+						"select count(c.code) as num from t_biz_campus_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code left join t_biz_enterprise_customer_instance_m d on c.code = d.enterprise_code left join t_biz_enterprise_customer_contract_m e on d.id = e.enterprise_instance_id where e.status = '1' and e.is_end = '0' and a.code = ? GROUP BY c.code ");
+				contract.setString(1, market_key);
+				ResultSet contractRs = contract.executeQuery();
+				boolean is_cover = false;
+				while (contractRs.next()) {
+					Integer num = contractRs.getInt("num");
+					if (num!= null && num > 0) {
+						is_cover = true;
+						school_dev_custom+=num;
 					}
 				}
-				if(type.contains("工业园区集群"))
-				{
-					gyynum++;
-					gyy_user_num += userNum;
-					if(dtype.length() == 0)
-					{
-						dtype = "工业园区集群";
-					}
-				}
-				if(type.contains("商业楼宇"))
-				{
-					businum++;
-					busi_user_num += userNum;
-					if(dtype.length() == 0)
-					{
-						dtype = "商业楼宇";
-					}
-				}
-				if(type.contains("住宅小区"))
-				{
-					housenum++;
-					house_user_num += userNum;
-					if(dtype.length() == 0)
-					{
-						dtype = "住宅小区";
-					}
-				}	
-				
-				PreparedStatement p2 = connection.prepareStatement(
-						"select * from dwr_jxyz_customer_d  where key_market_code = ? ");
-				p2.setString(1, market_key);
-				ResultSet rs2 = p2.executeQuery();
-				
-
-				boolean is_school_cover = false;
-				boolean is_gyy_cover = false;
-				boolean is_house_cover = false;
-				boolean is_business_cover = false;
-				while (rs2.next()) {
-					if(type.contains("学校"))
-					{
-						school_custom++;
-					}
-					if(type.contains("工业园区集群"))
-					{
-						gyy_custom++;
-					}
-					if(type.contains("商业楼宇"))
-					{
-						busi_custom++;
-					}
-					if(type.contains("住宅小区"))
-					{
-						house_custom++;
-					}	
-					
-					String sender_no = rs2.getString("sender_no");
-					Date date = rs2.getDate("contract_expiration_time");
-					if(sender_no != null && date != null && System.currentTimeMillis() < date.getTime())
-					{
-						if(type.contains("学校"))
-						{
-							is_school_cover = true;
-							school_dev_custom++;
-						}
-						if(type.contains("工业园区集群"))
-						{
-							is_gyy_cover = true;
-							gyy_dev_custom++;
-						}
-						if(type.contains("商业楼宇"))
-						{
-							is_business_cover = true;
-							busi_dev_custom++;
-						}
-						if(type.contains("住宅小区"))
-						{
-							is_house_cover = true;
-							house_dev_custom++;
-						}	
-					}
-				}
-				rs2.close();
-				p2.close();
-				if(is_school_cover)
+				contractRs.close();
+				contract.close();
+				if(is_cover)
 				{
 					school_cover++;
+				}	
+			}
+			campus.close();
+			p2.close();
+			
+			
+			PreparedStatement p3 = connection.prepareStatement(
+					"select code,employee_number from t_biz_enterprise_m  where grid_code = ? ");
+			p3.setString(1, rs.getString("code"));
+			ResultSet enterprise = p3.executeQuery(); // 集团
+			while (enterprise.next()) {
+				dtype = "工业园区集群";
+				Integer userNum = enterprise.getInt("employee_number");
+				String market_key = enterprise.getString("code");
+				if(userNum == null){
+					userNum = 0;
 				}
-				if(is_gyy_cover)
+				gyynum++;
+				gyy_user_num += userNum;
+				PreparedStatement customer = connection.prepareStatement(
+						"select count(1) as num from t_biz_enterprise_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code where a.code = ? ");
+				customer.setString(1, market_key);
+				ResultSet customerRS = customer.executeQuery();
+				while (customerRS.next()) {
+					Integer num = customerRS.getInt("num");
+					gyy_custom+=num;
+				}
+				customerRS.close();
+				customer.close();
+				
+				PreparedStatement contract = connection.prepareStatement(
+						"select count(c.code) as num from t_biz_enterprise_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code left join t_biz_enterprise_customer_instance_m d on c.code = d.enterprise_code left join t_biz_enterprise_customer_contract_m e on d.id = e.enterprise_instance_id where e.status = '1' and e.is_end = '0' and a.code = ? GROUP BY c.code ");
+				contract.setString(1, market_key);
+				ResultSet contractRs = contract.executeQuery();
+				boolean is_cover = false;
+				while (contractRs.next()) {
+					Integer num = contractRs.getInt("num");
+					if (num!= null && num > 0) {
+						is_cover = true;
+						gyy_dev_custom+=num;
+					}
+				}
+				contractRs.close();
+				contract.close();
+				if(is_cover)
 				{
 					gyy_cover++;
+				}	
+			}
+			enterprise.close();
+			p3.close();
+			
+			PreparedStatement p1 = connection.prepareStatement("select code,customer_total from t_biz_building_m  where grid_code = ? ");
+			p1.setString(1, rs.getString("code"));
+			ResultSet building = p1.executeQuery(); // 商业楼宇
+			while (building.next()) {
+				dtype = "商业楼宇";
+				Integer userNum = building.getInt("customer_total");
+				String market_key = building.getString("code");
+				if(userNum == null)
+				{
+					userNum = 0;
 				}
+				businum++;
+				busi_user_num += userNum;
+				PreparedStatement customer = connection.prepareStatement(
+						"select count(1) as num from t_biz_building_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code where a.code = ? ");
+				customer.setString(1, market_key);
+				ResultSet customerRS = customer.executeQuery();
+				while (customerRS.next()) {
+					Integer num = customerRS.getInt("num");
+					busi_custom+=num;
+				}
+				customerRS.close();
+				customer.close();
+				
+				PreparedStatement contract = connection.prepareStatement(
+						"select count(c.code) as num from t_biz_building_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code left join t_biz_enterprise_customer_instance_m d on c.code = d.enterprise_code left join t_biz_enterprise_customer_contract_m e on d.id = e.enterprise_instance_id where e.status = '1' and e.is_end = '0' and a.code = ? GROUP BY c.code ");
+				contract.setString(1, market_key);
+				ResultSet contractRs = contract.executeQuery();
+				boolean is_cover = false;
+				while (contractRs.next()) {
+					Integer num = contractRs.getInt("num");
+					if (num!= null && num > 0) {
+						is_cover = true;
+						busi_dev_custom+=num;
+					}
+				}
+				contractRs.close();
+				contract.close();
+				if(is_cover)
+				{
+					busi_cover++;
+				}	
+			}
+			building.close();
+			p1.close();
+			
+			
+			PreparedStatement p4 = connection.prepareStatement(
+					"select code,actual_householdcount from t_uptown_m  where grid_code = ? ");
+			p4.setString(1, rs.getString("code"));
+			ResultSet uptown = p4.executeQuery(); // 小区
+			while (uptown.next()) {
+				dtype = "住宅小区";
+				Integer userNum = uptown.getInt("actual_householdcount");
+				String market_key = uptown.getString("code");
+				if(userNum == null){
+					userNum = 0;
+				}
+				housenum++;
+				house_user_num += userNum;
+				PreparedStatement customer = connection.prepareStatement(
+						"select count(1) as num from t_uptown_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code where a.code = ? ");
+				customer.setString(1, market_key);
+				ResultSet customerRS = customer.executeQuery();
+				while (customerRS.next()) {
+					Integer num = customerRS.getInt("num");
+					house_custom+=num;
+				}
+				customerRS.close();
+				customer.close();
+				
+				PreparedStatement contract = connection.prepareStatement(
+						"select count(c.code) as num from t_uptown_m a left join t_biz_resource_customer_relation b on a.code = b.resource_code left join t_biz_enterprise_customer_m c on b.customer_code = c.code left join t_biz_enterprise_customer_instance_m d on c.code = d.enterprise_code left join t_biz_enterprise_customer_contract_m e on d.id = e.enterprise_instance_id where e.status = '1' and e.is_end = '0' and a.code = ?  GROUP BY c.code");
+				contract.setString(1, market_key);
+				ResultSet contractRs = contract.executeQuery();
+				boolean is_house_cover = false;
+				while (contractRs.next()) {
+					Integer num = contractRs.getInt("num");
+					if (num!= null && num > 0) {
+						is_house_cover = true;
+						house_dev_custom+=num;
+					}
+				}
+				contractRs.close();
+				contract.close();
 				if(is_house_cover)
 				{
 					house_cover++;
-				}
-				if(is_business_cover)
-				{
-					busi_cover++;
-				}				
-				
+				}	
 			}
-			rs1.close();
-			p1.close();
+			uptown.close();
+			p4.close();
+//			while (rs1.next()) {
+//				
+//				String type = rs1.getString("resources_type");
+//				String market_key = rs1.getString("key_market_code");
+//				if(market_key.equals("校园市场"))
+//				{
+//					System.out.println("");
+//				}
+//				Integer userNum = rs1.getInt("users_qty");
+//				if(userNum == null)
+//				{
+//					userNum = 0;
+//				}
+//				
+//				if(type.contains("学校"))
+//				{
+//					schoolnum++;
+//					school_user_num += userNum;
+//					if(dtype.length() == 0)
+//					{
+//						dtype = "学校";
+//					}
+//				}
+//				if(type.contains("工业园区集群"))
+//				{
+//					gyynum++;
+//					gyy_user_num += userNum;
+//					if(dtype.length() == 0)
+//					{
+//						dtype = "工业园区集群";
+//					}
+//				}
+//				if(type.contains("商业楼宇"))
+//				{
+//					businum++;
+//					busi_user_num += userNum;
+//					if(dtype.length() == 0)
+//					{
+//						dtype = "商业楼宇";
+//					}
+//				}
+//				if(type.contains("住宅小区"))
+//				{
+//					housenum++;
+//					house_user_num += userNum;
+//					if(dtype.length() == 0)
+//					{
+//						dtype = "住宅小区";
+//					}
+//				}	
+//				
+//				PreparedStatement p2 = connection.prepareStatement(
+//						"select * from dwr_jxyz_customer_d  where key_market_code = ? ");
+//				p2.setString(1, market_key);
+//				ResultSet rs2 = p2.executeQuery();
+//				
+//
+//				boolean is_school_cover = false;
+//				boolean is_gyy_cover = false;
+//				boolean is_house_cover = false;
+//				boolean is_business_cover = false;
+//				while (rs2.next()) {
+//					if(type.contains("学校"))
+//					{
+//						school_custom++;
+//					}
+//					if(type.contains("工业园区集群"))
+//					{
+//						gyy_custom++;
+//					}
+//					if(type.contains("商业楼宇"))
+//					{
+//						busi_custom++;
+//					}
+//					if(type.contains("住宅小区"))
+//					{
+//						house_custom++;
+//					}	
+//					
+//					String sender_no = rs2.getString("sender_no");
+//					Date date = rs2.getDate("contract_expiration_time");
+//					if(sender_no != null && date != null && System.currentTimeMillis() < date.getTime())
+//					{
+//						if(type.contains("学校"))
+//						{
+//							is_school_cover = true;
+//							school_dev_custom++;
+//						}
+//						if(type.contains("工业园区集群"))
+//						{
+//							is_gyy_cover = true;
+//							gyy_dev_custom++;
+//						}
+//						if(type.contains("商业楼宇"))
+//						{
+//							is_business_cover = true;
+//							busi_dev_custom++;
+//						}
+//						if(type.contains("住宅小区"))
+//						{
+//							is_house_cover = true;
+//							house_dev_custom++;
+//						}	
+//					}
+//				}
+//				rs2.close();
+//				p2.close();
+//				if(is_school_cover)
+//				{
+//					school_cover++;
+//				}
+//				if(is_gyy_cover)
+//				{
+//					gyy_cover++;
+//				}
+//				if(is_house_cover)
+//				{
+//					house_cover++;
+//				}
+//				if(is_business_cover)
+//				{
+//					busi_cover++;
+//				}				
+//				
+//			}
+//			rs1.close();
+//			p1.close();
 			
-			if(dtype.length() == 0)
-			{
+			if(schoolnum > 0) {
+				dtype = "学校";
+			} else if(gyynum > 0) {
+				dtype = "工业园区集群";
+			} else if(businum > 0) {
+				dtype = "商业楼宇";
+			} else {
 				dtype = "住宅小区";
 			}
 			
-			System.out.println(grid_code + " " + schoolnum + " " + school_custom + " " + school_dev_custom + " " + school_cover);
+			System.out.println(dtype + "   " +grid_code + " " + schoolnum + " " + gyynum + " " + businum + " " + housenum);
 		
 
 			
@@ -258,12 +438,12 @@ public class ResourceExchanger implements Exchanger{
 		p.close();
 		System.out.println("写入jpx_volumn_collect_d" + " 记录数:" + count);
 		
-		 Map<String,String> transferMap = new HashMap<>();
-	        transferMap.put("tableName", "jpx_resource_collect_d");
-			String selectSql = "select * from jpx_resource_collect_d ";
-			transferMap.put("selectSql", selectSql);
-			transferMap.put("prefix", "TRUNCATE jpx_resource_collect_d");
-			HttpUtil.upload(transferMap);
+//		Map<String,String> transferMap = new HashMap<>();
+//        transferMap.put("tableName", "jpx_resource_collect_d");
+//		String selectSql = "select * from jpx_resource_collect_d ";
+//		transferMap.put("selectSql", selectSql);
+//		transferMap.put("prefix", "TRUNCATE jpx_resource_collect_d");
+//		HttpUtil.upload(transferMap);
     }
 	
 
