@@ -23,7 +23,10 @@ public class SanderExchanger implements Exchanger{
 	public void process(Connection connection) throws Exception
     {
 		// 查询当日现费  -- 段道
-    	PreparedStatement level4Day = connection.prepareStatement("select count(b.grid_code) as yesterday_cash_qty,b.grid_code,sum(postage_total) as yesterday_cash_income from sdi_jxyz_pkp_waybill_base_2020 a left join dwr_jxyz_emp_d b on a.post_person_no = b.emp_code where biz_occur_date > ? and biz_occur_date < ? and sender_type = '0' and sender_province_no = '360000' and a.postage_total != 0  GROUP BY b.grid_code");
+    	PreparedStatement level4Day = connection.prepareStatement("select count(b.grid_code) as yesterday_cash_qty,b.grid_code,sum(postage_total) as yesterday_cash_income from ( \r\n" + 
+    			"    select *, row_number() over (partition by waybill_no order by id) as group_idx  \r\n" + 
+    			"    from sdi_jxyz_pkp_waybill_base_2020  where biz_occur_date > ? and biz_occur_date < ? and sender_type = '0' and sender_province_no = '360000' and postage_total != 0 \r\n" + 
+    			") a left join dwr_jxyz_emp_d b on a.post_person_no = b.emp_code  GROUP BY b.grid_code ");
     	level4Day.setString(1, (String) Application.GLOBAL_PARAM.get(Application.LAST_DAY));
     	level4Day.setString(2, (String) Application.GLOBAL_PARAM.get(Application.CURR_DAY));
     	ResultSet level4DayRs = level4Day.executeQuery();
@@ -39,7 +42,10 @@ public class SanderExchanger implements Exchanger{
 		level4Day.close();
     	
 		// 查询当月现费  -- 段道
-    	PreparedStatement level4Month = connection.prepareStatement("select count(b.grid_code) as month_cash_qty,b.grid_code,sum(postage_total) as month_cash_income from sdi_jxyz_pkp_waybill_base_2020 a left join dwr_jxyz_emp_d b on a.post_person_no = b.emp_code where biz_occur_date > ? and biz_occur_date < ? and sender_type = '0' and sender_province_no = '360000' and a.postage_total != 0  GROUP BY b.grid_code");
+    	PreparedStatement level4Month = connection.prepareStatement("select count(b.grid_code) as month_cash_qty,b.grid_code,sum(postage_total) as month_cash_income from ( \r\n" + 
+    			"    select *, row_number() over (partition by waybill_no order by id) as group_idx  \r\n" + 
+    			"    from sdi_jxyz_pkp_waybill_base_20201130  where biz_occur_date > ? and biz_occur_date < ? and sender_type = '0' and sender_province_no = '360000' and postage_total != 0\r\n" + 
+    			") a left join dwr_jxyz_emp_d b on a.post_person_no = b.emp_code  GROUP BY b.grid_code ");
     	level4Month.setString(1, (String) Application.GLOBAL_PARAM.get(Application.CURR_MONTH_FIRSTDAY));
     	level4Month.setString(2, (String) Application.GLOBAL_PARAM.get(Application.CURR_MONTH_LASTDAY));
     	ResultSet level4MonthRs = level4Month.executeQuery();
