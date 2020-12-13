@@ -17,6 +17,14 @@ public class BuildingHttpExchanger implements Exchanger {
         jsonObject.put("table", "t_biz_building_m");
         String a = HttpUtil.doPost(url,jsonObject.toJSONString());
         System.out.println("收到结果过返回===========》" + a);
+        
+        
+        jsonObject.put("qry", "select id,code, parent_code, all_parent_code, old_grid_code, name,level,grid_status,create_user, create_date, modify_user, modify_date, extend_column from t_grid_m;");
+        jsonObject.put("prefix", "TRUNCATE t_grid_m;");
+        jsonObject.put("suffix", "");
+        jsonObject.put("table", "t_grid_m");
+        HttpUtil.doPost(url,jsonObject.toJSONString());
+        System.out.println("收到结果过返回===========》t_grid_m");
     }
     
 }

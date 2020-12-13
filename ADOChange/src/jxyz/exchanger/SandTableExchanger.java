@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
+import jxyz.Application;
 import jxyz.utils.HttpUtil;
+import jxyz.utils.Tools;
 
 /**
  * 沙盘看板 输入表：dwr_emp_daily_collection_t 输出表：dm_jxyz_sand_table_t
@@ -119,7 +121,7 @@ public class SandTableExchanger implements Exchanger {
 				"	ON d.post_org_no = g.parent_code\r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	UNION ALL \r\n" + 
 				"	#月度数据\r\n" + 
 				"	SELECT \r\n" + 
@@ -247,6 +249,11 @@ public class SandTableExchanger implements Exchanger {
 				"			 post_org_name,\r\n" + 
 				"			 section_code,\r\n" + 
 				"			 section_name";
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("LAST_DAY", (String) Application.GLOBAL_PARAM.get(Application.LAST_DAY));
+		params.put("CURR_MONTH", (String) Application.GLOBAL_PARAM.get(Application.CURR_MONTH));
+		params.put("LAST_MONTH", (String) Application.GLOBAL_PARAM.get(Application.LAST_MONTH));
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		
 		PreparedStatement queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
@@ -317,7 +324,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	UNION ALL \r\n" + 
 				"	#月度数据\r\n" + 
 				"	SELECT \r\n" + 
@@ -377,7 +384,7 @@ public class SandTableExchanger implements Exchanger {
 				"			 sender_county_name,\r\n" + 
 				"			 post_org_no,\r\n" + 
 				"			 post_org_name";
-		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("营业部级别数据插入: " + num);
@@ -441,7 +448,7 @@ public class SandTableExchanger implements Exchanger {
 				"		FROM dwr_emp_daily_collection_t d \r\n" + 
 				"		LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"		ON dep.dept_code = d.post_org_no\r\n" + 
-				"		WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"		WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"		UNION ALL \r\n" + 
 				"		#月度数据\r\n" + 
 				"		SELECT \r\n" + 
@@ -496,6 +503,7 @@ public class SandTableExchanger implements Exchanger {
 				"				 sender_county_no,\r\n" + 
 				"				 sender_county_name";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("区县级别数据插入: " + num);
@@ -553,7 +561,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	UNION ALL \r\n" + 
 				"	#月度数据\r\n" + 
 				"	SELECT \r\n" + 
@@ -602,6 +610,7 @@ public class SandTableExchanger implements Exchanger {
 				"			 sender_city_no,\r\n" + 
 				"			 sender_city_name";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("市级别数据插入: " + num);
@@ -653,7 +662,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	UNION ALL \r\n" + 
 				"	#月度数据\r\n" + 
 				"	SELECT \r\n" + 
@@ -696,6 +705,7 @@ public class SandTableExchanger implements Exchanger {
 				"			 sender_province_no,	\r\n" + 
 				"			 sender_province_name";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("省级别数据插入: " + num);
@@ -748,7 +758,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	UNION ALL \r\n" + 
 				"	#月度数据\r\n" + 
 				"	SELECT \r\n" + 
@@ -791,6 +801,7 @@ public class SandTableExchanger implements Exchanger {
 				"			 sender_province_no,	\r\n" + 
 				"			 sender_province_name";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("省级别数据插入: " + num);
@@ -825,13 +836,14 @@ public class SandTableExchanger implements Exchanger {
 				"	ON d.post_org_no = g.parent_code\r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)) t\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}') t\r\n" + 
 				"	group BY grid_code ,post_person_no) t\r\n" + 
 				"	GROUP BY grid_code )  t \r\n" + 
 				"	ON t.grid_code = n.grid_code\r\n" + 
 				"	SET n.post_person_qty = t.qty\r\n" + 
 				"	WHERE n.grid_level = '4'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新段道人数: " + num);
@@ -848,7 +860,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	) t\r\n" + 
 				"	GROUP BY grid_code,post_person_no) t\r\n" + 
 				"	GROUP BY grid_code )  t \r\n" + 
@@ -856,6 +868,7 @@ public class SandTableExchanger implements Exchanger {
 				"	SET n.post_person_qty = t.qty\r\n" + 
 				"	WHERE n.grid_level = '3';";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新营业部人数: " + num);
@@ -869,7 +882,7 @@ public class SandTableExchanger implements Exchanger {
 				"			d.sender_county_no grid_code,	 #区县部编码\r\n" + 
 				"			 d.post_person_no\r\n" + 
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	) t\r\n" + 
 				"	GROUP BY grid_code,post_person_no) t\r\n" + 
 				"	GROUP BY grid_code)  t \r\n" + 
@@ -877,6 +890,7 @@ public class SandTableExchanger implements Exchanger {
 				"	SET n.post_person_qty = t.qty\r\n" + 
 				"	WHERE n.grid_level = '2';";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新区县人数: " + num);
@@ -891,7 +905,7 @@ public class SandTableExchanger implements Exchanger {
 				"			d.sender_city_no grid_code,	 #营业部编码\r\n" + 
 				"			 d.post_person_no\r\n" + 
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	) t\r\n" + 
 				"	GROUP BY grid_code,post_person_no) t\r\n" + 
 				"	GROUP BY grid_code)  t \r\n" + 
@@ -899,6 +913,7 @@ public class SandTableExchanger implements Exchanger {
 				"	SET n.post_person_qty = t.qty\r\n" + 
 				"	WHERE n.grid_level = '1'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新市人数: " + num);
@@ -913,7 +928,7 @@ public class SandTableExchanger implements Exchanger {
 				"			d.sender_province_no grid_code,	 #营业部编码\r\n" + 
 				"			 d.post_person_no\r\n" + 
 				"	FROM dwr_emp_daily_collection_t d \r\n" + 
-				"	WHERE d.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"	WHERE d.period_id = '${LAST_DAY}' \r\n" + 
 				"	) t\r\n" + 
 				"	GROUP BY grid_code,post_person_no) t\r\n" + 
 				"	GROUP BY grid_code)  t \r\n" + 
@@ -921,6 +936,7 @@ public class SandTableExchanger implements Exchanger {
 				"	SET n.post_person_qty = t.qty\r\n" + 
 				"	WHERE n.grid_level = '0'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新省人数: " + num);
@@ -1039,6 +1055,7 @@ public class SandTableExchanger implements Exchanger {
 				"	st.residential_quarters = tt.residential_quarters,\r\n" + 
 				"	st.characteristic_markets = tt.characteristic_markets";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("更新资源数据: " + num);
@@ -1097,7 +1114,7 @@ public class SandTableExchanger implements Exchanger {
 				"			) g\r\n" + 
 				"			WHERE num = 1 )  g \r\n" + 
 				"			ON g.grid_code = t.section_code\r\n" + 
-				"		WHERE t.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"		WHERE t.period_id = '${LAST_DAY}' \r\n" + 
 				"		GROUP BY CASE WHEN  t.section_code IS NOT NULL THEN \r\n" + 
 				"					 t.section_code \r\n" + 
 				"					 WHEN t.section_code IS NULL AND t.post_org_no = g.parent_code THEN\r\n" + 
@@ -1132,7 +1149,7 @@ public class SandTableExchanger implements Exchanger {
 				"		SUM(IFNULL(last_year_total_qty,0)) last_year_total_qty\r\n" + 
 				"		FROM \r\n" + 
 				"		(SELECT  del.post_person_no,sum(del.deliver_qty) yesterday_deliver_qty #昨天投递量\r\n" + 
-				"		FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"		FROM dwr_delivery_detail_t del WHERE del.period_id = '${LAST_DAY}' \r\n" + 
 				"		GROUP BY del.post_person_no) del LEFT OUTER JOIN \r\n" + 
 				"		(SELECT  del.post_person_no,sum(del.deliver_qty) befor_day_deliver_qty  #前天投递量\r\n" + 
 				"		FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -2 DAY)\r\n" + 
@@ -1143,12 +1160,12 @@ public class SandTableExchanger implements Exchanger {
 				"		sum(mel.deliver_qty) month_deliver_qty, #本月投递量\r\n" + 
 				"		SUM(mel.current_year_total_qty) year_delivery_qty,  #本年投递量\r\n" + 
 				"		SUM(mel.last_year_total_qty) last_year_total_qty #去年累计投递量\r\n" + 
-				"		FROM dm_delivery_month_t mel WHERE mel.period_id = 202011\r\n" + 
+				"		FROM dm_delivery_month_t mel WHERE mel.period_id = '${CURR_MONTH}' \r\n" + 
 				"		GROUP BY mel.post_person_no) mel\r\n" + 
 				"		ON del.post_person_no = mel.post_person_no\r\n" + 
 				"		LEFT OUTER JOIN \r\n" + 
 				"		(SELECT  lmel.post_person_no,sum(lmel.deliver_qty) last_month_deliver_qty #上月投递量\r\n" + 
-				"		FROM dm_delivery_month_t lmel WHERE lmel.period_id = 202010\r\n" + 
+				"		FROM dm_delivery_month_t lmel WHERE lmel.period_id = '${LAST_MONTH}' \r\n" + 
 				"		GROUP BY lmel.post_person_no) lmel\r\n" + 
 				"		ON del.post_person_no = lmel.post_person_no\r\n" + 
 				"		GROUP BY del.post_person_no) del\r\n" + 
@@ -1164,6 +1181,7 @@ public class SandTableExchanger implements Exchanger {
 				"			st.year_delivery_growth_rate = ifnull(tmp.year_delivery_growth_rate,0)\r\n" + 
 				"		WHERE st.grid_level = '4'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("段道级比率和: " + num);
@@ -1204,7 +1222,7 @@ public class SandTableExchanger implements Exchanger {
 				"			SUM(t.standard_express_collection) yesterday_collected_qty,  ##昨天的揽收量\r\n" + 
 				"			SUM(t.standard_express_salary) yesterday_salary ######昨天的揽收收入\r\n" + 
 				"			FROM  dwr_emp_daily_collection_t t\r\n" + 
-				"			WHERE t.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"			WHERE t.period_id = '${LAST_DAY}' \r\n" + 
 				"			GROUP BY t.post_org_no,t.post_person_no			  \r\n" + 
 				"						  ) t LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  t.post_person_no,\r\n" + 
@@ -1235,7 +1253,7 @@ public class SandTableExchanger implements Exchanger {
 				"			SUM(IFNULL(last_year_total_qty,0)) last_year_total_qty\r\n" + 
 				"			FROM \r\n" + 
 				"			(SELECT  del.post_person_no,sum(del.deliver_qty) yesterday_deliver_qty #昨天投递量\r\n" + 
-				"			FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"			FROM dwr_delivery_detail_t del WHERE del.period_id = '${LAST_DAY}' \r\n" + 
 				"			GROUP BY del.post_person_no) del LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  del.post_person_no,sum(del.deliver_qty) befor_day_deliver_qty  #前天投递量\r\n" + 
 				"			FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -2 DAY)\r\n" + 
@@ -1246,12 +1264,12 @@ public class SandTableExchanger implements Exchanger {
 				"			sum(mel.deliver_qty) month_deliver_qty, #本月投递量\r\n" + 
 				"			SUM(mel.current_year_total_qty) year_delivery_qty,  #本年投递量\r\n" + 
 				"			SUM(mel.last_year_total_qty) last_year_total_qty #去年累计投递量\r\n" + 
-				"			FROM dm_delivery_month_t mel WHERE mel.period_id = 202011\r\n" + 
+				"			FROM dm_delivery_month_t mel WHERE mel.period_id = '${CURR_MONTH}' \r\n" + 
 				"			GROUP BY mel.post_person_no) mel\r\n" + 
 				"			ON del.post_person_no = mel.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  lmel.post_person_no,sum(lmel.deliver_qty) last_month_deliver_qty #上月投递量\r\n" + 
-				"			FROM dm_delivery_month_t lmel WHERE lmel.period_id = 202010\r\n" + 
+				"			FROM dm_delivery_month_t lmel WHERE lmel.period_id = '${LAST_MONTH}' \r\n" + 
 				"			GROUP BY lmel.post_person_no) lmel\r\n" + 
 				"			ON del.post_person_no = lmel.post_person_no\r\n" + 
 				"			GROUP BY del.post_person_no) del\r\n" + 
@@ -1267,6 +1285,7 @@ public class SandTableExchanger implements Exchanger {
 				"				st.year_delivery_growth_rate = ifnull(tmp.year_delivery_growth_rate,0)\r\n" + 
 				"			WHERE st.grid_level = '3'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("营业部级比率和: " + num);
@@ -1305,7 +1324,7 @@ public class SandTableExchanger implements Exchanger {
 				"			SUM(t.standard_express_collection) yesterday_collected_qty,  ##昨天的揽收量\r\n" + 
 				"			SUM(t.standard_express_salary) yesterday_salary ######昨天的揽收收入\r\n" + 
 				"			FROM  dwr_emp_daily_collection_t t\r\n" + 
-				"			WHERE t.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"			WHERE t.period_id = '${LAST_DAY}' \r\n" + 
 				"			GROUP BY t.sender_county_no,t.post_person_no			  \r\n" + 
 				"						  ) t LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  t.post_person_no,\r\n" + 
@@ -1336,7 +1355,7 @@ public class SandTableExchanger implements Exchanger {
 				"			SUM(IFNULL(last_year_total_qty,0)) last_year_total_qty\r\n" + 
 				"			FROM \r\n" + 
 				"			(SELECT  del.post_person_no,sum(del.deliver_qty) yesterday_deliver_qty #昨天投递量\r\n" + 
-				"			FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"			FROM dwr_delivery_detail_t del WHERE del.period_id = '${LAST_DAY}' \r\n" + 
 				"			GROUP BY del.post_person_no) del LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  del.post_person_no,sum(del.deliver_qty) befor_day_deliver_qty  #前天投递量\r\n" + 
 				"			FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -2 DAY)\r\n" + 
@@ -1347,12 +1366,12 @@ public class SandTableExchanger implements Exchanger {
 				"			sum(mel.deliver_qty) month_deliver_qty, #本月投递量\r\n" + 
 				"			SUM(mel.current_year_total_qty) year_delivery_qty,  #本年投递量\r\n" + 
 				"			SUM(mel.last_year_total_qty) last_year_total_qty #去年累计投递量\r\n" + 
-				"			FROM dm_delivery_month_t mel WHERE mel.period_id = 202011\r\n" + 
+				"			FROM dm_delivery_month_t mel WHERE mel.period_id = '${CURR_MONTH}' \r\n" + 
 				"			GROUP BY mel.post_person_no) mel\r\n" + 
 				"			ON del.post_person_no = mel.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
 				"			(SELECT  lmel.post_person_no,sum(lmel.deliver_qty) last_month_deliver_qty #上月投递量\r\n" + 
-				"			FROM dm_delivery_month_t lmel WHERE lmel.period_id = 202010\r\n" + 
+				"			FROM dm_delivery_month_t lmel WHERE lmel.period_id = '${LAST_MONTH}' \r\n" + 
 				"			GROUP BY lmel.post_person_no) lmel\r\n" + 
 				"			ON del.post_person_no = lmel.post_person_no\r\n" + 
 				"			GROUP BY del.post_person_no) del\r\n" + 
@@ -1368,6 +1387,7 @@ public class SandTableExchanger implements Exchanger {
 				"				st.year_delivery_growth_rate = ifnull(tmp.year_delivery_growth_rate,0)\r\n" + 
 				"			WHERE st.grid_level = '2'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("区县级别比率和: " + num);
@@ -1406,7 +1426,7 @@ public class SandTableExchanger implements Exchanger {
 				"				SUM(t.standard_express_collection) yesterday_collected_qty,  ##昨天的揽收量\r\n" + 
 				"				SUM(t.standard_express_salary) yesterday_salary ######昨天的揽收收入\r\n" + 
 				"				FROM  dwr_emp_daily_collection_t t\r\n" + 
-				"				WHERE t.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"				WHERE t.period_id = '${LAST_DAY}' \r\n" + 
 				"				GROUP BY t.sender_city_no,t.post_person_no			  \r\n" + 
 				"							  ) t LEFT OUTER JOIN \r\n" + 
 				"				(SELECT  t.post_person_no,\r\n" + 
@@ -1437,7 +1457,7 @@ public class SandTableExchanger implements Exchanger {
 				"				SUM(IFNULL(last_year_total_qty,0)) last_year_total_qty\r\n" + 
 				"				FROM \r\n" + 
 				"				(SELECT  del.post_person_no,sum(del.deliver_qty) yesterday_deliver_qty #昨天投递量\r\n" + 
-				"				FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"				FROM dwr_delivery_detail_t del WHERE del.period_id = '${LAST_DAY}' \r\n" + 
 				"				GROUP BY del.post_person_no) del LEFT OUTER JOIN \r\n" + 
 				"				(SELECT  del.post_person_no,sum(del.deliver_qty) befor_day_deliver_qty  #前天投递量\r\n" + 
 				"				FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -2 DAY)\r\n" + 
@@ -1448,12 +1468,12 @@ public class SandTableExchanger implements Exchanger {
 				"				sum(mel.deliver_qty) month_deliver_qty, #本月投递量\r\n" + 
 				"				SUM(mel.current_year_total_qty) year_delivery_qty,  #本年投递量\r\n" + 
 				"				SUM(mel.last_year_total_qty) last_year_total_qty #去年累计投递量\r\n" + 
-				"				FROM dm_delivery_month_t mel WHERE mel.period_id = 202011\r\n" + 
+				"				FROM dm_delivery_month_t mel WHERE mel.period_id = '${CURR_MONTH}' \r\n" + 
 				"				GROUP BY mel.post_person_no) mel\r\n" + 
 				"				ON del.post_person_no = mel.post_person_no\r\n" + 
 				"				LEFT OUTER JOIN \r\n" + 
 				"				(SELECT  lmel.post_person_no,sum(lmel.deliver_qty) last_month_deliver_qty #上月投递量\r\n" + 
-				"				FROM dm_delivery_month_t lmel WHERE lmel.period_id = 202010\r\n" + 
+				"				FROM dm_delivery_month_t lmel WHERE lmel.period_id = '${LAST_MONTH}' \r\n" + 
 				"				GROUP BY lmel.post_person_no) lmel\r\n" + 
 				"				ON del.post_person_no = lmel.post_person_no\r\n" + 
 				"				GROUP BY del.post_person_no) del\r\n" + 
@@ -1469,6 +1489,7 @@ public class SandTableExchanger implements Exchanger {
 				"					st.year_delivery_growth_rate = ifnull(tmp.year_delivery_growth_rate,0)\r\n" + 
 				"				WHERE st.grid_level = '1'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("市级别比率和: " + num);
@@ -1508,7 +1529,7 @@ public class SandTableExchanger implements Exchanger {
 				"					SUM(t.standard_express_collection) yesterday_collected_qty,  ##昨天的揽收量\r\n" + 
 				"					SUM(t.standard_express_salary) yesterday_salary ######昨天的揽收收入\r\n" + 
 				"					FROM  dwr_emp_daily_collection_t t\r\n" + 
-				"					WHERE t.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"					WHERE t.period_id = '${LAST_DAY}' \r\n" + 
 				"					GROUP BY t.sender_province_no,t.post_person_no			  \r\n" + 
 				"								  ) t LEFT OUTER JOIN \r\n" + 
 				"					(SELECT  t.post_person_no,\r\n" + 
@@ -1539,7 +1560,7 @@ public class SandTableExchanger implements Exchanger {
 				"					SUM(IFNULL(last_year_total_qty,0)) last_year_total_qty\r\n" + 
 				"					FROM \r\n" + 
 				"					(SELECT  del.post_person_no,sum(del.deliver_qty) yesterday_deliver_qty #昨天投递量\r\n" + 
-				"					FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -1 DAY)\r\n" + 
+				"					FROM dwr_delivery_detail_t del WHERE del.period_id = '${LAST_DAY}' \r\n" + 
 				"					GROUP BY del.post_person_no) del LEFT OUTER JOIN \r\n" + 
 				"					(SELECT  del.post_person_no,sum(del.deliver_qty) befor_day_deliver_qty  #前天投递量\r\n" + 
 				"					FROM dwr_delivery_detail_t del WHERE del.period_id = ADDDATE(CURDATE(),INTERVAL -2 DAY)\r\n" + 
@@ -1550,12 +1571,12 @@ public class SandTableExchanger implements Exchanger {
 				"					sum(mel.deliver_qty) month_deliver_qty, #本月投递量\r\n" + 
 				"					SUM(mel.current_year_total_qty) year_delivery_qty,  #本年投递量\r\n" + 
 				"					SUM(mel.last_year_total_qty) last_year_total_qty #去年累计投递量\r\n" + 
-				"					FROM dm_delivery_month_t mel WHERE mel.period_id = 202011\r\n" + 
+				"					FROM dm_delivery_month_t mel WHERE mel.period_id = '${CURR_MONTH}' \r\n" + 
 				"					GROUP BY mel.post_person_no) mel\r\n" + 
 				"					ON del.post_person_no = mel.post_person_no\r\n" + 
 				"					LEFT OUTER JOIN \r\n" + 
 				"					(SELECT  lmel.post_person_no,sum(lmel.deliver_qty) last_month_deliver_qty #上月投递量\r\n" + 
-				"					FROM dm_delivery_month_t lmel WHERE lmel.period_id = 202010\r\n" + 
+				"					FROM dm_delivery_month_t lmel WHERE lmel.period_id = '${LAST_MONTH}' \r\n" + 
 				"					GROUP BY lmel.post_person_no) lmel\r\n" + 
 				"					ON del.post_person_no = lmel.post_person_no\r\n" + 
 				"					GROUP BY del.post_person_no) del\r\n" + 
@@ -1571,6 +1592,7 @@ public class SandTableExchanger implements Exchanger {
 				"						st.year_delivery_growth_rate = ifnull(tmp.year_delivery_growth_rate,0)\r\n" + 
 				"					WHERE st.grid_level = '0'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("省级别比率和: " + num);
@@ -1621,6 +1643,7 @@ public class SandTableExchanger implements Exchanger {
 				"			t.industrial_park_act_customer_qty = f.industrial_park_act_customer_qty\r\n" + 
 				"		WHERE t.grid_level = '4'";
 		
+		queryAndInsertSQL = Tools.parse(queryAndInsertSQL, params);
 		queryAndInsertPs = connection.prepareStatement(queryAndInsertSQL);
 		num = queryAndInsertPs.executeUpdate();
 		System.out.println("开发率: " + num);

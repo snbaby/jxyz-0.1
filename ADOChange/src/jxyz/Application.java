@@ -54,6 +54,7 @@ public class Application {
     public static final String CURR_DAY = "curr_day";
     public static final String LAST_DAY = "last_day";
     public static final String CURR_MONTH = "curr_month";
+    public static final String LAST_MONTH = "last_month";
 
     public static final String CURR_MONTH_FIRSTDAY = "curr_month_first_day";
     public static final String CURR_MONTH_LASTDAY = "curr_month_last_day";
@@ -144,6 +145,7 @@ public class Application {
         cale = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
         cale.setTime(targetDate);
         GLOBAL_PARAM.put(CURR_MONTH, TimeUtil.translateDate(cale.getTime(), "yyyyMM")); // 本月
+        GLOBAL_PARAM.put(LAST_MONTH, TimeUtil.translateDate(cale.getTime(), "yyyyMM")); // 上月
         // 计算本月第一天
         cale = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
         cale.setTime(targetDate);
@@ -161,6 +163,7 @@ public class Application {
         cale.add(Calendar.MONTH, -1);
         cale.set(Calendar.DAY_OF_MONTH, 1);
         GLOBAL_PARAM.put(LAST_MONTH_FIRSTDAY, TimeUtil.translateDate(cale.getTime(), "yyyy-MM-dd"));
+        
         // 计算上月同期
         cale = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
         cale.setTime(targetDate);
