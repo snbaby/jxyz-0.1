@@ -3,7 +3,6 @@ package jxyz.exchanger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -255,133 +254,6 @@ public class ResourceExchanger implements Exchanger{
 			}
 			uptown.close();
 			p4.close();
-//			while (rs1.next()) {
-//				
-//				String type = rs1.getString("resources_type");
-//				String market_key = rs1.getString("key_market_code");
-//				if(market_key.equals("校园市场"))
-//				{
-//					System.out.println("");
-//				}
-//				Integer userNum = rs1.getInt("users_qty");
-//				if(userNum == null)
-//				{
-//					userNum = 0;
-//				}
-//				
-//				if(type.contains("学校"))
-//				{
-//					schoolnum++;
-//					school_user_num += userNum;
-//					if(dtype.length() == 0)
-//					{
-//						dtype = "学校";
-//					}
-//				}
-//				if(type.contains("工业园区集群"))
-//				{
-//					gyynum++;
-//					gyy_user_num += userNum;
-//					if(dtype.length() == 0)
-//					{
-//						dtype = "工业园区集群";
-//					}
-//				}
-//				if(type.contains("商业楼宇"))
-//				{
-//					businum++;
-//					busi_user_num += userNum;
-//					if(dtype.length() == 0)
-//					{
-//						dtype = "商业楼宇";
-//					}
-//				}
-//				if(type.contains("住宅小区"))
-//				{
-//					housenum++;
-//					house_user_num += userNum;
-//					if(dtype.length() == 0)
-//					{
-//						dtype = "住宅小区";
-//					}
-//				}	
-//				
-//				PreparedStatement p2 = connection.prepareStatement(
-//						"select * from dwr_jxyz_customer_d  where key_market_code = ? ");
-//				p2.setString(1, market_key);
-//				ResultSet rs2 = p2.executeQuery();
-//				
-//
-//				boolean is_school_cover = false;
-//				boolean is_gyy_cover = false;
-//				boolean is_house_cover = false;
-//				boolean is_business_cover = false;
-//				while (rs2.next()) {
-//					if(type.contains("学校"))
-//					{
-//						school_custom++;
-//					}
-//					if(type.contains("工业园区集群"))
-//					{
-//						gyy_custom++;
-//					}
-//					if(type.contains("商业楼宇"))
-//					{
-//						busi_custom++;
-//					}
-//					if(type.contains("住宅小区"))
-//					{
-//						house_custom++;
-//					}	
-//					
-//					String sender_no = rs2.getString("sender_no");
-//					Date date = rs2.getDate("contract_expiration_time");
-//					if(sender_no != null && date != null && System.currentTimeMillis() < date.getTime())
-//					{
-//						if(type.contains("学校"))
-//						{
-//							is_school_cover = true;
-//							school_dev_custom++;
-//						}
-//						if(type.contains("工业园区集群"))
-//						{
-//							is_gyy_cover = true;
-//							gyy_dev_custom++;
-//						}
-//						if(type.contains("商业楼宇"))
-//						{
-//							is_business_cover = true;
-//							busi_dev_custom++;
-//						}
-//						if(type.contains("住宅小区"))
-//						{
-//							is_house_cover = true;
-//							house_dev_custom++;
-//						}	
-//					}
-//				}
-//				rs2.close();
-//				p2.close();
-//				if(is_school_cover)
-//				{
-//					school_cover++;
-//				}
-//				if(is_gyy_cover)
-//				{
-//					gyy_cover++;
-//				}
-//				if(is_house_cover)
-//				{
-//					house_cover++;
-//				}
-//				if(is_business_cover)
-//				{
-//					busi_cover++;
-//				}				
-//				
-//			}
-//			rs1.close();
-//			p1.close();
 			
 			if(schoolnum > 0) {
 				dtype = "学校";
@@ -395,8 +267,6 @@ public class ResourceExchanger implements Exchanger{
 			
 			System.out.println(dtype + "   " +grid_code + " " + schoolnum + " " + gyynum + " " + businum + " " + housenum);
 		
-
-			
 			//写入看板资源表
 			PreparedStatement write = connection.prepareStatement("insert into jpx_resource_collect_d values(?,?,?,?,?,?,?,?,?,?,?,null,null,null,null,null,?,?,?,?,?,?,?,?,?,?,?,?)");
 			write.setString(1, Tools.createUUID());

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import jxyz.exchanger.BuildingHttpExchanger;
+import jxyz.exchanger.CampusHttpExchanger;
 import jxyz.exchanger.CustomDaliyExchanger;
 import jxyz.exchanger.CustomExchanger;
 import jxyz.exchanger.CustomHttpExchanger;
@@ -23,12 +25,18 @@ import jxyz.exchanger.EmpDaliyExchanger;
 import jxyz.exchanger.EmpExchanger;
 import jxyz.exchanger.EmpInfoExchanger;
 import jxyz.exchanger.EmpMonthExchanger;
+import jxyz.exchanger.EnterpriseContractHttpExchanger;
+import jxyz.exchanger.EnterpriseCustomHttpExchanger;
+import jxyz.exchanger.EnterpriseCustomRelatioHttpExchanger;
+import jxyz.exchanger.EnterpriseHttpExchanger;
+import jxyz.exchanger.EnterpriseInstanceHttpExchanger;
 import jxyz.exchanger.Exchanger;
 import jxyz.exchanger.RegionDaliyExchanger;
 import jxyz.exchanger.RegionMonthExchanger;
 import jxyz.exchanger.ResourceExchanger;
 import jxyz.exchanger.SandTableExchanger;
 import jxyz.exchanger.SanderExchanger;
+import jxyz.exchanger.UptownHttpExchanger;
 import jxyz.utils.TimeUtil;
 
 /**
@@ -189,6 +197,14 @@ public class Application {
         }
 
         List<Exchanger> exchangerList = new ArrayList<Exchanger>();
+        exchangerList.add(new BuildingHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new CampusHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new EnterpriseContractHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new EnterpriseCustomHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new EnterpriseCustomRelatioHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new EnterpriseHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new EnterpriseInstanceHttpExchanger());// 王建邮政地址接口
+        exchangerList.add(new UptownHttpExchanger());// 王建邮政地址接口
         exchangerList.add(new CustomHttpExchanger());// 王建邮政地址接口
         exchangerList.add(new DepartmentExchanger());// 营业部同步
         exchangerList.add(new DeliveryDaliyExchanger());// 添加投递记录转换器
