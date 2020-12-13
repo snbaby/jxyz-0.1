@@ -34,26 +34,44 @@ public class DeliveryDaliyExchanger implements Exchanger {
 		System.out.println("删除: " + num);
 		deletePs.close();
 
-		String querySQL = "SELECT\r\n" + "	DATE_FORMAT( t.`op_time`, '%Y-%m-%d' ) period_id,\r\n"
-				+ "	t.op_erator_no post_person_no,\r\n" + "	t.op_erator_name post_person_name,\r\n"
-				+ "	r.`province_code` receiver_province_no,\r\n" + "	t.op_org_prov_name receiver_province_name,\r\n"
-				+ "	r.`city_code` receiver_city_no,\r\n" + "	r.`city_name` receiver_city_name,\r\n"
-				+ "	IFNULL( r.`county_code`, d.county_code ) receiver_county_no,\r\n"
-				+ "	IFNULL( r.`county_name`, d.county_name ) receiver_county_name,\r\n"
-				+ "	t.`op_org_city` receiver_district_no,\r\n" + "	t.`op_org_code` deliver_org_no,\r\n"
-				+ "	IFNULL( d.dept_name, t.op_org_name ) deliver_org_name,\r\n"
-				+ "	COUNT( t.`trace_no` ) deliver_qty,\r\n" + "	0 yesterday_deliver_qty,\r\n"
-				+ "	SUM( CASE WHEN RIGHT ( t.trace_no, 2 ) IN ( '93', '94' ) THEN 1 ELSE 0 END ) AS court_mail_qty \r\n"
-				+ "FROM\r\n" + "	sdi_jxyz_pkp_trace_message_704_${CURRENT_MONTH} t\r\n"
-				+ "	LEFT OUTER JOIN dwr_jxyz_region_d r ON t.op_org_city = r.region_name\r\n"
-				+ "	LEFT OUTER JOIN dwr_jxyz_department_d d ON t.op_org_code = d.dept_code \r\n" + "WHERE\r\n"
-				+ "	t.op_code = '704' \r\n" + "	AND t.op_org_prov_name = '江西省' \r\n"
-				+ "	AND t.`op_time` >= '${START_DATE}' \r\n" + "	AND t.`op_time` <= '${END_DATE}' \r\n"
-				+ "GROUP BY\r\n" + "	DATE_FORMAT( t.`op_time`, '%Y-%m-%d' ),\r\n" + "	t.op_erator_no,\r\n"
-				+ "	t.op_erator_name,\r\n" + "	r.`province_code`,\r\n" + "	t.op_org_prov_name,\r\n"
-				+ "	r.`city_code`,\r\n" + "	r.`city_name`,\r\n" + "	IFNULL( r.`county_code`, d.county_code ),\r\n"
-				+ "	IFNULL( r.`county_name`, d.county_name ),\r\n" + "	t.`op_org_city`,\r\n"
-				+ "	t.`op_org_code`,\r\n" + "	IFNULL( d.dept_name, t.op_org_name )";
+		String querySQL = "SELECT\r\n" + 
+		"	a.period_id,\r\n" + 
+		"	a.post_person_no,\r\n" + 
+		"	a.deliver_qty,\r\n" + 
+		"	a.yesterday_deliver_qty,\r\n" + 
+		"	a.court_mail_qty,\r\n" + 
+		"	a.op_org_city as receiver_district_no,\r\n" + 
+		"	djed.emp_dept_code as deliver_org_no,\r\n" + 
+		"	djed.emp_dept_name as deliver_org_name,\r\n" + 
+		"	djdd.province_code as receiver_province_no,\r\n" + 
+		"	djdd.province_name as receiver_province_name,\r\n" + 
+		"	djdd.city_code as receiver_city_no,\r\n" + 
+		"	djdd.city_name as receiver_city_name,\r\n" + 
+		"	djdd.county_code as receiver_county_no,\r\n" + 
+		"	djdd.county_name as receiver_county_name,\r\n" + 
+		"	djed.emp_name as post_person_name\r\n" + 
+		"FROM\r\n" + 
+		"	(\r\n" + 
+		"SELECT\r\n" + 
+		"	DATE_FORMAT( t.`op_time`, '%Y-%m-%d' ) period_id,\r\n" + 
+		"	t.op_erator_no post_person_no,\r\n" + 
+		"	COUNT( t.`trace_no` ) deliver_qty,\r\n" + 
+		"	t.op_org_city as op_org_city,\r\n" + 
+		"	0 yesterday_deliver_qty,\r\n" + 
+		"	SUM( CASE WHEN RIGHT ( t.trace_no, 2 ) IN ( '93', '94' ) THEN 1 ELSE 0 END ) AS court_mail_qty \r\n" + 
+		"FROM\r\n" + 
+		"	sdi_jxyz_pkp_trace_message_704_${CURRENT_MONTH} t \r\n" + 
+		"WHERE\r\n" + 
+		"	t.op_code = '704' \r\n" + 
+		"	AND t.op_org_prov_name = '江西省' \r\n" + 
+		"	AND t.`op_time` >= '${START_DATE}' \r\n" + 
+		"	AND t.`op_time` <= '${END_DATE}' \r\n" + 
+		"GROUP BY\r\n" + 
+		"	DATE_FORMAT( t.`op_time`, '%Y-%m-%d' ),\r\n" + 
+		"	t.op_erator_no,\r\n" + 
+		"	t.op_org_city\r\n" + 
+		"	) a left join dwr_jxyz_emp_d djed on a.post_person_no = djed.emp_code \r\n" + 
+		"	left join dwr_jxyz_department_d  djdd on djdd.dept_code = djed.emp_dept_code ";
 		// 替换变量
 		Map<String, String> params2 = new HashMap<String, String>();
 		params2.put("C_YEAR", (String) Application.GLOBAL_PARAM.get(Application.CURR_YEAR));
