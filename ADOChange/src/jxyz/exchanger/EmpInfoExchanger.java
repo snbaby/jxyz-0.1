@@ -21,117 +21,73 @@ public class EmpInfoExchanger implements Exchanger {
 	@Override
 	public void process(Connection connection) throws Exception {
 		String querySQL = "SELECT\n" +
-				"\te.grid_code,\n" +
-				"\te.emp_code,\n" +
-				"\te.emp_name,\n" +
-				"\te.emp_dept_code,\n" +
-				"\te.emp_dept_name,\n" +
-				"\te.emp_section_code,\n" +
-				"\te.emp_section_name,\n" +
-				"\te.emp_working_seniority,\n" +
-				"\te.emp_post,\n" +
-				"\te.emp_tel,\n" +
-				"\te.emp_training_times,\n" +
-				"\te.ado_id,\n" +
-				"\te.hire_time,\n" +
-				"\te.`leavedate`,\n" +
-				"\te.location_longitude,\n" +
-				"\te.location_latitude,\n" +
-				"\tCONCAT( 'POINT(', e.location_longitude, ',', e.location_latitude, ')' ) bundary_coordinate,\n" +
-				"\tIFNULL( ed.collected_qty, 0 ) daily_volume,\n" +
-				"\tIFNULL( em.month_collected_qty, 0 ) monthly_volume,\n" +
-				"\tIFNULL( dt.deliver_qty, 0 ) daily_delivery,\n" +
-				"\tIFNULL( dm.monthly_delivery, 0 ) monthly_delivery \n" +
-				"FROM\n" +
-				"\t(\n" +
-				"\tSELECT\n" +
-				"\t\ttt.post_person_no \n" +
-				"\tFROM\n" +
-				"\t\t(\n" +
-				"\t\tSELECT DISTINCT\n" +
-				"\t\t\t( post_person_no ) AS post_person_no \n" +
-				"\t\tFROM\n" +
-				"\t\t\tdwr_emp_daily_collection_t \n" +
-				"\t\tWHERE\n" +
-				"\t\t\tperiod_id >= ADDDATE( NOW(), INTERVAL - 30 DAY ) UNION\n" +
-				"\t\tSELECT DISTINCT\n" +
-				"\t\t\t( post_person_no ) AS post_person_no \n" +
-				"\t\tFROM\n" +
-				"\t\t\tdwr_delivery_detail_t \n" +
-				"\t\tWHERE\n" +
-				"\t\tperiod_id >= ADDDATE( NOW(), INTERVAL - 30 DAY )) tt \n" +
-				"\t) a\n" +
-				"\tLEFT JOIN dwr_jxyz_emp_d e ON a.post_person_no = e.emp_code\n" +
-				"\tLEFT JOIN (\n" +
-				"\tSELECT\n" +
-				"\t\tt.post_person_no \n" +
-				"\tFROM\n" +
-				"\t\tdm_emp_month_collection_t t \n" +
-				"\tWHERE\n" +
-				"\t\tt.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 30 DAY ), '%Y%m' ) \n" +
-				"\tGROUP BY\n" +
-				"\t\tt.post_person_no \n" +
-				"\t) km ON e.`emp_code` = km.`post_person_no`\n" +
-				"\tLEFT JOIN (\n" +
-				"\tSELECT\n" +
-				"\t\ted.post_person_no,\n" +
-				"\t\tSUM( ed.collected_qty ) collected_qty \n" +
-				"\tFROM\n" +
-				"\t\t`dwr_emp_daily_collection_t` ed \n" +
-				"\tWHERE\n" +
-				"\t\ted.period_id = ADDDATE( CURDATE( ), INTERVAL - 1 DAY ) \n" +
-				"\tGROUP BY\n" +
-				"\t\ted.post_person_no \n" +
-				"\t) ed ON e.`emp_code` = ed.`post_person_no`\n" +
-				"\tLEFT JOIN (\n" +
-				"\tSELECT\n" +
-				"\t\tt.post_person_no,\n" +
-				"\t\tSUM( t.collected_qty ) month_collected_qty \n" +
-				"\tFROM\n" +
-				"\t\tdm_emp_month_collection_t t \n" +
-				"\tWHERE\n" +
-				"\t\tt.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \n" +
-				"\tGROUP BY\n" +
-				"\t\tt.post_person_no \n" +
-				"\t) em ON e.`emp_code` = em.`post_person_no`\n" +
-				"\tLEFT JOIN (\n" +
-				"\tSELECT\n" +
-				"\t\tt.post_person_no,\n" +
-				"\t\tSUM( deliver_qty ) deliver_qty \n" +
-				"\tFROM\n" +
-				"\t\t(\n" +
-				"\t\tSELECT\n" +
-				"\t\t\tt.post_person_no,\n" +
-				"\t\t\tSUM( t.deliver_qty ) deliver_qty \n" +
-				"\t\tFROM\n" +
-				"\t\t\tdwr_delivery_detail_t t \n" +
-				"\t\tWHERE\n" +
-				"\t\t\tt.period_id = ADDDATE( CURDATE( ), INTERVAL - 1 DAY ) \n" +
-				"\t\tGROUP BY\n" +
-				"\t\t\tt.post_person_no \n" +
-				"\t\t) t \n" +
-				"\tGROUP BY\n" +
-				"\t\tt.post_person_no \n" +
-				"\t) dt ON e.`emp_code` = dt.post_person_no\n" +
-				"\tLEFT JOIN (\n" +
-				"\tSELECT\n" +
-				"\t\tt.post_person_no,\n" +
-				"\t\tSUM( monthly_delivery ) monthly_delivery \n" +
-				"\tFROM\n" +
-				"\t\t(\n" +
-				"\t\tSELECT\n" +
-				"\t\t\tt.post_person_no,\n" +
-				"\t\t\tSUM( t.deliver_qty ) monthly_delivery \n" +
-				"\t\tFROM\n" +
-				"\t\t\tdm_delivery_month_t t \n" +
-				"\t\tWHERE\n" +
-				"\t\t\tt.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \n" +
-				"\t\tGROUP BY\n" +
-				"\t\t\tt.post_person_no \n" +
-				"\t\t) t \n" +
-				"\tGROUP BY\n" +
-				"\tt.post_person_no \n" +
-				"\t) dm ON e.`emp_code` = dm.post_person_no";
+                "\te.grid_code,\n" +
+                "\te.emp_code,\n" +
+                "\te.emp_name,\n" +
+                "\te.emp_dept_code,\n" +
+                "\te.emp_dept_name,\n" +
+                "\te.emp_section_code,\n" +
+                "\te.emp_section_name,\n" +
+                "\te.emp_working_seniority,\n" +
+                "\te.emp_post,\n" +
+                "\te.emp_tel,\n" +
+                "\te.emp_training_times,\n" +
+                "\te.ado_id,\n" +
+                "\te.hire_time,\n" +
+                "\te.`leavedate`,\n" +
+                "\te.location_longitude,\n" +
+                "\te.location_latitude,\n" +
+                "\tCONCAT( 'POINT(', e.location_longitude, ',', e.location_latitude, ')' ) bundary_coordinate,\n" +
+                "\tIFNULL( ed.collected_qty, 0 ) daily_volume,\n" +
+                "\tIFNULL( em.month_collected_qty, 0 ) monthly_volume\n" +
+                "FROM\n" +
+                "\t(\n" +
+                "\tSELECT\n" +
+                "\t\ttt.post_person_no \n" +
+                "\tFROM\n" +
+                "\t\t(\n" +
+                "\t\tSELECT DISTINCT\n" +
+                "\t\t\t( post_person_no ) AS post_person_no \n" +
+                "\t\tFROM\n" +
+                "\t\t\tdwr_emp_daily_collection_t \n" +
+                "\t\tWHERE\n" +
+                "\t\t\tperiod_id >= ADDDATE( NOW(), INTERVAL - 30 DAY ) \n" +
+                "\t\t) tt \n" +
+                "\t) a\n" +
+                "\tLEFT JOIN dwr_jxyz_emp_d e ON a.post_person_no = e.emp_code\n" +
+                "\tLEFT JOIN (\n" +
+                "\tSELECT\n" +
+                "\t\tt.post_person_no \n" +
+                "\tFROM\n" +
+                "\t\tdm_emp_month_collection_t t \n" +
+                "\tWHERE\n" +
+                "\t\tt.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 30 DAY ), '%Y%m' ) \n" +
+                "\tGROUP BY\n" +
+                "\t\tt.post_person_no \n" +
+                "\t) km ON e.`emp_code` = km.`post_person_no`\n" +
+                "\tLEFT JOIN (\n" +
+                "\tSELECT\n" +
+                "\t\ted.post_person_no,\n" +
+                "\t\tSUM( ed.collected_qty ) collected_qty \n" +
+                "\tFROM\n" +
+                "\t\t`dwr_emp_daily_collection_t` ed \n" +
+                "\tWHERE\n" +
+                "\t\ted.period_id = ADDDATE( CURDATE( ), INTERVAL - 1 DAY ) \n" +
+                "\tGROUP BY\n" +
+                "\t\ted.post_person_no \n" +
+                "\t) ed ON e.`emp_code` = ed.`post_person_no`\n" +
+                "\t\n" +
+                "\tLEFT JOIN (\n" +
+                "\tSELECT\n" +
+                "\t\tt.post_person_no,\n" +
+                "\t\tSUM( t.collected_qty ) month_collected_qty \n" +
+                "\tFROM\n" +
+                "\t\tdm_emp_month_collection_t t \n" +
+                "\tWHERE\n" +
+                "\t\tt.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \n" +
+                "\tGROUP BY\n" +
+                "\t\tt.post_person_no \n" +
+                "\t) em ON e.`emp_code` = em.`post_person_no`";
 		
 		PreparedStatement p = connection.prepareStatement(querySQL);
 		ResultSet rs = p.executeQuery();
