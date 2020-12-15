@@ -21,104 +21,99 @@ public class EmpInfoExchanger implements Exchanger {
 	@Override
 	public void process(Connection connection) throws Exception {
 		String querySQL = "SELECT\r\n" + 
-				"	e.grid_code,\r\n" + 
-				"	e.emp_code,\r\n" + 
-				"	e.emp_name,\r\n" + 
-				"	e.emp_dept_code,\r\n" + 
-				"	e.emp_dept_name,\r\n" + 
-				"	e.emp_section_code,\r\n" + 
-				"	e.emp_section_name,\r\n" + 
-				"	e.emp_working_seniority,\r\n" + 
-				"	e.emp_post,\r\n" + 
-				"	e.emp_tel,\r\n" + 
-				"	e.emp_training_times,\r\n" + 
-				"	e.ado_id,\r\n" + 
-				"	e.hire_time,\r\n" + 
-				"	e.`leavedate`,\r\n" + 
-				"	e.location_longitude,\r\n" + 
-				"	e.location_latitude,\r\n" + 
-				"	CONCAT( 'POINT(', e.location_longitude, ',', e.location_latitude, ')' ) bundary_coordinate,\r\n" + 
-				"	IFNULL( ed.collected_qty, 0 ) daily_volume,\r\n" + 
-				"	IFNULL( em.month_collected_qty, 0 ) monthly_volume,\r\n" + 
-				"	IFNULL( dt.deliver_qty, 0 ) daily_delivery,\r\n" + 
-				"	IFNULL( dm.monthly_delivery, 0 ) monthly_delivery \r\n" + 
-				"FROM\r\n" + 
-				"	dwr_jxyz_emp_d e #最近30天发生业务\r\n" + 
-				"	LEFT JOIN (\r\n" + 
-				"SELECT\r\n" + 
-				"	t.post_person_no\r\n" + 
-				"FROM\r\n" + 
-				"	dm_emp_month_collection_t t \r\n" + 
-				"WHERE\r\n" + 
-				"	t.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 30 DAY ), '%Y%m' ) \r\n" + 
-				"GROUP BY\r\n" + 
-				"	t.post_person_no \r\n" + 
-				"	) km ON e.`emp_code` = km.`post_person_no` \r\n" + 
-				"	#日拦收\r\n" + 
-				"	LEFT JOIN (\r\n" + 
-				"	SELECT\r\n" + 
+				"		e.grid_code,\r\n" + 
+				"		e.emp_code,\r\n" + 
+				"		e.emp_name,\r\n" + 
+				"		e.emp_dept_code,\r\n" + 
+				"		e.emp_dept_name,\r\n" + 
+				"		e.emp_section_code,\r\n" + 
+				"		e.emp_section_name,\r\n" + 
+				"		e.emp_working_seniority,\r\n" + 
+				"		e.emp_post,\r\n" + 
+				"		e.emp_tel,\r\n" + 
+				"		e.emp_training_times,\r\n" + 
+				"		e.ado_id,\r\n" + 
+				"		e.hire_time,\r\n" + 
+				"		e.`leavedate`,\r\n" + 
+				"		e.location_longitude,\r\n" + 
+				"		e.location_latitude,\r\n" + 
+				"		CONCAT( 'POINT(', e.location_longitude, ',', e.location_latitude, ')' ) bundary_coordinate,\r\n" + 
+				"		IFNULL( ed.collected_qty, 0 ) daily_volume,\r\n" + 
+				"		IFNULL( em.month_collected_qty, 0 ) monthly_volume,\r\n" + 
+				"		IFNULL( dd.deliver_qty, 0 ) daily_delivery,\r\n" + 
+				"		IFNULL( dm.deliver_qty, 0 ) monthly_delivery\r\n" + 
+				"		FROM\r\n" + 
+				"		(\r\n" + 
+				"		SELECT\r\n" + 
+				"		tt.post_person_no \r\n" + 
+				"		FROM\r\n" + 
+				"		(\r\n" + 
+				"		SELECT DISTINCT\r\n" + 
+				"		( post_person_no ) AS post_person_no \r\n" + 
+				"		FROM\r\n" + 
+				"		dwr_emp_daily_collection_t \r\n" + 
+				"		WHERE\r\n" + 
+				"		period_id >= ADDDATE( NOW(), INTERVAL - 30 DAY ) \r\n" + 
+				"		) tt \r\n" + 
+				"		) a\r\n" + 
+				"		LEFT JOIN dwr_jxyz_emp_d e ON a.post_person_no = e.emp_code\r\n" + 
+				"		LEFT JOIN (\r\n" + 
+				"		SELECT\r\n" + 
+				"		t.post_person_no \r\n" + 
+				"		FROM\r\n" + 
+				"		dm_emp_month_collection_t t \r\n" + 
+				"		WHERE\r\n" + 
+				"		t.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 30 DAY ), '%Y%m' ) \r\n" + 
+				"		GROUP BY\r\n" + 
+				"		t.post_person_no \r\n" + 
+				"		) km ON e.`emp_code` = km.`post_person_no`\r\n" + 
+				"		LEFT JOIN (\r\n" + 
+				"		SELECT\r\n" + 
 				"		ed.post_person_no,\r\n" + 
 				"		SUM( ed.collected_qty ) collected_qty\r\n" + 
-				"	FROM\r\n" + 
+				"		FROM\r\n" + 
 				"		`dwr_emp_daily_collection_t` ed \r\n" + 
-				"	WHERE\r\n" + 
+				"		WHERE\r\n" + 
 				"		ed.period_id = ADDDATE( CURDATE( ), INTERVAL - 1 DAY ) \r\n" + 
-				"	GROUP BY\r\n" + 
+				"		GROUP BY\r\n" + 
 				"		ed.post_person_no \r\n" + 
-				"	) ed ON e.`emp_code` = ed.`post_person_no` \r\n" + 
-				"	#月拦收\r\n" + 
-				"	LEFT JOIN (\r\n" + 
-				"	SELECT\r\n" + 
+				"		) ed ON e.`emp_code` = ed.`post_person_no`\r\n" + 
+				"		\r\n" + 
+				"		LEFT JOIN (\r\n" + 
+				"		SELECT\r\n" + 
+				"		ed.post_person_no,\r\n" + 
+				"		SUM( ed.deliver_qty ) deliver_qty\r\n" + 
+				"		FROM\r\n" + 
+				"		`dwr_delivery_detail_t` ed \r\n" + 
+				"		WHERE\r\n" + 
+				"		ed.period_id = ADDDATE( CURDATE(), INTERVAL - 1 DAY ) \r\n" + 
+				"		GROUP BY\r\n" + 
+				"		ed.post_person_no \r\n" + 
+				"		) dd ON e.`emp_code` = dd.`post_person_no`\r\n" + 
+				"		\r\n" + 
+				"		LEFT JOIN (\r\n" + 
+				"		SELECT\r\n" + 
 				"		t.post_person_no,\r\n" + 
 				"		SUM( t.collected_qty ) month_collected_qty\r\n" + 
-				"	FROM\r\n" + 
+				"		FROM\r\n" + 
 				"		dm_emp_month_collection_t t \r\n" + 
-				"	WHERE\r\n" + 
+				"		WHERE\r\n" + 
 				"		t.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \r\n" + 
-				"	GROUP BY\r\n" + 
-				"		t.post_person_no \r\n" + 
-				"	) em ON e.`emp_code` = em.`post_person_no` \r\n" + 
-				"	#日投递\r\n" + 
-				"	LEFT JOIN (\r\n" + 
-				"	SELECT\r\n" + 
-				"		t.post_person_no,\r\n" + 
-				"		SUM( deliver_qty ) deliver_qty\r\n" + 
-				"	FROM\r\n" + 
-				"		(\r\n" + 
-				"		SELECT\r\n" + 
-				"			t.post_person_no,\r\n" + 
-				"			SUM( t.deliver_qty ) deliver_qty \r\n" + 
-				"		FROM\r\n" + 
-				"			dwr_delivery_detail_t t \r\n" + 
-				"		WHERE\r\n" + 
-				"			t.period_id = ADDDATE( CURDATE( ), INTERVAL - 1 DAY ) \r\n" + 
 				"		GROUP BY\r\n" + 
-				"			t.post_person_no \r\n" + 
-				"		) t \r\n" + 
-				"	GROUP BY\r\n" + 
 				"		t.post_person_no \r\n" + 
-				"	) dt ON e.`emp_code` = dt.post_person_no \r\n" + 
-				"	#月投递\r\n" + 
-				"	LEFT JOIN (\r\n" + 
-				"	SELECT\r\n" + 
-				"		t.post_person_no,\r\n" + 
-				"		SUM( monthly_delivery ) monthly_delivery\r\n" + 
-				"	FROM\r\n" + 
-				"		(\r\n" + 
+				"		) em ON e.`emp_code` = em.`post_person_no`\r\n" + 
+				"		LEFT JOIN (\r\n" + 
 				"		SELECT\r\n" + 
-				"			t.post_person_no,\r\n" + 
-				"			SUM( t.deliver_qty ) monthly_delivery \r\n" + 
+				"		ed.post_person_no,\r\n" + 
+				"		SUM( ed.deliver_qty ) deliver_qty\r\n" + 
 				"		FROM\r\n" + 
-				"			dm_delivery_month_t t \r\n" + 
+				"		`dm_delivery_month_t` ed \r\n" + 
 				"		WHERE\r\n" + 
-				"			t.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \r\n" + 
+				"		ed.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \r\n" + 
 				"		GROUP BY\r\n" + 
-				"			t.post_person_no \r\n" + 
-				"		) t \r\n" + 
-				"	GROUP BY\r\n" + 
-				"	t.post_person_no \r\n" + 
-				") dm ON e.`emp_code` = dm.post_person_no";
-		
+				"		ed.post_person_no \r\n" + 
+				"		) dm ON e.`emp_code` = dm.`post_person_no` ";
+		System.out.println(querySQL);
 		PreparedStatement p = connection.prepareStatement(querySQL);
 		ResultSet rs = p.executeQuery();
 		int count = 0;
@@ -178,17 +173,17 @@ public class EmpInfoExchanger implements Exchanger {
 			write.executeUpdate();
 			count++;
 		}
-		
+
+		System.out.println("插入dm_jxyz_emp_info_t表=======》" + count + "条");
+
 		rs.close();
 		p.close();
 		write.close();
-		 Map<String,String> transferMap = new HashMap<>();
-	        transferMap.put("tableName", "dm_jxyz_emp_info_t");
-			String selectSql = "select * from dm_jxyz_emp_info_t ";
-			transferMap.put("selectSql", selectSql);
-			transferMap.put("prefix", "TRUNCATE dm_jxyz_emp_info_t");
-			HttpUtil.upload(transferMap);
-		
+	    Map<String,String> transferMap = new HashMap<>();
+        transferMap.put("tableName", "dm_jxyz_emp_info_t");
+		String selectSql = "select * from dm_jxyz_emp_info_t ";
+		transferMap.put("selectSql", selectSql);
+		transferMap.put("prefix", "TRUNCATE dm_jxyz_emp_info_t");
+		HttpUtil.upload(transferMap);
 	}
-
 }
