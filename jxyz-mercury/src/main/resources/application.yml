@@ -1,0 +1,25 @@
+logging:
+  level:
+    root: INFO
+  file:
+    path: log
+server:
+  port: 10001
+spring:
+  jackson:
+    generator:
+      write-numbers-as-strings: true
+  application:
+    name: jxyz-mercury
+  rabbitmq:
+    host: 161.117.39.189
+    port: 5672
+    username: jxyz_ado
+    password: HdIdh2_J4SMId2
+    
+jxyz:
+  rabbitmq:
+    exchange: fanout-exchange-sun
+    queue: sun.mercury
+    err-exchange: fanout-exchange-sun-mercury-err
+    err-queue: sun.mercury.err
