@@ -75,6 +75,7 @@ function insertData(list,total,key,toFix,text){
             }, 0);
             if(first){
               first.value = Math.round(parseFloat(total-totalNum) * toFix) / toFix 
+              first.value = first.value < 0 ? 0 : first.value 
               const sql1 = `INSERT INTO t_grid_statistics(grid_code, level, type, `+'`key`' +`, value, `+'`group`' +`, remark, statistics_time, create_user, create_date, modify_user, modify_date) VALUES ( '${first.code}', '${first.level}', 'mainDownLeftCount', '${key}', '${first.value}', NULL, NULL, '${currDay}', 'system', NOW(), 'system', NOW());`;
               console.log(sql1)
               if (first.children){
