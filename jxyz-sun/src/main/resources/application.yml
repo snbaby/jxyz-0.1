@@ -16,6 +16,20 @@ spring:
     port: 5672
     username: jxyz_ado
     password: HdIdh2_J4SMId2
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.36.32.115:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: 1qaz@WSX
+    hikari:
+      connection-timeout: 15000
+      auto-commit: true
+      max-lifetime: 600000
+      pool-name: DatebookHikariCP
+      minimum-idle: 5
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+      maximum-pool-size: 15
     
 jxyz:
   rabbitmq:

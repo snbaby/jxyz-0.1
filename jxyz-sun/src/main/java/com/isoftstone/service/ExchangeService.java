@@ -18,4 +18,5 @@ public class ExchangeService {
 	public void exchangeSend(JSONObject messageJsb) {
         this.rabbitTemplate.convertAndSend(exchange,"", messageJsb);
     }
+
 }
