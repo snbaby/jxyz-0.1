@@ -30,7 +30,7 @@ spring:
       connection-test-query: SELECT 1
       idle-timeout: 30000
       maximum-pool-size: 15
-    
+
 jxyz:
   rabbitmq:
     exchange: fanout-exchange-sun
