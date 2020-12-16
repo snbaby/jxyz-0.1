@@ -7,17 +7,13 @@ import java.util.Date;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.isoftstone.service.ExchangeErrorService;
 import com.rabbitmq.client.Channel;
 
 @Component
 public class QueueComponent {
-	@Autowired
-	private ExchangeErrorService exchangeErrorService;
 
 	@RabbitListener(queues = "${jxyz.rabbitmq.queue}")
 	@RabbitHandler
@@ -32,7 +28,6 @@ public class QueueComponent {
 			e.printStackTrace();
 			// 丢弃这条消息
 			channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
-			exchangeErrorService.errExchangeSend(messageJsb);
 			System.out.println("receiver fail");
 		}
 	}

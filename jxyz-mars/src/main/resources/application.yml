@@ -16,6 +16,20 @@ spring:
     port: 5672
     username: jxyz_ado
     password: HdIdh2_J4SMId2
+    template:
+      # 必须设置成true 消息路由失败通知监听者，而不是将消息丢弃
+      mandatory: true
+    listener:
+      simple:
+        # 每次从RabbitMQ获取的消息数量
+        prefetch: 1
+        default-requeue-rejected: false
+        # 每个队列启动的消费者数量
+        concurrency: 1
+        # 每个队列最大的消费者数量
+        max-concurrency: 1
+        # 签收模式为手动签收-那么需要在代码中手动ACK
+        acknowledge-mode: manual
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://121.36.32.115:3306/jxyz?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
@@ -54,5 +68,5 @@ jxyz:
   rabbitmq:
     exchange: fanout-exchange-sun
     queue: sun.mars
-    err-exchange: fanout-exchange-sun-mars-err
-    err-queue: sun.mars.err
+    dead-exchange: fanout-exchange-sun-mars-dead
+    dead-queue: sun.mars.dead

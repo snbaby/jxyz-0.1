@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -16,36 +17,26 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class QueueConfig {
-	@Value("${jxyz.rabbitmq.exchange}")
-	private String exchange;
-
-	@Value("${jxyz.rabbitmq.err-exchange}")
-	private String errExchange;
-
-	@Value("${jxyz.rabbitmq.queue}")
-	private String queue;
-
-	@Value("${jxyz.rabbitmq.err-queue}")
-	private String errQueue;
 
 	@Bean
-	FanoutExchange exchange() {
+	FanoutExchange exchange(@Value("${jxyz.rabbitmq.exchange}") String exchange) {
 		return new FanoutExchange(exchange);
 	}
 
 	@Bean
-	FanoutExchange errExchange() {
-		return new FanoutExchange(errExchange);
+	FanoutExchange deadExchange(@Value("${jxyz.rabbitmq.dead-exchange}") String deadExchange) {
+		return new FanoutExchange(deadExchange);
 	}
 
 	@Bean
-	public Queue errQueue() {
-		return new Queue(errQueue);
+	public Queue deadQueue(@Value("${jxyz.rabbitmq.dead-queue}") String deadQueue) {
+		return new Queue(deadQueue);
 	}
 
 	@Bean
-	public Queue queue() {
-		return new Queue(queue);
+	public Queue queue(@Value("${jxyz.rabbitmq.queue}") String queue,
+			@Value("${jxyz.rabbitmq.dead-exchange}") String deadExchange) {
+		return QueueBuilder.durable(queue).withArgument("x-dead-letter-exchange", deadExchange).build();
 	}
 
 	@Bean
@@ -54,7 +45,7 @@ public class QueueConfig {
 	}
 
 	@Bean
-	Binding bindingErrExchange(Queue errQueue, FanoutExchange errExchange) {
-		return BindingBuilder.bind(errQueue).to(errExchange);
+	Binding bindingDeadExchange(Queue deadQueue, FanoutExchange deadExchange) {
+		return BindingBuilder.bind(deadQueue).to(deadExchange);
 	}
 }
