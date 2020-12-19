@@ -445,7 +445,9 @@ public class CustomMonth {
 	
 	public String getGroupName() {
 		return getPost_org_no() + "-" + getSender_country_no() + "-" + getSender_province_no() + "-"
-				+ getSender_city_no() + "-" + getSender_county_no() + "-" + getSender_district_no() + "-" + getPeriod_id() + "-" + getSender_id() + "-" + getSender_warehouse_id() + "-" + getPeriod_id();
+				+ getSender_city_no() + "-" + getSender_county_no() + "-" + getSender_district_no() + "-"
+				+ getPeriod_id() + "-" + getSender_id() + "-" + getSender_warehouse_id() + "-"
+				+ getPeriod_id() + "-" + getCustomer_send_time_type();
 	}
 	
 	
