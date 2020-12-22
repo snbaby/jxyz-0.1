@@ -124,7 +124,7 @@ public class SalaryAnalysisService {
 				log.error("投递未匹配上规则：trace_no:{}", trace_no);
 			}
 		}
-		String baseSql = "select waybill_no,product_reach_area,contents_attribute,sender_type,postage_total,postage_standard,postage_paid,postage_other,discount_rate from sdi_jxyz_pkp_waybill_base_"
+		String baseSql = "select waybill_no,base_product_no,product_reach_area,contents_attribute,sender_type,postage_total,postage_standard,postage_paid,postage_other,discount_rate from sdi_jxyz_pkp_waybill_base_"
 				+ yearDf.format(new Date())
 				+ " where biz_occur_date >= ? and post_person_no = ? and postage_paid != 0 ";
 		List<Map<String, Object>> baseMapList = dbContext.qryMapList(baseSql,
@@ -141,12 +141,15 @@ public class SalaryAnalysisService {
 			}
 			String loose_items = baseMap.getOrDefault("sender_type", "0").equals("0") ? "1" : "0";// 是否为散件,'1'散户，'0'，协议客户
 			String type = "";
-			if (baseMap.getOrDefault("product_reach_area", "").equals("5")) { // 国际标快
+			String base_product_no = (String) baseMap.getOrDefault("base_product_no", "");
+			if (("21210".equals(base_product_no) || "22210".equals(base_product_no) || "21412".equals(base_product_no))) { // 国际标快
 				type = "4";// 国际标快
-			} else if (baseMap.getOrDefault("contents_attribute", "").equals("4")) { // 包裹
+			} else if ("11312".equals(base_product_no)) { // 包裹
 				type = "3";// 包裹
-			} else {
+			} else if("11210".equals(base_product_no)){
 				type = "2";// 标快
+			} else {
+				continue; // 其他则不计算
 			}
 
 			boolean is_matching = false;

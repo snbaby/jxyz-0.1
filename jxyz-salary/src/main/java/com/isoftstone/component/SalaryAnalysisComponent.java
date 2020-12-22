@@ -23,7 +23,7 @@ public class SalaryAnalysisComponent {
 	@Autowired
 	private EtlService etlService;
 
-	@Scheduled(initialDelay = 2000, fixedDelay = 2*60*60*1000)
+	@Scheduled(initialDelay = 2000, fixedDelay = 8*60*60*1000)
 	public void run3() throws InterruptedException {
 		log.info("start：------------------------------");
 		etlService.uploadTEmolumentResult();
