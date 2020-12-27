@@ -65,7 +65,6 @@ public class ResourceExchanger implements Exchanger{
 			int house_user_num = 0;
 			int busi_user_num = 0;
 			
-
 			String dtype = "";
 			
 			PreparedStatement p2 = connection.prepareStatement(

@@ -112,7 +112,7 @@ public class EmpInfoExchanger implements Exchanger {
 				"		ed.period_id = DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 0 MONTH ), '%Y%m' ) \r\n" + 
 				"		GROUP BY\r\n" + 
 				"		ed.post_person_no \r\n" + 
-				"		) dm ON e.`emp_code` = dm.`post_person_no` ";
+				"		) dm ON e.`emp_code` = dm.`post_person_no` where  e.emp_status = '01' ";
 		System.out.println(querySQL);
 		PreparedStatement p = connection.prepareStatement(querySQL);
 		ResultSet rs = p.executeQuery();
