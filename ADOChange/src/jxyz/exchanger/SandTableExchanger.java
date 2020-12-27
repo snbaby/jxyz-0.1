@@ -1135,10 +1135,11 @@ public class SandTableExchanger implements Exchanger {
 				"		GROUP BY mt.post_person_no) mt\r\n" + 
 				"		ON mt.post_person_no = t.post_person_no\r\n" + 
 				"		LEFT OUTER JOIN \r\n" + 
-				"		(SELECT lmt.post_person_no ,sum(lmt.standard_express_collection)  last_month_collected_qty, #本月揽收量\r\n" + 
-				"		SUM(lmt.standard_express_salary)  last_month_salary #本月收入\r\n" + 
-				"		FROM dm_emp_month_collection_t lmt WHERE lmt.period_id =DATE_FORMAT(ADDDATE(NOW(),INTERVAL -1 MONTH),'%Y%m')\r\n" + 
-				"		GROUP BY lmt.post_person_no) lmt\r\n" + 
+				"		(SELECT lmt.post_person_no, sum( lmt.standard_express_collection ) last_month_collected_qty, #上月揽收量\n" +
+				"		SUM( lmt.standard_express_salary ) last_month_salary #上月收入\n" +
+				"		FROM dwr_emp_daily_collection_t lmt  WHERE lmt.period_id >= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%01' )  \n" +
+				"		and lmt.period_id <= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%d' )  \n" +
+				"		GROUP BY lmt.post_person_no) lmt\r\n" +
 				"		ON lmt.post_person_no = t.post_person_no\r\n" + 
 				"		LEFT OUTER JOIN \r\n" + 
 				"		(SELECT del.post_person_no,SUM(ifnull(yesterday_deliver_qty,0)) yesterday_deliver_qty,\r\n" + 
@@ -1239,10 +1240,11 @@ public class SandTableExchanger implements Exchanger {
 				"			GROUP BY mt.post_person_no) mt\r\n" + 
 				"			ON mt.post_person_no = t.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
-				"			(SELECT lmt.post_person_no ,sum(lmt.standard_express_collection)  last_month_collected_qty, #本月揽收量\r\n" + 
-				"			SUM(lmt.standard_express_salary)  last_month_salary #本月收入\r\n" + 
-				"			FROM dm_emp_month_collection_t lmt WHERE lmt.period_id =DATE_FORMAT(ADDDATE(NOW(),INTERVAL -1 MONTH),'%Y%m')\r\n" + 
-				"			GROUP BY lmt.post_person_no) lmt\r\n" + 
+				"			(SELECT lmt.post_person_no, sum( lmt.standard_express_collection ) last_month_collected_qty, #上月揽收量\n" +
+				"			SUM( lmt.standard_express_salary ) last_month_salary #上月收入\n" +
+				"			FROM dwr_emp_daily_collection_t lmt  WHERE lmt.period_id >= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%01' )  \n" +
+				"			and lmt.period_id <= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%d' )  \n" +
+				"			GROUP BY lmt.post_person_no) lmt\r\n" +
 				"			ON lmt.post_person_no = t.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
 				"			(SELECT del.post_person_no,SUM(ifnull(yesterday_deliver_qty,0)) yesterday_deliver_qty,\r\n" + 
@@ -1341,10 +1343,11 @@ public class SandTableExchanger implements Exchanger {
 				"			GROUP BY mt.post_person_no) mt\r\n" + 
 				"			ON mt.post_person_no = t.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
-				"			(SELECT lmt.post_person_no ,sum(lmt.standard_express_collection)  last_month_collected_qty, #本月揽收量\r\n" + 
-				"			SUM(lmt.standard_express_salary)  last_month_salary #本月收入\r\n" + 
-				"			FROM dm_emp_month_collection_t lmt WHERE lmt.period_id =DATE_FORMAT(ADDDATE(NOW(),INTERVAL -1 MONTH),'%Y%m')\r\n" + 
-				"			GROUP BY lmt.post_person_no) lmt\r\n" + 
+				"			(SELECT lmt.post_person_no, sum( lmt.standard_express_collection ) last_month_collected_qty, #上月揽收量\n" +
+				"			SUM( lmt.standard_express_salary ) last_month_salary #上月收入\n" +
+				"			FROM dwr_emp_daily_collection_t lmt  WHERE lmt.period_id >= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%01' )  \n" +
+				"			and lmt.period_id <= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%d' )  \n" +
+				"			GROUP BY lmt.post_person_no) lmt\r\n" +
 				"			ON lmt.post_person_no = t.post_person_no\r\n" + 
 				"			LEFT OUTER JOIN \r\n" + 
 				"			(SELECT del.post_person_no,SUM(ifnull(yesterday_deliver_qty,0)) yesterday_deliver_qty,\r\n" + 
@@ -1443,10 +1446,11 @@ public class SandTableExchanger implements Exchanger {
 				"				GROUP BY mt.post_person_no) mt\r\n" + 
 				"				ON mt.post_person_no = t.post_person_no\r\n" + 
 				"				LEFT OUTER JOIN \r\n" + 
-				"				(SELECT lmt.post_person_no ,sum(lmt.standard_express_collection)  last_month_collected_qty, #本月揽收量\r\n" + 
-				"				SUM(lmt.standard_express_salary)  last_month_salary #本月收入\r\n" + 
-				"				FROM dm_emp_month_collection_t lmt WHERE lmt.period_id =DATE_FORMAT(ADDDATE(NOW(),INTERVAL -1 MONTH),'%Y%m')\r\n" + 
-				"				GROUP BY lmt.post_person_no) lmt\r\n" + 
+				"				(SELECT lmt.post_person_no, sum( lmt.standard_express_collection ) last_month_collected_qty, #上月揽收量\n" +
+				"				SUM( lmt.standard_express_salary ) last_month_salary #上月收入\n" +
+				"				FROM dwr_emp_daily_collection_t lmt  WHERE lmt.period_id >= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%01' )  \n" +
+				"				and lmt.period_id <= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%d' )  \n" +
+				"				GROUP BY lmt.post_person_no) lmt\r\n" +
 				"				ON lmt.post_person_no = t.post_person_no\r\n" + 
 				"				LEFT OUTER JOIN \r\n" + 
 				"				(SELECT del.post_person_no,SUM(ifnull(yesterday_deliver_qty,0)) yesterday_deliver_qty,\r\n" + 
@@ -1546,10 +1550,11 @@ public class SandTableExchanger implements Exchanger {
 				"					GROUP BY mt.post_person_no) mt\r\n" + 
 				"					ON mt.post_person_no = t.post_person_no\r\n" + 
 				"					LEFT OUTER JOIN \r\n" + 
-				"					(SELECT lmt.post_person_no ,sum(lmt.standard_express_collection)  last_month_collected_qty, #本月揽收量\r\n" + 
-				"					SUM(lmt.standard_express_salary)  last_month_salary #本月收入\r\n" + 
-				"					FROM dm_emp_month_collection_t lmt WHERE lmt.period_id =DATE_FORMAT(ADDDATE(NOW(),INTERVAL -1 MONTH),'%Y%m')\r\n" + 
-				"					GROUP BY lmt.post_person_no) lmt\r\n" + 
+				"					(SELECT lmt.post_person_no, sum( lmt.standard_express_collection ) last_month_collected_qty, #上月揽收量\n" +
+				"					SUM( lmt.standard_express_salary ) last_month_salary #上月收入\n" +
+				"					FROM dwr_emp_daily_collection_t lmt  WHERE lmt.period_id >= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%01' )  \n" +
+				"					and lmt.period_id <= DATE_FORMAT( ADDDATE( NOW( ), INTERVAL - 1 MONTH ), '%Y-%m-%d' )  \n" +
+				"					GROUP BY lmt.post_person_no) lmt\r\n" +
 				"					ON lmt.post_person_no = t.post_person_no\r\n" + 
 				"					LEFT OUTER JOIN \r\n" + 
 				"					(SELECT del.post_person_no,SUM(ifnull(yesterday_deliver_qty,0)) yesterday_deliver_qty,\r\n" + 
