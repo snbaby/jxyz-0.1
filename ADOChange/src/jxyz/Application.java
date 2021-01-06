@@ -97,22 +97,31 @@ public class Application {
                 "jdbc:mysql://%s/%s?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai",
                 DATABASE_IP, DATABASE_DB), DATABASE_USER, DATABASE_PASS);
         long startTime = System.currentTimeMillis();
-
+      
+      Date targetDate = null;
+      Calendar c = null;
+      if (args.length > 0 && args[0] != null && !"".equals(args[0])) {
+    	  String date = args[0];
+    	  System.out.println("date:" + date);
+    	  targetDate = TimeUtil.stringToDate(date);
+    	  c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+    	  c.setTime(targetDate);
+      } else {
+    	  c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
+  		  c.add(Calendar.DATE, -1);
+      }
         /*****自动算前一天****/
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-		c.add(Calendar.DATE, -1);
+		
 		calcByDate(c.getTime(), connection, 1);
         /*****自动算前一天****/
 
         /*****手动按天****/
-//        String date = "2020-12-01";
-//        Date targetDate = TimeUtil.stringToDate(date);
-//        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"));
-//        c.setTime(targetDate);
+
+
 //
-//    	for (int i = 0; i < 11; ++i) {
+//    	for (int i = 0; i < 1; ++i) {
 //			System.out.println("================计算日期【" + TimeUtil.translateDate(c.getTime()) + "】开始===========");
-//			if (i==10){
+//			if (i==0){
 //                calcByDate(c.getTime(), connection,1);
 //            }else{
 //                calcByDate(c.getTime(), connection,0);
@@ -193,7 +202,7 @@ public class Application {
         cale.set(Calendar.DAY_OF_YEAR, 1);
         GLOBAL_PARAM.put(CURR_YEAR_START, TimeUtil.translateDate(cale.getTime(), "yyyy-MM-dd"));
 
-//		System.out.println("===============开始转换" + TimeUtil.translateDate(targetDate) + "=============");
+		System.out.println("===============开始转换" + TimeUtil.translateDate(targetDate) + "=============");
 
         for (String key : GLOBAL_PARAM.keySet()) {
             System.out.println("GLOBALPARAM[" + key + "]: " + GLOBAL_PARAM.get(key));

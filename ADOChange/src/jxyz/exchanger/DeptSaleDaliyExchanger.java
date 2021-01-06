@@ -128,9 +128,9 @@ public class DeptSaleDaliyExchanger implements Exchanger {
 				",d.county_name as sender_county_name\r\n" + 
 				",t.sender_district_no\r\n" + 
 				",DATE_FORMAT(t.biz_occur_date,'%Y-%m-%d') period_id\r\n" + 
-				",ifnull(t.order_weight,0) 	order_weight\r\n" + 
-				",ifnull(t.real_weight,0) 		real_weight\r\n" + 
-				",ifnull(t.fee_weight,0) 		fee_weight\r\n" + 
+				",IF(t.base_product_no = '11210',ifnull(t.order_weight,0),0) order_weight\r\n" + 
+				",IF(t.base_product_no = '11210',ifnull(t.real_weight,0),0)  real_weight\r\n" + 
+				",IF(t.base_product_no = '11210',ifnull(t.fee_weight,0),0) 	fee_weight\r\n" + 
 				",ifnull(t.postage_total,0) 	postage_total\r\n" + 
 				",0 yesterday_postage_total\r\n" + 
 				",ifnull(t.postage_standard,0) postage_standard\r\n" + 
@@ -146,15 +146,15 @@ public class DeptSaleDaliyExchanger implements Exchanger {
 				" ifnull(t.postage_total,0)  else 0 end as unpaid_amount\r\n" + 
 				",case when t.payment_state ='1' then \r\n" + 
 				" ifnull(t.postage_total,0)  else 0 end as payment_amount\r\n" + 
-				",case when t.contents_attribute = '1' then \r\n" + 
+				",case when t.contents_attribute = '1' and t.base_product_no = '11210' then \r\n" + 
 				"	1 else 0 end files_qty\r\n" + 
 				",0 yesterday_files_qty\r\n" + 
-				",case when t.contents_attribute = '3' then \r\n" + 
+				",case when t.contents_attribute = '3' and t.base_product_no = '11210'  then \r\n" + 
 				"	1 else 0 end goods_qty\r\n" + 
 				",0 yesterday_goods_qty\r\n" + 
-				",case when t.contents_attribute = '1' then \r\n" + 
+				",case when t.contents_attribute = '1' and t.base_product_no = '11210' then \r\n" + 
 				" ifnull(t.postage_total,0) else 0 end files_revenue\r\n" + 
-				",case when t.contents_attribute = '3' then \r\n" + 
+				",case when t.contents_attribute = '3' and t.base_product_no = '11210'  then \r\n" + 
 				" ifnull(t.postage_total,0) else 0 end goods_revenue\r\n" + 
 				", IF(t.waybill_no IS NULL,0,1)  collected_qty\r\n" + 
 				",0 yesterday_collection_qty\r\n" + 
@@ -294,10 +294,10 @@ public class DeptSaleDaliyExchanger implements Exchanger {
 				",0.00 as unpaid_amount\r\n" + 
 				",0.00 as payment_amount\r\n" + 
 				",0 files_qty\r\n" + 
-				",case when t.contents_attribute = '1' then \r\n" + 
+				",case when t.contents_attribute = '1' and t.base_product_no = '11210' then \r\n" + 
 				"	1 else 0 end yesterday_files_qty\r\n" + 
 				",0 goods_qty\r\n" + 
-				",case when t.contents_attribute = '3' then \r\n" + 
+				",case when t.contents_attribute = '3' and t.base_product_no = '11210'  then \r\n" + 
 				"	1 else 0 end yesterday_goods_qty\r\n" + 
 				",0.00 files_revenue\r\n" + 
 				",0.00 goods_revenue\r\n" + 
@@ -438,10 +438,10 @@ public class DeptSaleDaliyExchanger implements Exchanger {
 				",0.00 as unpaid_amount\r\n" + 
 				",0.00 as payment_amount\r\n" + 
 				",0 files_qty\r\n" + 
-				",case when t.contents_attribute = '1' then \r\n" + 
+				",case when t.contents_attribute = '1' and t.base_product_no = '11210' then \r\n" + 
 				"	1 else 0 end yesterday_files_qty\r\n" + 
 				",0 goods_qty\r\n" + 
-				",case when t.contents_attribute = '3' then \r\n" + 
+				",case when t.contents_attribute = '3' and t.base_product_no = '11210'  then \r\n" + 
 				"	1 else 0 end yesterday_goods_qty\r\n" + 
 				",0.00 files_revenue\r\n" + 
 				",0.00 goods_revenue\r\n" + 
