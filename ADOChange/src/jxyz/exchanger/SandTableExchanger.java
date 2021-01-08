@@ -235,7 +235,7 @@ public class SandTableExchanger implements Exchanger {
 				"	ON d.post_org_no = g.parent_code\r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m') ) f\r\n" + 
+				"	WHERE  d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m') ) f\r\n" +
 				"	GROUP BY grid_code,\r\n" + 
 				"			 grid_level, \r\n" + 
 				"			 region_name,\r\n" + 
@@ -372,7 +372,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dm_emp_month_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" + 
+				"	WHERE d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" +
 				"	GROUP BY grid_code,\r\n" + 
 				"			 grid_level, \r\n" + 
 				"			 region_name,\r\n" + 
@@ -492,7 +492,7 @@ public class SandTableExchanger implements Exchanger {
 				"		FROM dm_emp_month_collection_t d \r\n" + 
 				"		LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"		ON dep.dept_code = d.post_org_no\r\n" + 
-				"		WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" + 
+				"		WHERE d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" +
 				"		GROUP BY grid_code,\r\n" + 
 				"				 grid_level, \r\n" + 
 				"				 region_name,\r\n" + 
@@ -601,7 +601,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dm_emp_month_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" + 
+				"	WHERE d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" +
 				"	GROUP BY grid_code,\r\n" + 
 				"			 grid_level, \r\n" + 
 				"			 region_name,\r\n" + 
@@ -698,7 +698,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dm_emp_month_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" + 
+				"	WHERE d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" +
 				"	GROUP BY grid_code,\r\n" + 
 				"			 grid_level, \r\n" + 
 				"			 region_name,\r\n" + 
@@ -794,7 +794,7 @@ public class SandTableExchanger implements Exchanger {
 				"	FROM dm_emp_month_collection_t d \r\n" + 
 				"	LEFT OUTER JOIN  dwr_jxyz_department_d dep \r\n" + 
 				"	ON dep.dept_code = d.post_org_no\r\n" + 
-				"	WHERE d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" + 
+				"	WHERE d.period_id >= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%01') and d.period_id <= DATE_FORMAT(ADDDATE(NOW(),INTERVAL -0 MONTH),'%Y%m')) f\r\n" +
 				"	GROUP BY grid_code,\r\n" + 
 				"			 grid_level, \r\n" + 
 				"			 region_name,\r\n" + 
